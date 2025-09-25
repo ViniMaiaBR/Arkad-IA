@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossos Resultados | ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/background-animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .content-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-box h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .content-box p {
+            color: #fff;
+            text-align: justify;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .case-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .case-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .case-item i {
+            font-size: 2.5em;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .case-item h3 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .case-item p {
+            color: #ccc;
+            font-size: 0.95em;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .stat-item h3 {
+            color: #007bff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: #fff;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="content-box">
+            <h1><i class="fas fa-chart-line"></i> Nossos Resultados</h1>
+            <p>Conheça alguns dos nossos cases de sucesso e os resultados que alcançamos para nossos clientes através da implementação de soluções em inteligência artificial.</p>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <h3>1000+</h3>
+                    <p>Empresas Atendidas</p>
+                </div>
+                <div class="stat-item">
+                    <h3>95%</h3>
+                    <p>Satisfação dos Clientes</p>
+                </div>
+                <div class="stat-item">
+                    <h3>40%</h3>
+                    <p>Aumento Médio em Eficiência</p>
+                </div>
+            </div>
+
+            <div class="cases-grid">
+                <div class="case-item">
+                    <i class="fas fa-industry"></i>
+                    <h3>Indústria 4.0</h3>
+                    <p>Implementação de IA em linha de produção, resultando em 45% de redução de custos operacionais.</p>
+                </div>
+
+                <div class="case-item">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3>E-commerce</h3>
+                    <p>Sistema de recomendação personalizado que aumentou as vendas em 60% para uma rede de varejo.</p>
+                </div>
+
+                <div class="case-item">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Saúde</h3>
+                    <p>Diagnóstico assistido por IA com 98% de precisão, reduzindo tempo de análise em 70%.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="get-started-btn" onclick="window.location.href='sobre.html'" style="background: transparent; border: 2px solid #fff;">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Sobre
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

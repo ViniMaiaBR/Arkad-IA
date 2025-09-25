@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat IA - ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/background-animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../images/logo.svg" alt="Logo ARKAD AI">
+                <span>ARKAD AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">VOLTAR</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2>Chat com IA</h2>
+                <p>Como posso ajudar você hoje?</p>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message">
+                    <div class="message-content">
+                        <i class="fas fa-robot"></i>
+                        <p>Olá! Sou a IA da Arkad. Como posso ajudar você hoje?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="userInput" placeholder="Digite sua mensagem..." class="chat-input">
+                <button id="sendButton" class="send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mostra a consulta inicial do usuário
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const query = urlParams.get('query');
+            if (query) {
+                addMessage(query, 'user');
+                setTimeout(() => {
+                    const response = `Entendi que você está procurando por "${query}". Como posso ajudar você com isso?`;
+                    addMessage(response, 'ai');
+                }, 1000);
+            }
+        };
+
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Adiciona mensagem do usuário
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Simula resposta da IA (aqui você pode integrar com sua API de IA)
+                setTimeout(() => {
+                    const response = "Entendi sua pergunta. Estou processando e em breve teremos uma resposta mais elaborada.";
+                    addMessage(response, 'ai');
+                }, 1000);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const icon = sender === 'ai' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+            
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    ${icon}
+                    <p>${text}</p>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html> 

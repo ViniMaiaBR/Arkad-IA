@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossos Planos | ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/background-animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .content-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1200px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-box h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .content-box p {
+            color: #fff;
+            text-align: justify;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .plan-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .plan-header {
+            margin-bottom: 20px;
+        }
+
+        .plan-header h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .plan-price {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .plan-price span {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .plan-features li {
+            color: #fff;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .plan-features i {
+            color: var(--primary-color);
+        }
+
+        .plan-button {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .plan-button:hover {
+            background: #009698;
+        }
+
+        .popular-tag {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="content-box">
+            <h1><i class="fas fa-cubes"></i> Nossos Planos</h1>
+            <p>Escolha o plano ideal para impulsionar seu negócio com nossas soluções de IA. Oferecemos opções flexíveis para atender às suas necessidades específicas.</p>
+            
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Plano Básico</h3>
+                        <div class="plan-price">
+                            R$ 199<span>/mês</span>
+                        </div>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Análise de Dados Básica</li>
+                        <li><i class="fas fa-check"></i> Suporte por Email</li>
+                        <li><i class="fas fa-check"></i> 5 Consultas IA/mês</li>
+                        <li><i class="fas fa-check"></i> Relatórios Básicos</li>
+                    </ul>
+                    <button class="plan-button" onclick="window.location.href='contato.html'">Começar Agora</button>
+                </div>
+
+                <div class="plan-card">
+                    <div class="popular-tag">Mais Popular</div>
+                    <div class="plan-header">
+                        <h3>Plano Profissional</h3>
+                        <div class="plan-price">
+                            R$ 399<span>/mês</span>
+                        </div>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Análise de Dados Avançada</li>
+                        <li><i class="fas fa-check"></i> Suporte Prioritário 24/7</li>
+                        <li><i class="fas fa-check"></i> 20 Consultas IA/mês</li>
+                        <li><i class="fas fa-check"></i> Relatórios Personalizados</li>
+                        <li><i class="fas fa-check"></i> API Access</li>
+                    </ul>
+                    <button class="plan-button" onclick="window.location.href='contato.html'">Começar Agora</button>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3>Plano Empresarial</h3>
+                        <div class="plan-price">
+                            R$ 599<span>/mês</span>
+                        </div>
+                    </div>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Análise de Dados Premium</li>
+                        <li><i class="fas fa-check"></i> Suporte Dedicado 24/7</li>
+                        <li><i class="fas fa-check"></i> Consultas IA Ilimitadas</li>
+                        <li><i class="fas fa-check"></i> Relatórios Avançados</li>
+                        <li><i class="fas fa-check"></i> API Access Ilimitado</li>
+                        <li><i class="fas fa-check"></i> Treinamento da Equipe</li>
+                    </ul>
+                    <button class="plan-button" onclick="window.location.href='contato.html'">Começar Agora</button>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="get-started-btn" onclick="window.location.href='sobre.html'" style="background: transparent; border: 2px solid #fff;">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Sobre
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

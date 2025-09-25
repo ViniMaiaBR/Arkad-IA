@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro | ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/background-animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .cadastro-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .cadastro-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cadastro-box h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+        }
+
+        .form-group input[type="date"] {
+            color: #333;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input[type="date"]::-webkit-calendar-picker-indicator {
+            background-color: #007bff;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .cadastro-btn {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .cadastro-btn:hover {
+            background: #0056b3;
+        }
+
+        .error-message {
+            color: #ff4444;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-message {
+            color: #00C851;
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="cadastro-container">
+        <div class="cadastro-box">
+            <h1>Cadastro ARKAD AI</h1>
+            <form id="cadastroForm" onsubmit="return handleCadastro(event)">
+                <div class="form-group">
+                    <label for="nome">Nome</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataNascimento">Data de Nascimento</label>
+                    <input type="date" id="dataNascimento" name="dataNascimento" required>
+                </div>
+                <div class="form-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" name="senha" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmarSenha">Confirmar Senha</label>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" required>
+                </div>
+                <button type="submit" class="cadastro-btn">Cadastrar</button>
+                <div id="errorMessage" class="error-message"></div>
+                <div id="successMessage" class="success-message"></div>
+            </form>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="get-started-btn" onclick="window.location.href='login.html'" style="background: transparent; border: 2px solid #fff;">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Login
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/login.js"></script>
+    <script>
+        async function handleCadastro(event) {
+            event.preventDefault();
+            
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const dataNascimento = document.getElementById('dataNascimento').value;
+            const senha = document.getElementById('senha').value;
+            const confirmarSenha = document.getElementById('confirmarSenha').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const successMessage = document.getElementById('successMessage');
+            
+            // Limpar mensagens anteriores
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            // Validar data de nascimento
+            if (!dataNascimento) {
+                errorMessage.textContent = 'Por favor, informe sua data de nascimento';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+            
+            // Validar se a pessoa tem pelo menos 13 anos
+            const hoje = new Date();
+            const dataNasc = new Date(dataNascimento);
+            const idade = hoje.getFullYear() - dataNasc.getFullYear();
+            const mesAtual = hoje.getMonth();
+            const mesNasc = dataNasc.getMonth();
+            
+            if (idade < 13 || (idade === 13 && mesAtual < mesNasc) || 
+                (idade === 13 && mesAtual === mesNasc && hoje.getDate() < dataNasc.getDate())) {
+                errorMessage.textContent = 'Você deve ter pelo menos 13 anos para se cadastrar';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+            
+            // Validar senhas
+            if (senha !== confirmarSenha) {
+                errorMessage.textContent = 'As senhas não coincidem';
+                errorMessage.style.display = 'block';
+                return false;
+            }
+            
+            try {
+                await cadastrarUsuario(email, senha, nome, dataNascimento);
+                successMessage.textContent = 'Cadastro realizado com sucesso!';
+                successMessage.style.display = 'block';
+                
+                // Limpar formulário
+                document.getElementById('cadastroForm').reset();
+                
+                // Redirecionar para login após 2 segundos
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+            } catch (error) {
+                console.error('Erro ao cadastrar:', error);
+                errorMessage.textContent = error.message || 'Erro ao realizar cadastro. Tente novamente.';
+                errorMessage.style.display = 'block';
+            }
+            
+            return false;
+        }
+    </script>
+</body>
+</html> 

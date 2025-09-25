@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários - ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/background-animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .cadastro-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .cadastro-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .form-group input {
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: white;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .voltar-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .voltar-btn:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+        
+        .usuarios-lista {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+        }
+        
+        .usuario-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #e1e5e9;
+            transition: background 0.3s ease;
+        }
+        
+        .usuario-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .usuario-info {
+            flex: 1;
+        }
+        
+        .usuario-nome {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .usuario-detalhes {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .acoes-usuario {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-acao {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-editar {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .btn-deletar {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-acao:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../images/logo.svg" alt="Logo ARKAD AI">
+                <span>ARKAD AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">INÍCIO</a>
+                <a href="sobre.html">SOBRE</a>
+                <a href="servicos.html">SERVIÇOS</a>
+                <a href="contato.html">CONTATO</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="cadastro-container">
+            <a href="index.html" class="voltar-btn">
+                <i class="fas fa-arrow-left"></i> Voltar ao Início
+            </a>
+            
+            <h1 style="text-align: center; margin-bottom: 30px; color: #333;">
+                <i class="fas fa-user-plus"></i> Cadastro de Usuários
+            </h1>
+            
+            <div id="message"></div>
+            
+            <form class="cadastro-form" id="cadastroForm">
+                <div class="form-group">
+                    <label for="nome">Nome Completo *</label>
+                    <input type="text" id="nome" name="nome" required placeholder="Digite seu nome completo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="aniversario">Data de Aniversário *</label>
+                    <input type="date" id="aniversario" name="aniversario" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="senha">Senha *</label>
+                    <input type="password" id="senha" name="senha" required placeholder="Mínimo 6 caracteres" minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmarSenha">Confirmar Senha *</label>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" required placeholder="Confirme sua senha" minlength="6">
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-save"></i> Cadastrar Usuário
+                </button>
+            </form>
+            
+            <div class="usuarios-lista">
+                <h3 style="margin-bottom: 20px; color: #333;">
+                    <i class="fas fa-users"></i> Usuários Cadastrados
+                </h3>
+                <div id="usuariosLista">
+                    <p style="text-align: center; color: #666;">Carregando usuários...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="../js/database-frontend.js"></script>
+    <script>
+        // Inicializar a página
+        document.addEventListener('DOMContentLoaded', function() {
+            carregarUsuarios();
+        });
+        
+        // Manipular envio do formulário
+        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const dados = {
+                nome: formData.get('nome'),
+                aniversario: formData.get('aniversario'),
+                email: formData.get('email'),
+                senha: formData.get('senha'),
+                confirmarSenha: formData.get('confirmarSenha')
+            };
+            
+            // Validações
+            if (dados.senha !== dados.confirmarSenha) {
+                mostrarMensagem('As senhas não coincidem!', 'error');
+                return;
+            }
+            
+            if (dados.senha.length < 6) {
+                mostrarMensagem('A senha deve ter pelo menos 6 caracteres!', 'error');
+                return;
+            }
+            
+            // Cadastrar usuário
+            cadastrarUsuario(dados);
+        });
+        
+        function mostrarMensagem(texto, tipo) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.innerHTML = `<div class="message ${tipo}">${texto}</div>`;
+            
+            setTimeout(() => {
+                messageDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        function cadastrarUsuario(dados) {
+            // Simular cadastro (em produção, isso seria uma chamada para o backend)
+            const usuario = {
+                id: Date.now(),
+                nome: dados.nome,
+                aniversario: dados.aniversario,
+                email: dados.email,
+                senha: dados.senha
+            };
+            
+            // Salvar no localStorage (simulação do banco)
+            const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+            usuarios.push(usuario);
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            
+            mostrarMensagem('Usuário cadastrado com sucesso!', 'success');
+            document.getElementById('cadastroForm').reset();
+            carregarUsuarios();
+        }
+        
+        function carregarUsuarios() {
+            const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+            const listaDiv = document.getElementById('usuariosLista');
+            
+            if (usuarios.length === 0) {
+                listaDiv.innerHTML = '<p style="text-align: center; color: #666;">Nenhum usuário cadastrado ainda.</p>';
+                return;
+            }
+            
+            const usuariosHTML = usuarios.map(usuario => `
+                <div class="usuario-item">
+                    <div class="usuario-info">
+                        <div class="usuario-nome">${usuario.nome}</div>
+                        <div class="usuario-detalhes">
+                            <i class="fas fa-envelope"></i> ${usuario.email} | 
+                            <i class="fas fa-birthday-cake"></i> ${usuario.aniversario}
+                        </div>
+                    </div>
+                    <div class="acoes-usuario">
+                        <button class="btn-acao btn-editar" onclick="editarUsuario('${usuario.email}')">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn-acao btn-deletar" onclick="deletarUsuario('${usuario.email}')">
+                            <i class="fas fa-trash"></i> Deletar
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            listaDiv.innerHTML = usuariosHTML;
+        }
+        
+        function editarUsuario(email) {
+            // Implementar edição (simplificado para demonstração)
+            alert(`Funcionalidade de edição para ${email} será implementada em breve!`);
+        }
+        
+        function deletarUsuario(email) {
+            if (confirm('Tem certeza que deseja deletar este usuário?')) {
+                const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+                const usuariosFiltrados = usuarios.filter(u => u.email !== email);
+                localStorage.setItem('usuarios', JSON.stringify(usuariosFiltrados));
+                
+                mostrarMensagem('Usuário deletado com sucesso!', 'success');
+                carregarUsuarios();
+            }
+        }
+    </script>
+</body>
+</html>

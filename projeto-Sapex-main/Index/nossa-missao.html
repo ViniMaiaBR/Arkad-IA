@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossa Missão | ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/background-animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .content-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-box h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .content-box p {
+            color: #fff;
+            text-align: justify;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .mission-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .mission-item i {
+            font-size: 2.5em;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .mission-item h3 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        .mission-item p {
+            color: #ccc;
+            font-size: 0.95em;
+        }
+
+        .values-list {
+            list-style: none;
+            padding: 0;
+            margin: 30px 0;
+        }
+
+        .values-list li {
+            color: #fff;
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .values-list li i {
+            position: absolute;
+            left: 0;
+            top: 3px;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="content-box">
+            <h1><i class="fas fa-bullseye"></i> Nossa Missão</h1>
+            <p>Na ARKAD AI, nossa missão é democratizar o acesso à inteligência artificial, tornando-a acessível e eficiente para empresas de todos os portes. Acreditamos que a tecnologia deve ser um catalisador de crescimento e inovação.</p>
+            
+            <div class="mission-grid">
+                <div class="mission-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Inovação</h3>
+                    <p>Desenvolvemos soluções inovadoras que transformam a maneira como as empresas operam e crescem.</p>
+                </div>
+
+                <div class="mission-item">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Parceria</h3>
+                    <p>Trabalhamos em conjunto com nossos clientes para entender suas necessidades e criar soluções personalizadas.</p>
+                </div>
+
+                <div class="mission-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Resultados</h3>
+                    <p>Nosso foco é entregar resultados mensuráveis que impulsionem o sucesso dos nossos clientes.</p>
+                </div>
+            </div>
+
+            <h2 style="color: #fff; text-align: center; margin: 40px 0 20px;">Nossos Valores</h2>
+            <ul class="values-list">
+                <li><i class="fas fa-check-circle"></i> Excelência em tudo o que fazemos</li>
+                <li><i class="fas fa-check-circle"></i> Compromisso com a inovação</li>
+                <li><i class="fas fa-check-circle"></i> Ética e transparência</li>
+                <li><i class="fas fa-check-circle"></i> Foco no cliente</li>
+                <li><i class="fas fa-check-circle"></i> Aprendizado contínuo</li>
+            </ul>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="get-started-btn" onclick="window.location.href='sobre.html'" style="background: transparent; border: 2px solid #fff;">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Sobre
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

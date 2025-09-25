@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nossa Equipe | ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/background-animation.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .content-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+
+        .content-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content-box h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .content-box p {
+            color: #fff;
+            text-align: justify;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .team-member {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .team-member img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .team-member:first-child img,
+        .team-member:nth-child(2) img,
+        .team-member:nth-child(3) img {
+            object-position: top;
+        }
+
+        .team-member h3 {
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .team-member p {
+            color: #ccc;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 1.2em;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <div class="content-container">
+        <div class="content-box">
+            <h1><i class="fas fa-users"></i> Nossa Equipe</h1>
+            <p>Nossa equipe é composta por profissionais altamente qualificados e apaixonados por tecnologia. Cada membro traz sua expertise única para criar soluções inovadoras em inteligência artificial.</p>
+            
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="../images/TORUGA_AZUL.jpg" alt="Vinicius Maia">
+                    <h3>Vinicius Maia</h3>
+                    <p>CEO & Fundador</p>
+                    <p>Especialista em Inteligência Artificial e visão computacional, com vasta experiência em desenvolvimento de soluções tecnológicas inovadoras.</p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/vinicius-maia-190279219?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <img src="../images/TORUGA_ROXA.jpg" alt="Eduardo Romero">
+                    <h3>Eduardo Romero</h3>
+                    <p>CTO</p>
+                    <p>Especialista em Machine Learning e arquitetura de sistemas de IA, com foco em soluções escaláveis e de alta performance.</p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/eduardo-romero-gomes-a263a5251?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <img src="../images/TORUGA_VERMELHA.jpg" alt="Gustavo Spaggiari">
+                    <h3>Gustavo Spaggiari</h3>
+                    <p>Lead Developer</p>
+                    <p>Desenvolvedor full-stack com expertise em implementação de soluções de IA e automação de processos empresariais.</p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/gustavo-spaggiari-897246247?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+
+                <div class="team-member">
+                    <img src="../images/TORUGA_LARANJA.jpg" alt="Kelvin Herculim">
+                    <h3>Kelvin Herculim</h3>
+                    <p>AI Research Engineer</p>
+                    <p>Pesquisador em Inteligência Artificial, especializado em processamento de linguagem natural e modelos de deep learning.</p>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/kelvin-herculin-2032482b0?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="get-started-btn" onclick="window.location.href='sobre.html'" style="background: transparent; border: 2px solid #fff;">
+                    <i class="fas fa-arrow-left"></i> Voltar ao Sobre
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

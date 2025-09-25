@@ -6,7 +6,6 @@
     <title>Cadastro de Usuários - ARKAD AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/background-animation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .cadastro-container {
@@ -172,20 +171,7 @@
     </style>
 </head>
 <body>
-    <div class="animated-background">
-        <div class="dots">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
-    </div>
+    <canvas id="neural-bg"></canvas>
 
     <header>
         <nav class="navbar">
@@ -368,5 +354,6 @@
             }
         }
     </script>
+    <script src="../js/neural-background.js"></script>
 </body>
 </html>

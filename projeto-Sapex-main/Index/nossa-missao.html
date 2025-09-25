@@ -6,7 +6,6 @@
     <title>Nossa Missão | ARKAD AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/background-animation.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .content-container {
@@ -95,20 +94,7 @@
     </style>
 </head>
 <body>
-    <div class="animated-background">
-        <div class="dots">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
-    </div>
+    <canvas id="neural-bg"></canvas>
 
     <div class="content-container">
         <div class="content-box">
@@ -133,6 +119,12 @@
                     <h3>Resultados</h3>
                     <p>Nosso foco é entregar resultados mensuráveis que impulsionem o sucesso dos nossos clientes.</p>
                 </div>
+
+                <div class="mission-item">
+                    <i class="fas fa-robot"></i>
+                    <h3>Trabalhamos com IA</h3>
+                    <p>Utilizamos as mais avançadas tecnologias de inteligência artificial para criar soluções inovadoras e eficientes.</p>
+                </div>
             </div>
 
             <h2 style="color: #fff; text-align: center; margin: 40px 0 20px;">Nossos Valores</h2>
@@ -151,5 +143,6 @@
             </div>
         </div>
     </div>
+    <script src="../js/neural-background.js"></script>
 </body>
 </html> 

@@ -208,7 +208,10 @@
                 
                 <div class="form-group">
                     <label for="aniversario">Data de Aniversário *</label>
-                    <input type="date" id="aniversario" name="aniversario" required>
+                    <input type="text" id="aniversario" name="aniversario" required 
+                           placeholder="DD/MM/YYYY" maxlength="8" 
+                           pattern="\d{2}/\d{2}/\d{4}" 
+                           title="Digite a data no formato DD/MM/YYYY (máximo 8 dígitos)">
                 </div>
                 
                 <div class="form-group">
@@ -247,6 +250,7 @@
         // Inicializar a página
         document.addEventListener('DOMContentLoaded', function() {
             carregarUsuarios();
+            configurarMascaraData();
         });
         
         // Manipular envio do formulário
@@ -273,8 +277,17 @@
                 return;
             }
             
+            // Validar data
+            if (!validarData(dados.aniversario)) {
+                mostrarMensagem('Data de aniversário inválida! Digite no formato DD/MM/AAAA', 'error');
+                return;
+            }
+            
+            // Converter data para formato ISO para o backend
+            dados.aniversario = formatarDataParaISO(dados.aniversario);
+            
             // Cadastrar usuário
-            cadastrarUsuario(dados);
+            processarCadastro(dados);
         });
         
         function mostrarMensagem(texto, tipo) {
@@ -286,28 +299,120 @@
             }, 5000);
         }
         
-        function cadastrarUsuario(dados) {
-            // Simular cadastro (em produção, isso seria uma chamada para o backend)
-            const usuario = {
-                id: Date.now(),
-                nome: dados.nome,
-                aniversario: dados.aniversario,
-                email: dados.email,
-                senha: dados.senha
-            };
+        function configurarMascaraData() {
+            const campoData = document.getElementById('aniversario');
             
-            // Salvar no localStorage (simulação do banco)
-            const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-            usuarios.push(usuario);
-            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            campoData.addEventListener('input', function(e) {
+                let valor = e.target.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+                
+                // Limitar a 8 dígitos (DDMMYYYY)
+                if (valor.length > 8) {
+                    valor = valor.substring(0, 8);
+                }
+                
+                // Aplicar máscara conforme o usuário digita
+                if (valor.length >= 2) {
+                    valor = valor.substring(0, 2) + '/' + valor.substring(2);
+                }
+                if (valor.length >= 5) {
+                    valor = valor.substring(0, 5) + '/' + valor.substring(5, 8);
+                }
+                
+                e.target.value = valor;
+            });
             
-            mostrarMensagem('Usuário cadastrado com sucesso!', 'success');
-            document.getElementById('cadastroForm').reset();
-            carregarUsuarios();
+            campoData.addEventListener('keydown', function(e) {
+                // Permitir teclas de navegação, controle e edição
+                if ([8, 9, 27, 46, 37, 38, 39, 40, 16, 17, 18].indexOf(e.keyCode) !== -1 ||
+                    (e.keyCode === 65 && e.ctrlKey === true) || // Ctrl+A
+                    (e.keyCode === 67 && e.ctrlKey === true) || // Ctrl+C
+                    (e.keyCode === 86 && e.ctrlKey === true) || // Ctrl+V
+                    (e.keyCode === 88 && e.ctrlKey === true) || // Ctrl+X
+                    (e.keyCode === 90 && e.ctrlKey === true) || // Ctrl+Z
+                    (e.keyCode >= 35 && e.keyCode <= 40)) { // End, Home, Left, Up, Right, Down
+                    return;
+                }
+                
+                // Permitir apenas números
+                if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Permitir seleção e edição livre
+            campoData.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const texto = (e.clipboardData || window.clipboardData).getData('text');
+                const numeros = texto.replace(/\D/g, '').substring(0, 8);
+                
+                if (numeros.length >= 2) {
+                    let valor = numeros.substring(0, 2) + '/' + numeros.substring(2);
+                    if (numeros.length >= 5) {
+                        valor = numeros.substring(0, 2) + '/' + numeros.substring(2, 4) + '/' + numeros.substring(4, 8);
+                    }
+                    e.target.value = valor;
+                } else {
+                    e.target.value = numeros;
+                }
+            });
+        }
+        
+        function validarData(dataStr) {
+            const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            const match = dataStr.match(regex);
+            
+            if (!match) return false;
+            
+            const dia = parseInt(match[1], 10);
+            const mes = parseInt(match[2], 10);
+            const ano = parseInt(match[3], 10);
+            
+            // Validações básicas
+            if (mes < 1 || mes > 12) return false;
+            if (dia < 1 || dia > 31) return false;
+            
+            // Verificar se a data é válida
+            const data = new Date(ano, mes - 1, dia);
+            if (data.getDate() !== dia || data.getMonth() !== mes - 1 || data.getFullYear() !== ano) {
+                return false;
+            }
+            
+            // Verificar se não é data futura
+            const hoje = new Date();
+            if (data > hoje) {
+                return false;
+            }
+            
+            // Verificar se não é muito antiga (mais de 120 anos)
+            const centoEVinteAnosAtras = new Date();
+            centoEVinteAnosAtras.setFullYear(hoje.getFullYear() - 120);
+            if (data < centoEVinteAnosAtras) {
+                return false;
+            }
+            
+            return true;
+        }
+        
+        function formatarDataParaISO(dataStr) {
+            const [dia, mes, ano] = dataStr.split('/');
+            return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
+        }
+        
+        function processarCadastro(dados) {
+            // Usar a função do database-frontend.js
+            const resultado = cadastrarUsuario(dados);
+            
+            if (resultado.success) {
+                mostrarMensagem(resultado.message, 'success');
+                document.getElementById('cadastroForm').reset();
+                carregarUsuarios();
+            } else {
+                mostrarMensagem(resultado.message, 'error');
+            }
         }
         
         function carregarUsuarios() {
-            const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+            const usuarios = listarUsuarios();
             const listaDiv = document.getElementById('usuariosLista');
             
             if (usuarios.length === 0) {
@@ -315,13 +420,19 @@
                 return;
             }
             
-            const usuariosHTML = usuarios.map(usuario => `
+            const usuariosHTML = usuarios.map(usuario => {
+                // Converter data ISO para formato brasileiro
+                const dataFormatada = usuario.aniversario ? 
+                    new Date(usuario.aniversario).toLocaleDateString('pt-BR') : 
+                    'Data não informada';
+                
+                return `
                 <div class="usuario-item">
                     <div class="usuario-info">
                         <div class="usuario-nome">${usuario.nome}</div>
                         <div class="usuario-detalhes">
                             <i class="fas fa-envelope"></i> ${usuario.email} | 
-                            <i class="fas fa-birthday-cake"></i> ${usuario.aniversario}
+                            <i class="fas fa-birthday-cake"></i> ${dataFormatada}
                         </div>
                     </div>
                     <div class="acoes-usuario">
@@ -333,7 +444,8 @@
                         </button>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
             
             listaDiv.innerHTML = usuariosHTML;
         }
@@ -345,12 +457,14 @@
         
         function deletarUsuario(email) {
             if (confirm('Tem certeza que deseja deletar este usuário?')) {
-                const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-                const usuariosFiltrados = usuarios.filter(u => u.email !== email);
-                localStorage.setItem('usuarios', JSON.stringify(usuariosFiltrados));
+                const resultado = dbManager.deletarUsuario(email);
                 
-                mostrarMensagem('Usuário deletado com sucesso!', 'success');
-                carregarUsuarios();
+                if (resultado.success) {
+                    mostrarMensagem(resultado.message, 'success');
+                    carregarUsuarios();
+                } else {
+                    mostrarMensagem(resultado.message, 'error');
+                }
             }
         }
     </script>

@@ -1,4 +1,3 @@
-// Neural Network Background Animation para ARKAD AI
 // Adaptado do template neural portfolio
 
 document.addEventListener('DOMContentLoaded', function() {

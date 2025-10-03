@@ -45,16 +45,24 @@
         </div>
     </main>
 
+    <script src="../js/chat-ai-responses.js"></script>
     <script>
+        let messagesContainer;
+        let currentContext = null;
+        let userData = {};
+        let questionIndex = 0;
+        let currentQuestions = [];
+
         // Mostra a consulta inicial do usuário
         window.onload = function() {
+            messagesContainer = document.getElementById('chatMessages');
+            
             const urlParams = new URLSearchParams(window.location.search);
             const query = urlParams.get('query');
             if (query) {
                 addMessage(query, 'user');
                 setTimeout(() => {
-                    const response = `Entendi que você está procurando por "${query}". Como posso ajudar você com isso?`;
-                    addMessage(response, 'ai');
+                    processUserMessage(query);
                 }, 1000);
             }
         };
@@ -71,34 +79,179 @@
             const message = input.value.trim();
             
             if (message) {
-                // Adiciona mensagem do usuário
                 addMessage(message, 'user');
                 input.value = '';
                 
-                // Simula resposta da IA (aqui você pode integrar com sua API de IA)
                 setTimeout(() => {
-                    const response = "Entendi sua pergunta. Estou processando e em breve teremos uma resposta mais elaborada.";
-                    addMessage(response, 'ai');
+                    processUserMessage(message);
                 }, 1000);
             }
         }
 
+        function processUserMessage(message) {
+            try {
+                const response = chatAI.processMessage(message);
+                
+                if (response.type === 'budget_collection' || response.type === 'financial_collection') {
+                    currentContext = response.type;
+                    currentQuestions = response.questions;
+                    questionIndex = 0;
+                    
+                    addMessage(response.message, 'ai');
+                    
+                    // Adicionar primeira pergunta
+                    setTimeout(() => {
+                        addMessage(`**Pergunta ${questionIndex + 1}:** ${currentQuestions[questionIndex]}`, 'ai');
+                        
+                        // Se for a pergunta sobre setor, mostrar opções específicas
+                        if (currentQuestions[questionIndex].includes('setor')) {
+                            // Mostrar opções de setor imediatamente
+                            setTimeout(() => {
+                                const sectorOptions = [
+                                    "Tecnologia da Informação (TI)",
+                                    "Comércio Varejista", 
+                                    "Consultoria Empresarial",
+                                    "Serviços de Marketing Digital",
+                                    "Indústria de Transformação",
+                                    "Outro setor"
+                                ];
+                                sectorOptions.forEach(option => {
+                                    addQuickReply(option);
+                                });
+                            }, 500);
+                        } else {
+                            addQuickReply("Responder");
+                        }
+                    }, 1500);
+                    
+                } else if (response.type === 'plans_info') {
+                    addMessage(response.message, 'ai');
+                    
+                    // Adicionar opções de planos
+                    setTimeout(() => {
+                        response.options.forEach((option, index) => {
+                            addQuickReply(option);
+                        });
+                    }, 1000);
+                    
+                } else if (response.type === 'greeting') {
+                    addMessage(response.message, 'ai');
+                    
+                    setTimeout(() => {
+                        response.options.forEach(option => {
+                            addQuickReply(option);
+                        });
+                    }, 1000);
+                    
+                } else {
+                    addMessage(response.message, 'ai');
+                    
+                    if (response.options) {
+                        setTimeout(() => {
+                            response.options.forEach(option => {
+                                addQuickReply(option);
+                            });
+                        }, 1000);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Erro ao processar mensagem:', error);
+                addMessage("Desculpe, ocorreu um erro. Como posso ajudar você?", 'ai');
+            }
+        }
+
         function addMessage(text, sender) {
-            const messagesContainer = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
             
             const icon = sender === 'ai' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
             
+            // Processar texto com formatação
+            const formattedText = formatMessage(text);
+            
             messageDiv.innerHTML = `
                 <div class="message-content">
                     ${icon}
-                    <p>${text}</p>
+                    <div>${formattedText}</div>
                 </div>
             `;
             
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function formatMessage(text) {
+            // Converter markdown básico para HTML
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>')
+                .replace(/## (.*?)/g, '<h3>$1</h3>')
+                .replace(/### (.*?)/g, '<h4>$1</h4>')
+                .replace(/• (.*?)/g, '<li>$1</li>')
+                .replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>');
+        }
+
+        function addQuickReply(text) {
+            const quickReplyDiv = document.createElement('div');
+            quickReplyDiv.className = 'quick-reply';
+            quickReplyDiv.textContent = text;
+            quickReplyDiv.onclick = () => {
+                document.getElementById('userInput').value = text;
+                sendMessage();
+            };
+            
+            messagesContainer.appendChild(quickReplyDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function handleQuestionResponse(response) {
+            // Armazenar resposta do usuário
+            const questionKey = `question_${questionIndex}`;
+            userData[questionKey] = response;
+            
+            questionIndex++;
+            
+            if (questionIndex < currentQuestions.length) {
+                // Próxima pergunta
+                setTimeout(() => {
+                    addMessage(`**Pergunta ${questionIndex + 1}:** ${currentQuestions[questionIndex]}`, 'ai');
+                    
+                    // Se for a pergunta sobre setor, mostrar opções específicas
+                    if (currentQuestions[questionIndex].includes('setor')) {
+                        // Mostrar opções de setor imediatamente
+                        setTimeout(() => {
+                            const sectorOptions = [
+                                "Tecnologia da Informação (TI)",
+                                "Comércio Varejista", 
+                                "Consultoria Empresarial",
+                                "Serviços de Marketing Digital",
+                                "Indústria de Transformação",
+                                "Outro setor"
+                            ];
+                            sectorOptions.forEach(option => {
+                                addQuickReply(option);
+                            });
+                        }, 500);
+                    } else {
+                        addQuickReply("Responder");
+                    }
+                }, 1000);
+            } else {
+                // Gerar análise completa
+                setTimeout(() => {
+                    const analysis = chatAI.generateContextualResponse(currentContext, userData);
+                    addMessage(analysis, 'ai');
+                    
+                    // Adicionar opções de ação
+                    setTimeout(() => {
+                        addQuickReply("Fazer nova análise");
+                        addQuickReply("Ver planos disponíveis");
+                        addQuickReply("Falar com especialista");
+                    }, 2000);
+                }, 1500);
+            }
         }
     </script>
     <script src="../js/neural-background.js"></script>

@@ -1,5 +1,5 @@
 // Importar configurações
-let DB_CONFIG, SECURITY_CONFIG, MESSAGES;
+let APP_CONFIG, SECURITY_CONFIG, MESSAGES;
 
 // Carregar configurações
 fetch('../js/config.js')
@@ -14,7 +14,7 @@ fetch('../js/config.js')
 
 // Função para inicializar configurações
 function initConfig() {
-    console.log('Configurações carregadas para Oracle Database');
+    console.log('Configurações carregadas para ARKAD AI');
 }
 
 // Função para validar senha
@@ -27,56 +27,43 @@ function validarSenha(senha) {
     return true;
 }
 
-// Função para verificar tentativas de login (será implementada com Oracle)
-function verificarTentativasLogin(email) {
-    return new Promise((resolve, reject) => {
-        // TODO: Implementar verificação de tentativas de login com Oracle
-        // Por enquanto, retorna 0 tentativas
-        resolve(0);
-    });
-}
-
-// Função para registrar tentativa de login (será implementada com Oracle)
-function registrarTentativaLogin(email, status) {
-    // TODO: Implementar registro de tentativas de login com Oracle
-    console.log(`Tentativa de login registrada: ${email} - ${status}`);
-}
-
-// Função para verificar se o usuário existe (será implementada com Oracle)
+// Função para verificar se o usuário existe (usando sistema JSON)
 async function verificarUsuario(email, senha) {
-    const tentativas = await verificarTentativasLogin(email);
-    
-    if (tentativas >= 5) {
-        throw new Error(MESSAGES.accountLocked);
-    }
-
-    // TODO: Implementar verificação de usuário com Oracle
-    // Por enquanto, retorna false para simular usuário não encontrado
     return new Promise((resolve, reject) => {
-        // Simular verificação com Oracle
-        setTimeout(() => {
-            // Aqui será feita a consulta real ao Oracle
-            // SELECT * FROM usuarios WHERE email = ? AND senha = ?
-            resolve(false);
-        }, 100);
+        try {
+            // Usar o sistema de armazenamento JSON
+            const usuario = userStorage.authenticateUser(email, senha);
+            resolve(usuario !== null);
+        } catch (error) {
+            console.error('Erro ao verificar usuário:', error);
+            reject(error);
+        }
     });
 }
 
-// Função para cadastrar novo usuário (será implementada com Oracle)
+// Função para cadastrar novo usuário (usando sistema JSON)
 async function cadastrarUsuario(email, senha, nome, dataNascimento) {
     if (!validarSenha(senha)) {
         throw new Error(MESSAGES.invalidPassword);
     }
 
     return new Promise((resolve, reject) => {
-        // TODO: Implementar cadastro de usuário com Oracle
-        // Por enquanto, simula sucesso
-        setTimeout(() => {
-            // Aqui será feita a inserção real no Oracle
-            // INSERT INTO usuarios (email, senha, nome, data_nascimento) VALUES (?, ?, ?, ?)
+        try {
+            // Usar o sistema de armazenamento JSON
+            const dadosUsuario = {
+                nome: nome,
+                email: email,
+                senha: senha,
+                aniversario: dataNascimento
+            };
+            
+            const novoUsuario = userStorage.addUser(dadosUsuario);
             console.log(`Usuário cadastrado: ${nome} (${email}) - Data de nascimento: ${dataNascimento}`);
             resolve(true);
-        }, 500);
+        } catch (error) {
+            console.error('Erro ao cadastrar usuário:', error);
+            reject(error);
+        }
     });
 }
 
@@ -93,14 +80,16 @@ async function handleLogin(event) {
     successMessage.style.display = 'none';
     
     try {
-        const usuarioExiste = await verificarUsuario(email, senha);
+        const usuario = userStorage.authenticateUser(email, senha);
         
-        if (usuarioExiste) {
+        if (usuario) {
             successMessage.textContent = MESSAGES.loginSuccess;
             successMessage.style.display = 'block';
             
+            // Armazenar informações do usuário logado
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('loginTime', Date.now());
+            localStorage.setItem('userInfo', JSON.stringify(usuario));
             
             setTimeout(() => {
                 window.location.href = 'index.html';
@@ -137,4 +126,47 @@ function checkLoginStatus() {
 }
 
 // Verifica o status do login quando a página carrega
-document.addEventListener('DOMContentLoaded', checkLoginStatus); 
+document.addEventListener('DOMContentLoaded', checkLoginStatus);
+
+// Função para obter informações do usuário logado
+function getLoggedUser() {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+        try {
+            return JSON.parse(userInfo);
+        } catch (error) {
+            console.error('Erro ao parsear informações do usuário:', error);
+            return null;
+        }
+    }
+    return null;
+}
+
+// Função para fazer logout
+function logout() {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('loginTime');
+    localStorage.removeItem('userInfo');
+    window.location.href = 'login.html';
+}
+
+// Função para verificar se o usuário está logado
+function isUserLoggedIn() {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const loginTime = localStorage.getItem('loginTime');
+    
+    if (isLoggedIn === 'true' && loginTime) {
+        const currentTime = Date.now();
+        const timeDiff = currentTime - parseInt(loginTime);
+        
+        // Verificar se a sessão não expirou (24 horas)
+        if (timeDiff < 24 * 60 * 60 * 1000) {
+            return true;
+        } else {
+            logout(); // Fazer logout automático se a sessão expirou
+            return false;
+        }
+    }
+    
+    return false;
+} 

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Arquivos - ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .action-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .action-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .action-card p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffc107, #e0a800);
+            color: #212529;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .stats {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .stats h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .stat-value {
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .voltar-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .voltar-btn:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="neural-bg"></canvas>
+
+    <div class="container">
+        <a href="index.html" class="voltar-btn">
+            <i class="fas fa-arrow-left"></i> Voltar ao Início
+        </a>
+        
+        <div class="header">
+            <h1><i class="fas fa-file-export"></i> Gerenciar Arquivos JSON</h1>
+            <p>Gerencie os dados dos usuários em arquivos JSON físicos</p>
+        </div>
+        
+        <div class="stats" id="stats">
+            <h3><i class="fas fa-chart-bar"></i> Estatísticas</h3>
+            <div class="stat-item">
+                <span class="stat-label">Usuários Cadastrados:</span>
+                <span class="stat-value" id="totalUsers">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Última Atualização:</span>
+                <span class="stat-value" id="lastUpdate">Nunca</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Suporte a Arquivos:</span>
+                <span class="stat-value" id="fileSupport">Verificando...</span>
+            </div>
+        </div>
+        
+        <div class="actions-grid">
+            <div class="action-card" onclick="exportToFile()">
+                <h3><i class="fas fa-download"></i> Exportar para Arquivo</h3>
+                <p>Salve todos os dados dos usuários em um arquivo JSON físico no seu computador.</p>
+                <button class="btn btn-success">
+                    <i class="fas fa-download"></i> Exportar Dados
+                </button>
+            </div>
+            
+            <div class="action-card" onclick="importFromFile()">
+                <h3><i class="fas fa-upload"></i> Importar de Arquivo</h3>
+                <p>Carregue dados de usuários a partir de um arquivo JSON existente.</p>
+                <button class="btn btn-warning">
+                    <i class="fas fa-upload"></i> Importar Dados
+                </button>
+            </div>
+            
+            <div class="action-card" onclick="createBackup()">
+                <h3><i class="fas fa-shield-alt"></i> Criar Backup</h3>
+                <p>Gere um backup automático com timestamp dos dados atuais.</p>
+                <button class="btn btn-success">
+                    <i class="fas fa-shield-alt"></i> Criar Backup
+                </button>
+            </div>
+            
+            <div class="action-card" onclick="syncData()">
+                <h3><i class="fas fa-sync"></i> Sincronizar</h3>
+                <p>Sincronize os dados do navegador com um arquivo JSON físico.</p>
+                <button class="btn">
+                    <i class="fas fa-sync"></i> Sincronizar
+                </button>
+            </div>
+        </div>
+        
+        <div id="status"></div>
+        
+        <input type="file" id="fileInput" class="file-input" accept=".json" onchange="handleFileSelect(event)">
+    </div>
+
+    <script src="../js/user-storage-simples.js"></script>
+    <script src="../js/file-storage.js"></script>
+    <script src="../js/neural-background.js"></script>
+    <script>
+        // Atualizar estatísticas
+        function updateStats() {
+            try {
+                const users = userStorage.getAllUsers();
+                document.getElementById('totalUsers').textContent = users.length;
+                
+                const lastUpdate = localStorage.getItem('lastUpdate');
+                if (lastUpdate) {
+                    const date = new Date(lastUpdate);
+                    document.getElementById('lastUpdate').textContent = date.toLocaleString('pt-BR');
+                }
+                
+                const fileSupport = fileStorage.isFileSystemSupported ? 'Sim' : 'Não (Download)';
+                document.getElementById('fileSupport').textContent = fileSupport;
+                
+            } catch (error) {
+                console.error('Erro ao atualizar estatísticas:', error);
+            }
+        }
+        
+        // Mostrar status
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+            
+            setTimeout(() => {
+                statusDiv.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Exportar para arquivo
+        async function exportToFile() {
+            try {
+                showStatus('🔄 Exportando dados...', 'info');
+                
+                const users = userStorage.getAllUsers();
+                if (users.length === 0) {
+                    showStatus('⚠️ Nenhum usuário para exportar', 'error');
+                    return;
+                }
+                
+                await fileStorage.saveToFile(users);
+                showStatus('✅ Dados exportados com sucesso!', 'success');
+                
+                // Atualizar timestamp
+                localStorage.setItem('lastUpdate', new Date().toISOString());
+                updateStats();
+                
+            } catch (error) {
+                console.error('Erro ao exportar:', error);
+                showStatus('❌ Erro ao exportar: ' + error.message, 'error');
+            }
+        }
+        
+        // Importar de arquivo
+        function importFromFile() {
+            document.getElementById('fileInput').click();
+        }
+        
+        // Manipular seleção de arquivo
+        async function handleFileSelect(event) {
+            try {
+                showStatus('🔄 Carregando arquivo...', 'info');
+                
+                const data = await fileStorage.loadFromInput(event.target);
+                fileStorage.validateUserData(data);
+                
+                // Importar para localStorage
+                fileStorage.importToLocalStorage(data);
+                
+                showStatus(`✅ ${data.length} usuários importados com sucesso!`, 'success');
+                
+                // Atualizar timestamp
+                localStorage.setItem('lastUpdate', new Date().toISOString());
+                updateStats();
+                
+                // Limpar input
+                event.target.value = '';
+                
+            } catch (error) {
+                console.error('Erro ao importar:', error);
+                showStatus('❌ Erro ao importar: ' + error.message, 'error');
+            }
+        }
+        
+        // Criar backup
+        async function createBackup() {
+            try {
+                showStatus('🔄 Criando backup...', 'info');
+                
+                const success = await fileStorage.createBackup();
+                if (success) {
+                    showStatus('✅ Backup criado com sucesso!', 'success');
+                } else {
+                    showStatus('⚠️ Nenhum dado para backup', 'error');
+                }
+                
+            } catch (error) {
+                console.error('Erro ao criar backup:', error);
+                showStatus('❌ Erro ao criar backup: ' + error.message, 'error');
+            }
+        }
+        
+        // Sincronizar dados
+        async function syncData() {
+            try {
+                showStatus('🔄 Sincronizando dados...', 'info');
+                
+                const success = await fileStorage.syncWithLocalStorage();
+                if (success) {
+                    showStatus('✅ Dados sincronizados com sucesso!', 'success');
+                } else {
+                    showStatus('⚠️ Nenhum dado para sincronizar', 'error');
+                }
+                
+                // Atualizar timestamp
+                localStorage.setItem('lastUpdate', new Date().toISOString());
+                updateStats();
+                
+            } catch (error) {
+                console.error('Erro na sincronização:', error);
+                showStatus('❌ Erro na sincronização: ' + error.message, 'error');
+            }
+        }
+        
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Página de gerenciamento carregada');
+            updateStats();
+        });
+    </script>
+</body>
+</html>

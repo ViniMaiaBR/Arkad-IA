@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Chat - Setores - ARKAD AI</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .demo-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
+        .demo-button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        .demo-button:hover { background: #0056b3; }
+        .quick-reply { display: inline-block; background: rgba(0, 123, 255, 0.1); color: #007bff; border: 1px solid rgba(0, 123, 255, 0.3); padding: 8px 16px; margin: 4px 8px 4px 0; border-radius: 20px; cursor: pointer; font-size: 14px; transition: all 0.3s ease; }
+        .quick-reply:hover { background: rgba(0, 123, 255, 0.2); border-color: rgba(0, 123, 255, 0.5); transform: translateY(-2px); }
+        .message { margin: 10px 0; padding: 10px; border-radius: 8px; }
+        .ai-message { background: #e3f2fd; border-left: 4px solid #007bff; }
+        .user-message { background: #f3e5f5; border-left: 4px solid #9c27b0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 Demo: Opções de Setor no Chat IA</h1>
+        
+        <div class="demo-section">
+            <h3>📋 Fluxo de Conversação</h3>
+            <p>Quando o usuário solicita um orçamento, o sistema pergunta sobre o setor e mostra opções imediatamente:</p>
+            
+            <div id="chatDemo">
+                <div class="message ai-message">
+                    <strong>IA:</strong> Qual é o objetivo do seu negócio? (Ex: Abrir uma microempresa, montar um escritório, lançar um novo serviço)
+                </div>
+                
+                <div class="message user-message">
+                    <strong>Usuário:</strong> Abrir uma microempresa
+                </div>
+                
+                <div class="message ai-message">
+                    <strong>IA:</strong> <strong>Pergunta 2:</strong> Em qual setor você atua? Aqui estão alguns exemplos:
+                    <br>• Tecnologia da Informação (TI)
+                    <br>• Comércio Varejista
+                    <br>• Consultoria Empresarial
+                    <br>• Serviços de Marketing Digital
+                    <br>• Indústria de Transformação
+                </div>
+                
+                <div style="margin: 10px 0;">
+                    <h4>🎯 Opções de Resposta Rápida:</h4>
+                    <div class="quick-reply" onclick="selectSector('Tecnologia da Informação (TI)')">
+                        💻 Tecnologia da Informação (TI)
+                    </div>
+                    <div class="quick-reply" onclick="selectSector('Comércio Varejista')">
+                        🛒 Comércio Varejista
+                    </div>
+                    <div class="quick-reply" onclick="selectSector('Consultoria Empresarial')">
+                        💼 Consultoria Empresarial
+                    </div>
+                    <div class="quick-reply" onclick="selectSector('Serviços de Marketing Digital')">
+                        📱 Serviços de Marketing Digital
+                    </div>
+                    <div class="quick-reply" onclick="selectSector('Indústria de Transformação')">
+                        🏭 Indústria de Transformação
+                    </div>
+                    <div class="quick-reply" onclick="selectSector('Outro setor')">
+                        ➕ Outro setor
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="demo-section">
+            <h3>🔧 Teste Interativo</h3>
+            <button class="demo-button" onclick="simulateChat()">Simular Conversa Completa</button>
+            <button class="demo-button" onclick="testSectorDetection()">Testar Detecção de Setor</button>
+            <button class="demo-button" onclick="clearDemo()">Limpar Demo</button>
+        </div>
+        
+        <div class="demo-section">
+            <h3>📊 Resultados</h3>
+            <div id="results" style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace; white-space: pre-wrap;">
+                Clique nos botões para testar...
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/chat-ai-responses.js"></script>
+    <script>
+        let demoResults = [];
+        
+        function logDemo(message) {
+            demoResults.push(`[${new Date().toLocaleTimeString()}] ${message}`);
+            document.getElementById('results').textContent = demoResults.join('\n');
+        }
+        
+        function selectSector(sector) {
+            logDemo(`🎯 Setor selecionado: ${sector}`);
+            
+            // Simular resposta da IA
+            setTimeout(() => {
+                logDemo(`✅ Setor "${sector}" registrado com sucesso`);
+                logDemo(`➡️ Próxima pergunta seria sobre porte da empresa`);
+            }, 1000);
+        }
+        
+        function simulateChat() {
+            logDemo('🚀 Iniciando simulação de chat...');
+            
+            // Simular solicitação de orçamento
+            setTimeout(() => {
+                logDemo('👤 Usuário: "Quero um orçamento para meu negócio"');
+            }, 500);
+            
+            setTimeout(() => {
+                logDemo('🤖 IA: [Aviso legal] + "Qual é o objetivo do seu negócio?"');
+            }, 1000);
+            
+            setTimeout(() => {
+                logDemo('👤 Usuário: "Abrir uma microempresa"');
+            }, 1500);
+            
+            setTimeout(() => {
+                logDemo('🤖 IA: "Em qual setor você atua?" + [Mostra 6 opções de setor]');
+            }, 2000);
+            
+            setTimeout(() => {
+                logDemo('🎯 Opções disponíveis: TI, Comércio, Consultoria, Marketing, Indústria, Outro');
+            }, 2500);
+        }
+        
+        function testSectorDetection() {
+            logDemo('🔍 Testando detecção de setor...');
+            
+            const testMessage = 'Quero um orçamento para meu negócio';
+            const response = chatAI.processMessage(testMessage);
+            
+            if (response.type === 'budget_collection') {
+                logDemo('✅ Solicitação de orçamento detectada');
+                logDemo(`📝 Total de perguntas: ${response.questions.length}`);
+                
+                const sectorQuestion = response.questions.find(q => q.includes('setor'));
+                if (sectorQuestion) {
+                    logDemo(`🎯 Pergunta sobre setor encontrada: ${sectorQuestion.substring(0, 50)}...`);
+                }
+                
+                if (response.sectorOptions) {
+                    logDemo(`⚡ Opções de setor: ${response.sectorOptions.length}`);
+                }
+            } else {
+                logDemo('❌ Tipo de resposta incorreto');
+            }
+        }
+        
+        function clearDemo() {
+            demoResults = [];
+            document.getElementById('results').textContent = 'Demo limpo. Clique nos botões para testar novamente.';
+        }
+        
+        // Inicializar demo
+        document.addEventListener('DOMContentLoaded', function() {
+            logDemo('🎯 Demo do sistema de setores carregado');
+            logDemo('💡 Clique nos botões para testar as funcionalidades');
+        });
+    </script>
+</body>
+</html>

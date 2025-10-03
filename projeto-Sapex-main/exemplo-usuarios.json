@@ -1,0 +1,29 @@
+[
+  {
+    "id": "user_1705312200000_abc123",
+    "nome": "João Silva",
+    "email": "joao.silva@email.com",
+    "senha": "123456789",
+    "aniversario": "1990-05-15",
+    "dataCadastro": "2024-01-15T10:30:00.000Z",
+    "ativo": true
+  },
+  {
+    "id": "user_1705312200001_def456",
+    "nome": "Maria Santos",
+    "email": "maria.santos@email.com",
+    "senha": "987654321",
+    "aniversario": "1985-12-03",
+    "dataCadastro": "2024-01-15T11:15:00.000Z",
+    "ativo": true
+  },
+  {
+    "id": "user_1705312200002_ghi789",
+    "nome": "Pedro Oliveira",
+    "email": "pedro.oliveira@email.com",
+    "senha": "456789123",
+    "aniversario": "1992-08-22",
+    "dataCadastro": "2024-01-15T14:45:00.000Z",
+    "ativo": true
+  }
+]

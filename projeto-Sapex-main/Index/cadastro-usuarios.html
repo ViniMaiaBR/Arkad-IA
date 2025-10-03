@@ -245,7 +245,6 @@
         </div>
     </main>
 
-    <script src="../js/database-frontend.js"></script>
     <script>
         // Inicializar a página
         document.addEventListener('DOMContentLoaded', function() {
@@ -399,20 +398,22 @@
         }
         
         function processarCadastro(dados) {
-            // Usar a função do database-frontend.js
-            const resultado = cadastrarUsuario(dados);
-            
-            if (resultado.success) {
-                mostrarMensagem(resultado.message, 'success');
+            try {
+                // Usar o sistema de armazenamento JSON
+                const novoUsuario = userStorage.addUser(dados);
+                console.log('Usuário cadastrado com sucesso:', novoUsuario);
+                mostrarMensagem('Usuário cadastrado com sucesso!', 'success');
                 document.getElementById('cadastroForm').reset();
                 carregarUsuarios();
-            } else {
-                mostrarMensagem(resultado.message, 'error');
+            } catch (error) {
+                console.error('Erro ao cadastrar usuário:', error);
+                mostrarMensagem(error.message, 'error');
             }
         }
         
         function carregarUsuarios() {
-            const usuarios = listarUsuarios();
+            // Carregar usuários do sistema de armazenamento JSON
+            const usuarios = userStorage.getAllUsers();
             const listaDiv = document.getElementById('usuariosLista');
             
             if (usuarios.length === 0) {
@@ -421,9 +422,9 @@
             }
             
             const usuariosHTML = usuarios.map(usuario => {
-                // Converter data ISO para formato brasileiro
+                // Converter data para formato brasileiro
                 const dataFormatada = usuario.aniversario ? 
-                    new Date(usuario.aniversario).toLocaleDateString('pt-BR') : 
+                    userStorage.formatarDataParaExibicao(usuario.aniversario) : 
                     'Data não informada';
                 
                 return `
@@ -457,17 +458,27 @@
         
         function deletarUsuario(email) {
             if (confirm('Tem certeza que deseja deletar este usuário?')) {
-                const resultado = dbManager.deletarUsuario(email);
-                
-                if (resultado.success) {
-                    mostrarMensagem(resultado.message, 'success');
-                    carregarUsuarios();
-                } else {
-                    mostrarMensagem(resultado.message, 'error');
+                try {
+                    // Encontrar usuário pelo email
+                    const usuarios = userStorage.getAllUsers();
+                    const usuario = usuarios.find(u => u.email === email);
+                    
+                    if (usuario) {
+                        userStorage.deleteUser(usuario.id);
+                        console.log('Usuário deletado:', email);
+                        mostrarMensagem('Usuário deletado com sucesso!', 'success');
+                        carregarUsuarios();
+                    } else {
+                        mostrarMensagem('Usuário não encontrado!', 'error');
+                    }
+                } catch (error) {
+                    console.error('Erro ao deletar usuário:', error);
+                    mostrarMensagem('Erro ao deletar usuário: ' + error.message, 'error');
                 }
             }
         }
     </script>
+    <script src="../js/user-storage.js"></script>
     <script src="../js/neural-background.js"></script>
 </body>
 </html>

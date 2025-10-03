@@ -135,9 +135,21 @@
         </div>
     </div>
 
-    <script src="../js/config.js"></script>
-    <script src="../js/login.js"></script>
+    <script src="../js/user-storage-simples.js"></script>
+    <script src="../js/file-storage.js"></script>
     <script>
+        // Aguardar o carregamento do user-storage.js
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Verificando userStorage:', typeof userStorage);
+            if (typeof userStorage === 'undefined') {
+                console.error('❌ userStorage não está disponível!');
+                document.getElementById('errorMessage').textContent = 'Erro: Sistema de armazenamento não carregado!';
+                document.getElementById('errorMessage').style.display = 'block';
+            } else {
+                console.log('✅ userStorage carregado com sucesso!');
+            }
+        });
+        
         async function handleCadastro(event) {
             event.preventDefault();
             
@@ -182,7 +194,36 @@
             }
             
             try {
-                await cadastrarUsuario(email, senha, nome, dataNascimento);
+                // Verificar se userStorage está disponível
+                if (typeof userStorage === 'undefined') {
+                    throw new Error('Sistema de armazenamento não está disponível!');
+                }
+                
+                console.log('🔍 userStorage disponível:', userStorage);
+                
+                // Usar o sistema de armazenamento JSON diretamente
+                const dadosUsuario = {
+                    nome: nome,
+                    email: email,
+                    senha: senha,
+                    aniversario: dataNascimento
+                };
+                
+                console.log('📝 Dados do usuário:', dadosUsuario);
+                
+                const novoUsuario = userStorage.addUser(dadosUsuario);
+                console.log('✅ Usuário cadastrado com sucesso:', novoUsuario);
+                
+                // Salvar automaticamente em arquivo JSON
+                try {
+                    const users = userStorage.getAllUsers();
+                    await fileStorage.saveToFile(users);
+                    console.log('💾 Dados salvos em arquivo JSON');
+                } catch (fileError) {
+                    console.warn('⚠️ Erro ao salvar em arquivo:', fileError);
+                    // Não interromper o fluxo se houver erro no arquivo
+                }
+                
                 successMessage.textContent = 'Cadastro realizado com sucesso!';
                 successMessage.style.display = 'block';
                 
@@ -194,7 +235,7 @@
                     window.location.href = 'login.html';
                 }, 2000);
             } catch (error) {
-                console.error('Erro ao cadastrar:', error);
+                console.error('❌ Erro ao cadastrar:', error);
                 errorMessage.textContent = error.message || 'Erro ao realizar cadastro. Tente novamente.';
                 errorMessage.style.display = 'block';
             }

@@ -47,24 +47,22 @@ async function cadastrarUsuario(email, senha, nome, dataNascimento) {
         throw new Error(MESSAGES.invalidPassword);
     }
 
-    return new Promise((resolve, reject) => {
-        try {
-            // Usar o sistema de armazenamento JSON
-            const dadosUsuario = {
-                nome: nome,
-                email: email,
-                senha: senha,
-                aniversario: dataNascimento
-            };
-            
-            const novoUsuario = userStorage.addUser(dadosUsuario);
-            console.log(`Usuário cadastrado: ${nome} (${email}) - Data de nascimento: ${dataNascimento}`);
-            resolve(true);
-        } catch (error) {
-            console.error('Erro ao cadastrar usuário:', error);
-            reject(error);
-        }
-    });
+    try {
+        // Usar o sistema de armazenamento JSON
+        const dadosUsuario = {
+            nome: nome,
+            email: email,
+            senha: senha,
+            aniversario: dataNascimento
+        };
+        
+        const novoUsuario = await userStorage.addUser(dadosUsuario);
+        console.log(`Usuário cadastrado: ${nome} (${email}) - Data de nascimento: ${dataNascimento}`);
+        return true;
+    } catch (error) {
+        console.error('Erro ao cadastrar usuário:', error);
+        throw error;
+    }
 }
 
 // Função para lidar com o login

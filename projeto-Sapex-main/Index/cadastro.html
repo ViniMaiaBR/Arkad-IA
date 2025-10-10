@@ -135,8 +135,7 @@
         </div>
     </div>
 
-    <script src="../js/user-storage-simples.js"></script>
-    <script src="../js/file-storage.js"></script>
+    <script src="../js/user-storage-json.js"></script>
     <script>
         // Aguardar o carregamento do user-storage.js
         document.addEventListener('DOMContentLoaded', function() {
@@ -214,15 +213,8 @@
                 const novoUsuario = userStorage.addUser(dadosUsuario);
                 console.log('✅ Usuário cadastrado com sucesso:', novoUsuario);
                 
-                // Salvar automaticamente em arquivo JSON
-                try {
-                    const users = userStorage.getAllUsers();
-                    await fileStorage.saveToFile(users);
-                    console.log('💾 Dados salvos em arquivo JSON');
-                } catch (fileError) {
-                    console.warn('⚠️ Erro ao salvar em arquivo:', fileError);
-                    // Não interromper o fluxo se houver erro no arquivo
-                }
+                // O sistema já salva automaticamente no arquivo JSON
+                console.log('💾 Dados salvos automaticamente no arquivo JSON');
                 
                 successMessage.textContent = 'Cadastro realizado com sucesso!';
                 successMessage.style.display = 'block';

@@ -248,8 +248,7 @@
         <input type="file" id="fileInput" class="file-input" accept=".json" onchange="handleFileSelect(event)">
     </div>
 
-    <script src="../js/user-storage-simples.js"></script>
-    <script src="../js/file-storage.js"></script>
+    <script src="../js/user-storage-json.js"></script>
     <script src="../js/neural-background.js"></script>
     <script>
         // Atualizar estatísticas
@@ -264,7 +263,7 @@
                     document.getElementById('lastUpdate').textContent = date.toLocaleString('pt-BR');
                 }
                 
-                const fileSupport = fileStorage.isFileSystemSupported ? 'Sim' : 'Não (Download)';
+                const fileSupport = userStorage.isFileSystemSupported ? 'Sim' : 'Não (Download)';
                 document.getElementById('fileSupport').textContent = fileSupport;
                 
             } catch (error) {
@@ -293,7 +292,7 @@
                     return;
                 }
                 
-                await fileStorage.saveToFile(users);
+                await userStorage.saveUsersToFile();
                 showStatus('✅ Dados exportados com sucesso!', 'success');
                 
                 // Atualizar timestamp
@@ -316,20 +315,41 @@
             try {
                 showStatus('🔄 Carregando arquivo...', 'info');
                 
-                const data = await fileStorage.loadFromInput(event.target);
-                fileStorage.validateUserData(data);
+                const file = event.target.files[0];
+                if (!file) {
+                    showStatus('⚠️ Nenhum arquivo selecionado', 'error');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        // Validar estrutura dos dados
+                        if (!Array.isArray(data)) {
+                            throw new Error('Dados devem ser um array');
+                        }
+
+                        // Importar dados
+                        await userStorage.importData(JSON.stringify(data));
+                        
+                        showStatus(`✅ ${data.length} usuários importados com sucesso!`, 'success');
+                        
+                        // Atualizar timestamp
+                        localStorage.setItem('lastUpdate', new Date().toISOString());
+                        updateStats();
+                        
+                        // Limpar input
+                        event.target.value = '';
+                        
+                    } catch (error) {
+                        console.error('Erro ao processar arquivo:', error);
+                        showStatus('❌ Erro ao processar arquivo: ' + error.message, 'error');
+                    }
+                };
                 
-                // Importar para localStorage
-                fileStorage.importToLocalStorage(data);
-                
-                showStatus(`✅ ${data.length} usuários importados com sucesso!`, 'success');
-                
-                // Atualizar timestamp
-                localStorage.setItem('lastUpdate', new Date().toISOString());
-                updateStats();
-                
-                // Limpar input
-                event.target.value = '';
+                reader.readAsText(file);
                 
             } catch (error) {
                 console.error('Erro ao importar:', error);
@@ -342,7 +362,7 @@
             try {
                 showStatus('🔄 Criando backup...', 'info');
                 
-                const success = await fileStorage.createBackup();
+                const success = await userStorage.createBackup();
                 if (success) {
                     showStatus('✅ Backup criado com sucesso!', 'success');
                 } else {
@@ -360,7 +380,7 @@
             try {
                 showStatus('🔄 Sincronizando dados...', 'info');
                 
-                const success = await fileStorage.syncWithLocalStorage();
+                const success = await userStorage.syncWithFile();
                 if (success) {
                     showStatus('✅ Dados sincronizados com sucesso!', 'success');
                 } else {

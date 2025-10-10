@@ -397,10 +397,10 @@
             return `${ano}-${mes.padStart(2, '0')}-${dia.padStart(2, '0')}`;
         }
         
-        function processarCadastro(dados) {
+        async function processarCadastro(dados) {
             try {
                 // Usar o sistema de armazenamento JSON
-                const novoUsuario = userStorage.addUser(dados);
+                const novoUsuario = await userStorage.addUser(dados);
                 console.log('Usuário cadastrado com sucesso:', novoUsuario);
                 mostrarMensagem('Usuário cadastrado com sucesso!', 'success');
                 document.getElementById('cadastroForm').reset();
@@ -456,7 +456,7 @@
             alert(`Funcionalidade de edição para ${email} será implementada em breve!`);
         }
         
-        function deletarUsuario(email) {
+        async function deletarUsuario(email) {
             if (confirm('Tem certeza que deseja deletar este usuário?')) {
                 try {
                     // Encontrar usuário pelo email
@@ -464,7 +464,7 @@
                     const usuario = usuarios.find(u => u.email === email);
                     
                     if (usuario) {
-                        userStorage.deleteUser(usuario.id);
+                        await userStorage.deleteUser(usuario.id);
                         console.log('Usuário deletado:', email);
                         mostrarMensagem('Usuário deletado com sucesso!', 'success');
                         carregarUsuarios();
@@ -478,7 +478,7 @@
             }
         }
     </script>
-    <script src="../js/user-storage.js"></script>
+    <script src="../js/user-storage-json.js"></script>
     <script src="../js/neural-background.js"></script>
 </body>
 </html>

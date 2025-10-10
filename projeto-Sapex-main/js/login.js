@@ -1,21 +1,5 @@
-// Importar configurações
-let APP_CONFIG, SECURITY_CONFIG, MESSAGES;
-
-// Carregar configurações
-fetch('../js/config.js')
-    .then(response => response.text())
-    .then(text => {
-        // Executar o código do config.js
-        eval(text);
-        // Inicializar configurações após carregar
-        initConfig();
-    })
-    .catch(error => console.error('Erro ao carregar configurações:', error));
-
-// Função para inicializar configurações
-function initConfig() {
-    console.log('Configurações carregadas para ARKAD AI');
-}
+// Sistema de Login ARKAD AI
+console.log('🔐 Carregando sistema de login...');
 
 // Função para validar senha
 function validarSenha(senha) {
@@ -44,7 +28,7 @@ async function verificarUsuario(email, senha) {
 // Função para cadastrar novo usuário (usando sistema JSON)
 async function cadastrarUsuario(email, senha, nome, dataNascimento) {
     if (!validarSenha(senha)) {
-        throw new Error(MESSAGES.invalidPassword);
+        throw new Error('Senha inválida. Deve ter pelo menos 8 caracteres, incluindo maiúscula, minúscula, número e símbolo especial.');
     }
 
     try {
@@ -81,7 +65,7 @@ async function handleLogin(event) {
         const usuario = userStorage.authenticateUser(email, senha);
         
         if (usuario) {
-            successMessage.textContent = MESSAGES.loginSuccess;
+            successMessage.textContent = 'Login realizado com sucesso!';
             successMessage.style.display = 'block';
             
             // Armazenar informações do usuário logado
@@ -93,7 +77,7 @@ async function handleLogin(event) {
                 window.location.href = 'index.html';
             }, 1000);
         } else {
-            errorMessage.textContent = MESSAGES.loginFailed;
+            errorMessage.textContent = 'Usuário não encontrado ou senha incorreta';
             errorMessage.style.display = 'block';
         }
     } catch (error) {

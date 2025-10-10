@@ -92,7 +92,8 @@
             try {
                 const response = chatAI.processMessage(message);
                 
-                if (response.type === 'budget_collection' || response.type === 'financial_collection') {
+                if (response.type === 'budget_collection' || response.type === 'financial_collection' || 
+                    response.type === 'viability_collection' || response.type === 'project_collection') {
                     currentContext = response.type;
                     currentQuestions = response.questions;
                     questionIndex = 0;
@@ -108,19 +109,19 @@
                             // Mostrar opções de setor imediatamente
                             setTimeout(() => {
                                 const sectorOptions = [
-                                    "Tecnologia da Informação (TI)",
-                                    "Comércio Varejista", 
-                                    "Consultoria Empresarial",
-                                    "Serviços de Marketing Digital",
-                                    "Indústria de Transformação",
-                                    "Outro setor"
+                                    "💻 Tecnologia da Informação (TI)",
+                                    "🛒 Comércio Varejista", 
+                                    "💼 Consultoria Empresarial",
+                                    "📱 Serviços de Marketing Digital",
+                                    "🏭 Indústria de Transformação",
+                                    "➕ Outro setor"
                                 ];
                                 sectorOptions.forEach(option => {
                                     addQuickReply(option);
                                 });
                             }, 500);
                         } else {
-                            addQuickReply("Responder");
+                            addQuickReply("✅ Responder");
                         }
                     }, 1500);
                     
@@ -218,25 +219,25 @@
                 setTimeout(() => {
                     addMessage(`**Pergunta ${questionIndex + 1}:** ${currentQuestions[questionIndex]}`, 'ai');
                     
-                    // Se for a pergunta sobre setor, mostrar opções específicas
-                    if (currentQuestions[questionIndex].includes('setor')) {
-                        // Mostrar opções de setor imediatamente
-                        setTimeout(() => {
-                            const sectorOptions = [
-                                "Tecnologia da Informação (TI)",
-                                "Comércio Varejista", 
-                                "Consultoria Empresarial",
-                                "Serviços de Marketing Digital",
-                                "Indústria de Transformação",
-                                "Outro setor"
-                            ];
-                            sectorOptions.forEach(option => {
-                                addQuickReply(option);
-                            });
-                        }, 500);
-                    } else {
-                        addQuickReply("Responder");
-                    }
+                        // Se for a pergunta sobre setor, mostrar opções específicas
+                        if (currentQuestions[questionIndex].includes('setor')) {
+                            // Mostrar opções de setor imediatamente
+                            setTimeout(() => {
+                                const sectorOptions = [
+                                    "💻 Tecnologia da Informação (TI)",
+                                    "🛒 Comércio Varejista", 
+                                    "💼 Consultoria Empresarial",
+                                    "📱 Serviços de Marketing Digital",
+                                    "🏭 Indústria de Transformação",
+                                    "➕ Outro setor"
+                                ];
+                                sectorOptions.forEach(option => {
+                                    addQuickReply(option);
+                                });
+                            }, 500);
+                        } else {
+                            addQuickReply("✅ Responder");
+                        }
                 }, 1000);
             } else {
                 // Gerar análise completa
@@ -246,9 +247,12 @@
                     
                     // Adicionar opções de ação
                     setTimeout(() => {
-                        addQuickReply("Fazer nova análise");
-                        addQuickReply("Ver planos disponíveis");
-                        addQuickReply("Falar com especialista");
+                        addQuickReply("🔄 Fazer nova análise");
+                        addQuickReply("🎯 Ver planos disponíveis");
+                        addQuickReply("💬 Falar com especialista");
+                        addQuickReply("📊 Análise financeira detalhada");
+                        addQuickReply("💡 Avaliar viabilidade");
+                        addQuickReply("🚀 Começar novo projeto");
                     }, 2000);
                 }, 1500);
             }

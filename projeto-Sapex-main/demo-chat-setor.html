@@ -36,31 +36,31 @@
                 
                 <div class="message ai-message">
                     <strong>IA:</strong> <strong>Pergunta 2:</strong> Em qual setor você atua? Aqui estão alguns exemplos:
-                    <br>• Tecnologia da Informação (TI)
-                    <br>• Comércio Varejista
-                    <br>• Consultoria Empresarial
-                    <br>• Serviços de Marketing Digital
-                    <br>• Indústria de Transformação
+                    <br>• 💻 Tecnologia da Informação (TI)
+                    <br>• 🛒 Comércio Varejista
+                    <br>• 💼 Consultoria Empresarial
+                    <br>• 📱 Serviços de Marketing Digital
+                    <br>• 🏭 Indústria de Transformação
                 </div>
                 
                 <div style="margin: 10px 0;">
                     <h4>🎯 Opções de Resposta Rápida:</h4>
-                    <div class="quick-reply" onclick="selectSector('Tecnologia da Informação (TI)')">
+                    <div class="quick-reply" onclick="selectSector('💻 Tecnologia da Informação (TI)')">
                         💻 Tecnologia da Informação (TI)
                     </div>
-                    <div class="quick-reply" onclick="selectSector('Comércio Varejista')">
+                    <div class="quick-reply" onclick="selectSector('🛒 Comércio Varejista')">
                         🛒 Comércio Varejista
                     </div>
-                    <div class="quick-reply" onclick="selectSector('Consultoria Empresarial')">
+                    <div class="quick-reply" onclick="selectSector('💼 Consultoria Empresarial')">
                         💼 Consultoria Empresarial
                     </div>
-                    <div class="quick-reply" onclick="selectSector('Serviços de Marketing Digital')">
+                    <div class="quick-reply" onclick="selectSector('📱 Serviços de Marketing Digital')">
                         📱 Serviços de Marketing Digital
                     </div>
-                    <div class="quick-reply" onclick="selectSector('Indústria de Transformação')">
+                    <div class="quick-reply" onclick="selectSector('🏭 Indústria de Transformação')">
                         🏭 Indústria de Transformação
                     </div>
-                    <div class="quick-reply" onclick="selectSector('Outro setor')">
+                    <div class="quick-reply" onclick="selectSector('➕ Outro setor')">
                         ➕ Outro setor
                     </div>
                 </div>
@@ -71,6 +71,9 @@
             <h3>🔧 Teste Interativo</h3>
             <button class="demo-button" onclick="simulateChat()">Simular Conversa Completa</button>
             <button class="demo-button" onclick="testSectorDetection()">Testar Detecção de Setor</button>
+            <button class="demo-button" onclick="testViabilityAnalysis()">Testar Análise de Viabilidade</button>
+            <button class="demo-button" onclick="testNewProject()">Testar Novo Projeto</button>
+            <button class="demo-button" onclick="testPlansInfo()">Testar Informações de Planos</button>
             <button class="demo-button" onclick="clearDemo()">Limpar Demo</button>
         </div>
         
@@ -144,6 +147,53 @@
                 if (response.sectorOptions) {
                     logDemo(`⚡ Opções de setor: ${response.sectorOptions.length}`);
                 }
+            } else {
+                logDemo('❌ Tipo de resposta incorreto');
+            }
+        }
+        
+        function testViabilityAnalysis() {
+            logDemo('💡 Testando análise de viabilidade...');
+            
+            const testMessage = 'Tenho dúvidas sobre viabilidade';
+            const response = chatAI.processMessage(testMessage);
+            
+            if (response.type === 'viability_collection') {
+                logDemo('✅ Solicitação de análise de viabilidade detectada');
+                logDemo(`📝 Total de perguntas: ${response.questions.length}`);
+                logDemo(`🎯 Primeira pergunta: ${response.questions[0].substring(0, 50)}...`);
+            } else {
+                logDemo('❌ Tipo de resposta incorreto');
+            }
+        }
+        
+        function testNewProject() {
+            logDemo('🚀 Testando novo projeto...');
+            
+            const testMessage = 'Quero começar um novo projeto';
+            const response = chatAI.processMessage(testMessage);
+            
+            if (response.type === 'project_collection') {
+                logDemo('✅ Solicitação de novo projeto detectada');
+                logDemo(`📝 Total de perguntas: ${response.questions.length}`);
+                logDemo(`🎯 Primeira pergunta: ${response.questions[0].substring(0, 50)}...`);
+            } else {
+                logDemo('❌ Tipo de resposta incorreto');
+            }
+        }
+        
+        function testPlansInfo() {
+            logDemo('🎯 Testando informações de planos...');
+            
+            const testMessage = 'Como funciona o sistema de planos?';
+            const response = chatAI.processMessage(testMessage);
+            
+            if (response.type === 'plans_info') {
+                logDemo('✅ Informações de planos detectadas');
+                logDemo(`📝 Total de opções: ${response.options.length}`);
+                response.options.forEach((option, index) => {
+                    logDemo(`   ${index + 1}. ${option}`);
+                });
             } else {
                 logDemo('❌ Tipo de resposta incorreto');
             }

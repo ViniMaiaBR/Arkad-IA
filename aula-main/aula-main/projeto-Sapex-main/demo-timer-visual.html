@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Timer Visual Melhorado</title>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .demo-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .demo-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .demo-title {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .demo-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+        .feature-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .feature-desc {
+            color: #666;
+            font-size: 14px;
+        }
+        .demo-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            transition: transform 0.3s ease;
+        }
+        .demo-button:hover {
+            transform: translateY(-2px);
+        }
+        .timer-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .preview-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .preview-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .preview-counter {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff6b6b 0deg, #4ecdc4 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            animation: rotate 1s linear infinite;
+        }
+        .preview-number {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+        .preview-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .preview-progress {
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            border-radius: 25px;
+            position: relative;
+        }
+        .preview-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1 class="demo-title">🎨 Timer Visual Melhorado</h1>
+            <p class="demo-subtitle">Interface moderna e atrativa para o processamento de análise</p>
+        </div>
+
+        <div class="timer-preview">
+            <div class="preview-icon">🤖</div>
+            <div class="preview-text">Processando Análise Inteligente...</div>
+            <div class="preview-counter">
+                <div class="preview-number">5</div>
+            </div>
+            <div style="font-size: 16px; margin-bottom: 20px; opacity: 0.9;">segundos restantes</div>
+            <div class="preview-bar">
+                <div class="preview-progress"></div>
+            </div>
+            <div style="font-size: 14px; margin-top: 15px; opacity: 0.8;">Analisando dados e gerando relatório personalizado...</div>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-title">🎨 Design Moderno</div>
+                <div class="feature-desc">Gradiente atrativo, bordas arredondadas e sombras suaves para uma aparência profissional</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">⚡ Animações Fluidas</div>
+                <div class="feature-desc">Ícone pulsante, contador rotativo e efeitos de shimmer na barra de progresso</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">🌟 Efeitos Visuais</div>
+                <div class="feature-desc">Partículas animadas de fundo e efeito de fade out ao finalizar</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">📱 Responsivo</div>
+                <div class="feature-desc">Interface adaptável para diferentes tamanhos de tela e dispositivos</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">🎯 Feedback Visual</div>
+                <div class="feature-desc">Piscada acelerada nos últimos 3 segundos para indicar urgência</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-title">🎨 Cores Vibrantes</div>
+                <div class="feature-desc">Paleta de cores moderna com gradientes e transições suaves</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="Index/chat.html" class="demo-button">
+                🚀 Testar Timer Melhorado
+            </a>
+            <a href="teste-escritorio.html" class="demo-button">
+                📋 Ver Instruções Completas
+            </a>
+        </div>
+
+        <div style="background: #e3f2fd; padding: 20px; border-radius: 15px; margin-top: 30px;">
+            <h3 style="color: #1976d2; margin-top: 0;">💡 Melhorias Implementadas</h3>
+            <ul style="color: #666; line-height: 1.6;">
+                <li><strong>Gradiente de fundo</strong> com cores vibrantes (azul/roxo)</li>
+                <li><strong>Ícone animado</strong> (🤖) com efeito de pulsação</li>
+                <li><strong>Contador circular</strong> com gradiente conic e rotação</li>
+                <li><strong>Barra de progresso</strong> com gradiente multicolorido e efeito shimmer</li>
+                <li><strong>Partículas animadas</strong> de fundo para dinamismo</li>
+                <li><strong>Efeito de fade out</strong> suave ao finalizar</li>
+                <li><strong>Piscada acelerada</strong> nos últimos 3 segundos</li>
+                <li><strong>Sombras e bordas</strong> modernas para profundidade</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

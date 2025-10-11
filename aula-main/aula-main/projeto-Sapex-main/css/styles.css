@@ -851,3 +851,61 @@ body {
     color: #6c757d;
     font-style: italic;
 }
+
+/* Estilos para usuário logado */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 20px;
+}
+
+.user-welcome {
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg, #c82333, #a71e2a);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.logout-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(220, 53, 69, 0.3);
+}
+
+/* Responsividade para usuário logado */
+@media (max-width: 768px) {
+    .user-info {
+        flex-direction: column;
+        gap: 8px;
+        margin-left: 10px;
+    }
+    
+    .user-welcome {
+        font-size: 12px;
+    }
+    
+    .logout-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+}

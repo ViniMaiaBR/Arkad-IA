@@ -46,12 +46,16 @@
     </main>
 
     <script src="../js/chat-ai-responses.js"></script>
+    <script src="../js/escritorio-ti-flow.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         let messagesContainer;
         let currentContext = null;
         let userData = {};
         let questionIndex = 0;
         let currentQuestions = [];
+        let isOfficeFlow = false;
+        let officeFlowStep = 0;
 
         // Mostra a consulta inicial do usuário
         window.onload = function() {
@@ -90,7 +94,27 @@
 
         function processUserMessage(message) {
             try {
+                // Verificar se estamos no fluxo de escritório
+                if (isOfficeFlow) {
+                    processOfficeFlowMessage(message);
+                    return;
+                }
+
                 const response = chatAI.processMessage(message);
+                
+                // Verificar se é início do fluxo de escritório
+                if (response.type === 'office_flow_start') {
+                    isOfficeFlow = true;
+                    officeFlowStep = 0;
+                    addMessage(response.message, 'ai');
+                    
+                    setTimeout(() => {
+                        response.options.forEach(option => {
+                            addQuickReply(option);
+                        });
+                    }, 1000);
+                    return;
+                }
                 
                 if (response.type === 'budget_collection' || response.type === 'financial_collection' || 
                     response.type === 'viability_collection' || response.type === 'project_collection') {
@@ -205,6 +229,86 @@
             
             messagesContainer.appendChild(quickReplyDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Processar mensagens do fluxo de escritório
+        function processOfficeFlowMessage(message) {
+            try {
+                let response;
+                
+                if (officeFlowStep === 0) {
+                    // Primeira pergunta: tem plano?
+                    const hasPlan = message.includes('Sim') || message.includes('sim') || message.includes('✅');
+                    response = window.escritorioTIFlow.processPlanResponse(hasPlan);
+                    officeFlowStep = 1;
+                    
+                } else if (officeFlowStep === 1) {
+                    // Segunda pergunta: tipo de plano
+                    let planType = 'Plano Básico';
+                    if (message.includes('Intermediário') || message.includes('intermediário')) {
+                        planType = 'Plano Intermediário';
+                    } else if (message.includes('Premium') || message.includes('premium')) {
+                        planType = 'Plano Premium';
+                    }
+                    
+                    response = window.escritorioTIFlow.processPlanTypeSelection(planType);
+                    officeFlowStep = 2;
+                    
+                    // Mostrar mensagem de processamento
+                    addMessage(response.message, 'ai');
+                    
+                    // Iniciar timer de processamento
+                    window.escritorioTIFlow.startProcessingTimer(() => {
+                        const completeAnalysis = window.escritorioTIFlow.processCompleteAnalysis();
+                        addMessage(completeAnalysis.message, 'ai');
+                        
+                        // Gerar PDF automaticamente após 2 segundos
+                        setTimeout(() => {
+                            const pdfResponse = window.escritorioTIFlow.generatePDF();
+                            addMessage(pdfResponse.message, 'ai');
+                            
+                            // Adicionar botão para gerar TXT também
+                            setTimeout(() => {
+                                addQuickReply("📝 Gerar TXT");
+                                addQuickReply("🔄 Nova Análise");
+                            }, 1000);
+                        }, 2000);
+                    });
+                    
+                    return; // Não processar mais nada aqui
+                    
+                } else if (officeFlowStep === 2) {
+                    // Processar ações após análise
+                    if (message.includes('PDF') || message.includes('pdf')) {
+                        const pdfResponse = window.escritorioTIFlow.generatePDF();
+                        addMessage(pdfResponse.message, 'ai');
+                        return;
+                    } else if (message.includes('TXT') || message.includes('txt')) {
+                        const txtResponse = window.escritorioTIFlow.generateTXT();
+                        addMessage(txtResponse.message, 'ai');
+                        return;
+                    }
+                }
+                
+                // Mostrar resposta e opções
+                if (response) {
+                    addMessage(response.message, 'ai');
+                    
+                    if (response.options) {
+                        setTimeout(() => {
+                            response.options.forEach(option => {
+                                addQuickReply(option);
+                            });
+                        }, 1000);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Erro no fluxo de escritório:', error);
+                addMessage("Desculpe, ocorreu um erro no processamento. Vamos tentar novamente?", 'ai');
+                isOfficeFlow = false;
+                officeFlowStep = 0;
+            }
         }
 
         function handleQuestionResponse(response) {

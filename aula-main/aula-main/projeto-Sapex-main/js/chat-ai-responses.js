@@ -205,7 +205,9 @@ class ChatAIResponses {
         const message = userMessage.toLowerCase();
         
         // Detectar tipo de solicitação
-        if (this.isBudgetRequest(message)) {
+        if (this.isOfficeSetupRequest(message)) {
+            return this.handleOfficeSetupRequest();
+        } else if (this.isBudgetRequest(message)) {
             return this.handleBudgetRequest();
         } else if (this.isFinancialAnalysisRequest(message)) {
             return this.handleFinancialAnalysisRequest();
@@ -226,6 +228,12 @@ class ChatAIResponses {
     isBudgetRequest(message) {
         const budgetKeywords = ['orçamento', 'orçamento', 'custo', 'gasto', 'investimento', 'montar', 'abrir', 'negócio', 'completo'];
         return budgetKeywords.some(keyword => message.includes(keyword));
+    }
+
+    // Verificar se é solicitação de montagem de escritório
+    isOfficeSetupRequest(message) {
+        const officeKeywords = ['montar', 'escritório', 'escritorio', 'montagem', 'ti', 'tecnologia', 'informação'];
+        return officeKeywords.some(keyword => message.includes(keyword));
     }
 
     // Verificar se é solicitação de análise financeira
@@ -256,6 +264,20 @@ class ChatAIResponses {
     isGreeting(message) {
         const greetingKeywords = ['olá', 'oi', 'bom dia', 'boa tarde', 'boa noite', 'hello', 'hi'];
         return greetingKeywords.some(keyword => message.includes(keyword));
+    }
+
+    // Lidar com solicitação de montagem de escritório
+    handleOfficeSetupRequest() {
+        // Verificar se o fluxo de escritório TI está disponível
+        if (typeof window.escritorioTIFlow !== 'undefined') {
+            return window.escritorioTIFlow.startOfficeFlow();
+        } else {
+            return {
+                message: "🏢 **MONTAGEM DE ESCRITÓRIO**\n\nPerfeito! Vou te ajudar a montar um escritório completo. Vamos começar com algumas perguntas para personalizar sua análise.\n\n**Você já tem um plano ou assinatura conosco?**",
+                options: ["✅ Sim, já tenho", "❌ Não, ainda não tenho"],
+                type: 'office_flow_start'
+            };
+        }
     }
 
     // Lidar com solicitação de orçamento

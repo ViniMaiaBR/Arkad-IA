@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer + PDF Automático - ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .title {
+            color: #333;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .status {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .timer-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .timer-text {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .timer-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff6b6b 0deg, #4ecdc4 360deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: rotate 1s linear infinite;
+            position: relative;
+        }
+
+        .timer-number {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            border-radius: 25px;
+            position: relative;
+            transition: width 1s ease;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .processing-text {
+            font-size: 16px;
+            margin-top: 20px;
+            opacity: 0.9;
+        }
+
+        .result-container {
+            display: none;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+        }
+
+        .result-title {
+            color: #333;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .result-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .section-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .section-content {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .pdf-button {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 20px 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .pdf-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .pdf-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #dc3545;
+            display: none;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.3"><animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="30" r="1.5" fill="white" opacity="0.4"><animate attributeName="opacity" values="0.4;0.9;0.4" dur="1.5s" repeatCount="indefinite"/></circle><circle cx="40" cy="70" r="1" fill="white" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite"/></circle><circle cx="90" cy="80" r="2.5" fill="white" opacity="0.2"><animate attributeName="opacity" values="0.2;0.7;0.2" dur="1.8s" repeatCount="indefinite"/></circle></svg>') repeat;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .blink {
+            animation: blink 0.5s ease-in-out;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🤖 ARKAD AI</h1>
+            <p class="subtitle">Sistema de Análise Inteligente com Geração Automática de PDF</p>
+            <div class="status" id="status">Pronto para iniciar análise</div>
+        </div>
+
+        <div class="timer-container" id="timerContainer">
+            <div class="particles"></div>
+            <div class="timer-icon" id="timerIcon">🤖</div>
+            <div class="timer-text" id="timerText">Iniciando análise...</div>
+            <div class="timer-circle" id="timerCircle">
+                <div class="timer-number" id="timerNumber">10</div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+            <div class="processing-text" id="processingText">Analisando dados e gerando relatório personalizado...</div>
+        </div>
+
+        <div class="result-container" id="resultContainer">
+            <h2 class="result-title">📊 Relatório de Análise Completa</h2>
+            
+            <div class="result-section">
+                <div class="section-title">📈 Resumo Executivo</div>
+                <div class="section-content">
+                    <p><strong>Data da Análise:</strong> <span id="analysisDate"></span></p>
+                    <p><strong>Status:</strong> Análise concluída com sucesso</p>
+                    <p><strong>Confiança:</strong> 95%</p>
+                    <p><strong>Recomendação:</strong> Implementação recomendada</p>
+                </div>
+            </div>
+
+            <div class="result-section">
+                <div class="section-title">🎯 Objetivos Identificados</div>
+                <div class="section-content">
+                    <ul>
+                        <li>Otimização de processos operacionais</li>
+                        <li>Implementação de soluções de IA</li>
+                        <li>Melhoria na eficiência organizacional</li>
+                        <li>Redução de custos operacionais</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="result-section">
+                <div class="section-title">💡 Recomendações Principais</div>
+                <div class="section-content">
+                    <ul>
+                        <li>Implementar sistema de automação inteligente</li>
+                        <li>Integrar análise de dados em tempo real</li>
+                        <li>Desenvolver dashboard executivo personalizado</li>
+                        <li>Estabelecer métricas de performance</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="result-section">
+                <div class="section-title">📊 Métricas de Impacto</div>
+                <div class="section-content">
+                    <p><strong>ROI Esperado:</strong> 250% em 12 meses</p>
+                    <p><strong>Redução de Custos:</strong> 30-40%</p>
+                    <p><strong>Melhoria de Eficiência:</strong> 60-80%</p>
+                    <p><strong>Prazo de Implementação:</strong> 3-6 meses</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="pdf-button" id="generatePdfBtn" onclick="generatePDF()">
+                    📄 Gerar PDF Completo
+                </button>
+                <button class="pdf-button" onclick="restartAnalysis()">
+                    🔄 Nova Análise
+                </button>
+            </div>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            <i class="fas fa-check-circle"></i>
+            <strong>Sucesso!</strong> PDF gerado e baixado automaticamente.
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <i class="fas fa-exclamation-triangle"></i>
+            <strong>Erro!</strong> Não foi possível gerar o PDF. Tente novamente.
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let timeLeft = 10;
+        let isProcessing = false;
+
+        // Inicializar quando a página carregar
+        window.onload = function() {
+            startAnalysis();
+        };
+
+        function startAnalysis() {
+            if (isProcessing) return;
+            
+            isProcessing = true;
+            timeLeft = 10;
+            
+            // Atualizar status
+            document.getElementById('status').textContent = 'Processando análise...';
+            document.getElementById('status').style.background = '#fff3cd';
+            document.getElementById('status').style.color = '#856404';
+            
+            // Mostrar timer
+            document.getElementById('timerContainer').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+            
+            // Iniciar timer
+            startTimer();
+        }
+
+        function startTimer() {
+            const timerNumber = document.getElementById('timerNumber');
+            const progressFill = document.getElementById('progressFill');
+            const timerText = document.getElementById('timerText');
+            const processingText = document.getElementById('processingText');
+            const timerIcon = document.getElementById('timerIcon');
+            
+            // Atualizar data da análise
+            const now = new Date();
+            document.getElementById('analysisDate').textContent = now.toLocaleDateString('pt-BR') + ' às ' + now.toLocaleTimeString('pt-BR');
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                // Atualizar número do timer
+                timerNumber.textContent = timeLeft;
+                
+                // Atualizar barra de progresso
+                const progress = ((10 - timeLeft) / 10) * 100;
+                progressFill.style.width = progress + '%';
+                
+                // Efeitos visuais nos últimos 3 segundos
+                if (timeLeft <= 3) {
+                    timerNumber.classList.add('blink');
+                    timerIcon.style.animation = 'pulse 0.5s ease-in-out infinite';
+                }
+                
+                // Atualizar textos
+                if (timeLeft > 0) {
+                    timerText.textContent = `Processando análise... ${timeLeft} segundos restantes`;
+                    processingText.textContent = getProcessingMessage(timeLeft);
+                } else {
+                    // Timer finalizado
+                    clearInterval(timerInterval);
+                    completeAnalysis();
+                }
+            }, 1000);
+        }
+
+        function getProcessingMessage(timeLeft) {
+            const messages = [
+                "Analisando dados e gerando relatório personalizado...",
+                "Processando informações e calculando métricas...",
+                "Aplicando algoritmos de IA para análise...",
+                "Gerando insights e recomendações...",
+                "Finalizando relatório completo...",
+                "Preparando dados para exportação...",
+                "Quase pronto! Finalizando análise...",
+                "Últimos ajustes no relatório...",
+                "Concluindo processamento...",
+                "Finalizando..."
+            ];
+            
+            return messages[Math.min(9, 10 - timeLeft)] || "Processando...";
+        }
+
+        function completeAnalysis() {
+            // Parar timer
+            clearInterval(timerInterval);
+            
+            // Atualizar status
+            document.getElementById('status').textContent = 'Análise concluída com sucesso!';
+            document.getElementById('status').style.background = '#d4edda';
+            document.getElementById('status').style.color = '#155724';
+            
+            // Ocultar timer e mostrar resultados
+            setTimeout(() => {
+                document.getElementById('timerContainer').style.display = 'none';
+                document.getElementById('resultContainer').style.display = 'block';
+                document.getElementById('resultContainer').classList.add('fade-in');
+                
+                // Gerar PDF automaticamente após 2 segundos
+                setTimeout(() => {
+                    generatePDF();
+                }, 2000);
+            }, 1000);
+        }
+
+        function generatePDF() {
+            const button = document.getElementById('generatePdfBtn');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            // Desabilitar botão
+            button.disabled = true;
+            button.textContent = 'Gerando PDF...';
+            
+            try {
+                // Configurações do PDF
+                const opt = {
+                    margin: 1,
+                    filename: `Relatorio_ARKAD_AI_${new Date().toISOString().split('T')[0]}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                
+                // Elemento a ser convertido
+                const element = document.getElementById('resultContainer');
+                
+                // Gerar PDF
+                html2pdf().set(opt).from(element).save().then(() => {
+                    // Sucesso
+                    button.textContent = 'PDF Gerado!';
+                    successMessage.style.display = 'block';
+                    successMessage.classList.add('fade-in');
+                    
+                    // Ocultar mensagem de sucesso após 5 segundos
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 5000);
+                    
+                }).catch((error) => {
+                    console.error('Erro ao gerar PDF:', error);
+                    showError();
+                });
+                
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                showError();
+            }
+        }
+
+        function showError() {
+            const button = document.getElementById('generatePdfBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            button.disabled = false;
+            button.textContent = 'Tentar Novamente';
+            errorMessage.style.display = 'block';
+            errorMessage.classList.add('fade-in');
+            
+            // Ocultar mensagem de erro após 5 segundos
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function restartAnalysis() {
+            // Resetar estado
+            isProcessing = false;
+            timeLeft = 10;
+            
+            // Ocultar mensagens
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            
+            // Resetar botão
+            const button = document.getElementById('generatePdfBtn');
+            button.disabled = false;
+            button.textContent = '📄 Gerar PDF Completo';
+            
+            // Resetar timer
+            document.getElementById('timerNumber').textContent = '10';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('timerNumber').classList.remove('blink');
+            document.getElementById('timerIcon').style.animation = 'pulse 2s ease-in-out infinite';
+            
+            // Iniciar nova análise
+            startAnalysis();
+        }
+
+        // Adicionar efeitos de partículas animadas
+        function createParticles() {
+            const container = document.getElementById('timerContainer');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.style.cssText = `
+                    position: absolute;
+                    width: 4px;
+                    height: 4px;
+                    background: white;
+                    border-radius: 50%;
+                    opacity: 0.3;
+                    animation: float ${2 + Math.random() * 3}s ease-in-out infinite;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    animation-delay: ${Math.random() * 2}s;
+                `;
+                container.appendChild(particle);
+            }
+        }
+
+        // Inicializar partículas
+        createParticles();
+    </script>
+</body>
+</html>

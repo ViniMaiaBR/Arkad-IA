@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integração Chat + Timer + PDF - ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .chat-section {
+            padding: 30px;
+            border-right: 1px solid #eee;
+        }
+
+        .chat-header {
+            margin-bottom: 20px;
+        }
+
+        .chat-title {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .ai-message {
+            background: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .quick-reply {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: inline-block;
+            margin: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .quick-reply:hover {
+            background: #1976d2;
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .send-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .demo-section {
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .demo-title {
+            color: #333;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .demo-steps {
+            margin-bottom: 30px;
+        }
+
+        .step {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .step-desc {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .demo-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .demo-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .timer-preview {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .timer-preview-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .timer-preview-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 3px solid #28a745;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .feature-desc {
+            font-size: 12px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-section {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🤖 ARKAD AI - Sistema Integrado</h1>
+            <p class="subtitle">Chat Inteligente + Timer Visual + Geração Automática de PDF</p>
+        </div>
+
+        <div class="main-content">
+            <div class="chat-section">
+                <div class="chat-header">
+                    <h2 class="chat-title">💬 Chat Interativo</h2>
+                    <p>Teste o fluxo completo de interação</p>
+                </div>
+                
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai-message">
+                        <strong>🤖 ARKAD AI:</strong> Olá! Sou a IA da Arkad. Como posso ajudar você hoje?
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <input type="text" id="userInput" placeholder="Digite sua mensagem..." onkeypress="handleKeyPress(event)">
+                    <button class="send-btn" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="demo-section">
+                <h2 class="demo-title">🚀 Demonstração do Sistema</h2>
+                
+                <div class="demo-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-title">Inicie uma Conversa</div>
+                        <div class="step-desc">Digite "montar escritório" ou "análise de dados" no chat</div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-title">Responda as Perguntas</div>
+                        <div class="step-desc">Use os botões de resposta rápida ou digite suas respostas</div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-title">Timer Visual</div>
+                        <div class="step-desc">Acompanhe o processamento com timer animado de 10 segundos</div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-title">PDF Automático</div>
+                        <div class="step-desc">PDF é gerado e baixado automaticamente após o timer</div>
+                    </div>
+                </div>
+
+                <div class="timer-preview">
+                    <div class="timer-preview-icon">⏱️</div>
+                    <div class="timer-preview-text">Timer Visual de 10 Segundos</div>
+                    <p>Com animações modernas e barra de progresso</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">💬</div>
+                        <div class="feature-title">Chat Inteligente</div>
+                        <div class="feature-desc">Respostas contextuais e botões de ação rápida</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <div class="feature-title">Timer Visual</div>
+                        <div class="feature-desc">Interface moderna com animações e progresso</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📄</div>
+                        <div class="feature-title">PDF Automático</div>
+                        <div class="feature-desc">Geração e download automático de relatórios</div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <div class="feature-title">Design Moderno</div>
+                        <div class="feature-desc">Interface responsiva e visualmente atrativa</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="demo-timer-pdf-automatico.html" class="demo-button">
+                        🚀 Testar Sistema Completo
+                    </a>
+                    <a href="Index/chat.html" class="demo-button">
+                        💬 Ir para Chat
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let messageCount = 0;
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Simular resposta da IA
+                setTimeout(() => {
+                    processMessage(message);
+                }, 1000);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            const prefix = sender === 'user' ? '👤 Você:' : '🤖 ARKAD AI:';
+            messageDiv.innerHTML = `<strong>${prefix}</strong> ${text}`;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function addQuickReply(text) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const quickReplyDiv = document.createElement('div');
+            quickReplyDiv.className = 'quick-reply';
+            quickReplyDiv.textContent = text;
+            quickReplyDiv.onclick = () => {
+                document.getElementById('userInput').value = text;
+                sendMessage();
+            };
+            
+            messagesContainer.appendChild(quickReplyDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function processMessage(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            if (lowerMessage.includes('montar escritório') || lowerMessage.includes('escritório')) {
+                addMessage("🏢 **MONTAGEM DE ESCRITÓRIO DE TECNOLOGIA DA INFORMAÇÃO**\n\nPerfeito! Vou te ajudar a montar um escritório completo na área de TI. Vamos começar com algumas perguntas para personalizar sua análise.\n\n**Você já tem um plano ou assinatura conosco?**", 'ai');
+                
+                setTimeout(() => {
+                    addQuickReply("✅ Sim, já tenho");
+                    addQuickReply("❌ Não, ainda não tenho");
+                }, 1000);
+                
+            } else if (lowerMessage.includes('análise') || lowerMessage.includes('dados')) {
+                addMessage("📊 **ANÁLISE DE DADOS INTELIGENTE**\n\nExcelente! Vou realizar uma análise completa dos seus dados. Isso incluirá:\n\n• Processamento de informações\n• Aplicação de algoritmos de IA\n• Geração de insights personalizados\n• Relatório detalhado em PDF\n\n**Qual tipo de análise você precisa?**", 'ai');
+                
+                setTimeout(() => {
+                    addQuickReply("📈 Análise Financeira");
+                    addQuickReply("📊 Análise de Performance");
+                    addQuickReply("🎯 Análise de Mercado");
+                    addQuickReply("💡 Análise Estratégica");
+                }, 1000);
+                
+            } else if (lowerMessage.includes('sim') || lowerMessage.includes('✅')) {
+                addMessage("Ótimo! 🎯 Com sua assinatura, você terá acesso a análises mais detalhadas e personalizadas.\n\n**Qual tipo de plano você possui?**", 'ai');
+                
+                setTimeout(() => {
+                    addQuickReply("🥉 Plano Básico");
+                    addQuickReply("🥈 Plano Intermediário");
+                    addQuickReply("🥇 Plano Premium");
+                }, 1000);
+                
+            } else if (lowerMessage.includes('premium') || lowerMessage.includes('🥇')) {
+                addMessage("Perfeito! Plano Premium selecionado. 🚀\n\nAgora vou processar todas as informações e criar um relatório completo. Isso pode levar alguns segundos...\n\n⏳ **Iniciando processamento...**", 'ai');
+                
+                setTimeout(() => {
+                    addMessage("🎉 **Processamento Concluído!**\n\nSua análise foi finalizada com sucesso. O PDF será gerado automaticamente em alguns segundos...", 'ai');
+                    
+                    setTimeout(() => {
+                        addMessage("📄 **PDF Gerado e Baixado!**\n\nO relatório completo foi salvo automaticamente. Você pode fazer uma nova análise ou explorar outras funcionalidades.", 'ai');
+                        
+                        setTimeout(() => {
+                            addQuickReply("🔄 Nova Análise");
+                            addQuickReply("📊 Ver Relatório");
+                            addQuickReply("💬 Falar com Especialista");
+                        }, 1000);
+                    }, 2000);
+                }, 1000);
+                
+            } else {
+                addMessage("Entendi! Como posso ajudar você especificamente? Você pode pedir para montar um escritório, fazer uma análise de dados, ou explorar nossos serviços.", 'ai');
+                
+                setTimeout(() => {
+                    addQuickReply("🏢 Montar Escritório");
+                    addQuickReply("📊 Análise de Dados");
+                    addQuickReply("💡 Consultoria IA");
+                    addQuickReply("🎯 Ver Serviços");
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>

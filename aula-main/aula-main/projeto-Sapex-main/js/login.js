@@ -129,7 +129,7 @@ function logout() {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('loginTime');
     localStorage.removeItem('userInfo');
-    window.location.href = 'login.html';
+    window.location.href = 'Index/chat.html';
 }
 
 // Função para verificar se o usuário está logado

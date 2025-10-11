@@ -145,7 +145,7 @@
                                 });
                             }, 500);
                         } else {
-                            addQuickReply("✅ Responder");
+                            addQuickReply("✅ Ok, estou ciente!");
                         }
                     }, 1500);
                     
@@ -257,6 +257,11 @@
                     // Mostrar mensagem de processamento
                     addMessage(response.message, 'ai');
                     
+                    // Adicionar botão de download imediatamente após a mensagem de processamento
+                    setTimeout(() => {
+                        addDownloadButton();
+                    }, 500);
+                    
                     // Iniciar timer de processamento
                     window.escritorioTIFlow.startProcessingTimer(() => {
                         const completeAnalysis = window.escritorioTIFlow.processCompleteAnalysis();
@@ -267,7 +272,7 @@
                             const pdfResponse = window.escritorioTIFlow.generatePDF();
                             addMessage(pdfResponse.message, 'ai');
                             
-                            // Adicionar botão para gerar TXT também
+                            // Adicionar botões adicionais após geração automática
                             setTimeout(() => {
                                 addQuickReply("📝 Gerar TXT");
                                 addQuickReply("🔄 Nova Análise");
@@ -279,9 +284,14 @@
                     
                 } else if (officeFlowStep === 2) {
                     // Processar ações após análise
-                    if (message.includes('PDF') || message.includes('pdf')) {
+                    if (message.includes('PDF') || message.includes('pdf') || message.includes('📄')) {
                         const pdfResponse = window.escritorioTIFlow.generatePDF();
                         addMessage(pdfResponse.message, 'ai');
+                        
+                        // Adicionar botão de download após geração manual
+                        setTimeout(() => {
+                            addDownloadButton();
+                        }, 1000);
                         return;
                     } else if (message.includes('TXT') || message.includes('txt')) {
                         const txtResponse = window.escritorioTIFlow.generateTXT();
@@ -309,6 +319,29 @@
                 isOfficeFlow = false;
                 officeFlowStep = 0;
             }
+        }
+
+        function addDownloadButton() {
+            const downloadButtonDiv = document.createElement('div');
+            downloadButtonDiv.className = 'download-button-container';
+            
+            const downloadButton = document.createElement('button');
+            downloadButton.className = 'download-pdf-btn';
+            downloadButton.innerHTML = '<i class="fas fa-download"></i> 📄 Baixar PDF';
+            
+            downloadButton.onclick = () => {
+                try {
+                    const pdfResponse = window.escritorioTIFlow.generatePDF();
+                    addMessage("📄 **PDF gerado e baixado!**\n\nO relatório foi salvo no seu dispositivo.", 'ai');
+                } catch (error) {
+                    console.error('Erro ao gerar PDF:', error);
+                    addMessage("❌ **Erro ao gerar PDF**\n\nTente novamente em alguns instantes.", 'ai');
+                }
+            };
+            
+            downloadButtonDiv.appendChild(downloadButton);
+            messagesContainer.appendChild(downloadButtonDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
         function handleQuestionResponse(response) {

@@ -81,13 +81,14 @@ class EscritorioTIFlow {
             <div style="
                 text-align: center; 
                 padding: 30px; 
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                border-radius: 20px; 
+                background: rgba(0, 0, 0, 0.5);
+                border-radius: 16px; 
                 margin: 15px 0;
-                box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+                box-shadow: 0 8px 32px rgba(10, 38, 71, 0.25);
                 color: white;
                 position: relative;
                 overflow: hidden;
+                border: 1px solid rgba(255, 255, 255, 0.1);
             ">
                 <!-- Efeito de partículas animadas -->
                 <div style="

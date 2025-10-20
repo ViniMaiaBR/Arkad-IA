@@ -41,6 +41,7 @@
             <div class="nav-links">
                 <a href="sobre.html">SOBRE</a>
                 <a href="servicos.html">SERVIÇOS</a>
+                <a href="planos.html">PLANOS</a>
                 <a href="contato.html">CONTATO</a>
                 <div class="search-container">
                 </div>
@@ -50,24 +51,47 @@
     </header>
 
     <main>
-        <section class="hero">
-            <h1>Potencializando Seu<br>Negócio com IA</h1>
-            <p>Transforme suas operações empresariais e descubra novas<br>oportunidades através de nossas soluções de IA de ponta.</p>
-            <div class="hero-buttons">
-                <button class="learn-more-btn" onclick="window.location.href='sobre.html'">SAIBA MAIS</button>
-                <button class="get-started-btn" onclick="checkAuthAndRedirect()">COMEÇAR AGORA</button>
-            </div>
-            <div class="hero-search">
-                <div class="search-container">
-                    <input type="text" placeholder="Pesquisar com IA..." class="search-input" id="searchInput">
-                    <button class="search-btn" onclick="redirectToChat()"><i class="fas fa-search"></i></button>
+        <!-- HERO INTEGRADO COM CHAT -->
+        <section class="hero-integrated">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Potencializando Seu<br>Negócio com IA</h1>
+                    <p>Transforme suas operações empresariais e descubra novas<br>oportunidades através de nossas soluções de IA de ponta.</p>
+                    <div class="hero-buttons">
+                        <button class="learn-more-btn" onclick="window.location.href='sobre.html'">SAIBA MAIS</button>
+                        <button class="get-started-btn" onclick="checkAuthAndRedirect()">COMEÇAR AGORA</button>
+                    </div>
+                </div>
+                
+                <div class="hero-chat">
+                    <div class="chat-header">
+                        <h3><i class="fas fa-robot"></i> Chat Gratuito com IA</h3>
+                        <p>Experimente nossa inteligência artificial</p>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-messages" id="freeChatMessages">
+                            <div class="message ai-message">
+                                <div class="message-content">
+                                    <i class="fas fa-robot"></i>
+                                    <p>Olá! Sou sua assistente de IA gratuita. Como posso ajudar você hoje?</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <input type="text" placeholder="Digite sua pergunta aqui..." class="chat-input" id="freeChatInput">
+                            <button class="send-button" onclick="sendFreeMessage()">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-info">
+                        <p><i class="fas fa-info-circle"></i> Chat gratuito. Para recursos avançados, <a href="planos.html">conheça nossos planos</a>.</p>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <section class="services">
-            <h2>Nossos Serviços</h2>
-            <p>Oferecemos soluções junto da IA para que você possa ter um negócio mais eficiente e lucrativo.</p>
         </section>
     </main>
 
@@ -116,6 +140,75 @@
             }
         }
 
+        // Função para enviar mensagem no chat gratuito
+        function sendFreeMessage() {
+            const input = document.getElementById('freeChatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Adicionar mensagem do usuário
+            addFreeMessage(message, 'user');
+            
+            // Limpar input
+            input.value = '';
+            
+            // Simular resposta da IA (respostas básicas)
+            setTimeout(() => {
+                const response = getFreeAIResponse(message);
+                addFreeMessage(response, 'ai');
+            }, 1000);
+        }
+
+        // Função para adicionar mensagem ao chat gratuito
+        function addFreeMessage(text, type) {
+            const messagesContainer = document.getElementById('freeChatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}-message`;
+            
+            const icon = type === 'user' ? 'fas fa-user' : 'fas fa-robot';
+            messageDiv.innerHTML = `
+                <div class="message-content">
+                    <i class="${icon}"></i>
+                    <p>${text}</p>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Função para gerar respostas básicas da IA gratuita
+        function getFreeAIResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+            
+            if (message.includes('vendas') || message.includes('vender')) {
+                return 'Para aumentar vendas, foque em: 1) Conhecer seu cliente, 2) Melhorar seu produto/serviço, 3) Marketing digital, 4) Atendimento ao cliente. Precisa de mais detalhes?';
+            } else if (message.includes('marketing') || message.includes('promover')) {
+                return 'Marketing eficaz inclui: redes sociais, SEO, conteúdo de qualidade, email marketing e parcerias. Qual área você gostaria de explorar?';
+            } else if (message.includes('negócio') || message.includes('empresa')) {
+                return 'Para ter sucesso no negócio: planejamento, análise financeira, equipe qualificada, inovação e foco no cliente são essenciais. Em que posso ajudar?';
+            } else if (message.includes('financeiro') || message.includes('dinheiro')) {
+                return 'Gestão financeira básica: controle de receitas/despesas, fluxo de caixa, reserva de emergência e investimentos. Precisa de orientação específica?';
+            } else if (message.includes('tecnologia') || message.includes('digital')) {
+                return 'Digitalização pode otimizar processos, reduzir custos e melhorar atendimento. Considere automação, CRM e ferramentas online.';
+            } else {
+                return 'Interessante pergunta! Para uma resposta mais detalhada e personalizada, considere nossos planos premium com IA avançada. Posso ajudar com algo específico?';
+            }
+        }
+
+        // Adicionar evento de Enter no input do chat gratuito
+        document.addEventListener('DOMContentLoaded', function() {
+            const freeChatInput = document.getElementById('freeChatInput');
+            if (freeChatInput) {
+                freeChatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendFreeMessage();
+                    }
+                });
+            }
+        });
+
         // Inicializar quando a página carregar
         initAuth();
     </script>
@@ -135,7 +228,7 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>EMPRESA</h3>
-                <p>Aqui você pode usar linhas e colunas para organizar o conteúdo do seu rodapé. Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                <p>Plataforma inteligente de consultoria empresarial que combina tecnologia e análise de mercado para orientar decisões estratégicas, otimizar investimentos e impulsionar o crescimento de empresas de todos os portes.</p>
             </div>
             
             <div class="footer-section">

@@ -242,6 +242,11 @@
             pEmail.innerText = user.email;
         }
 
+        function redirectToChat() {
+            // Redirecionar para o chat após login
+            window.location.href = 'chat.html';
+        }
+
         // ----- EVENTOS -----
         toRegister.onclick = () => {
             showRegister();
@@ -289,18 +294,16 @@
                 // Registrar usuário
                 await ARKAD_AUTH.registerUser(name, email, password);
                 
-                regMsg.className = 'ok';
-                regMsg.innerText = 'Conta criada com sucesso! Agora faça login.';
+                // Fazer login automático após cadastro
+                const user = await ARKAD_AUTH.loginUser(email, password, true);
                 
-                // Limpar formulário e voltar ao login
+                regMsg.className = 'ok';
+                regMsg.innerText = 'Conta criada com sucesso! Redirecionando...';
+                
+                // Redirecionar para o chat após 1 segundo
                 setTimeout(() => {
-                    document.getElementById('name').value = '';
-                    document.getElementById('email').value = '';
-                    document.getElementById('password').value = '';
-                    document.getElementById('confirm').value = '';
-                    regMsg.innerText = '';
-                    showLogin();
-                }, 800);
+                    redirectToChat();
+                }, 1000);
 
             } catch (error) {
                 regMsg.innerText = error.message;
@@ -321,8 +324,12 @@
                 const user = await ARKAD_AUTH.loginUser(email, password, remember);
                 
                 loginMsg.className = 'ok';
-                loginMsg.innerText = 'Login realizado!';
-                showProfile(user);
+                loginMsg.innerText = 'Login realizado! Redirecionando...';
+                
+                // Redirecionar para o chat após 1 segundo
+                setTimeout(() => {
+                    redirectToChat();
+                }, 1000);
 
             } catch (error) {
                 loginMsg.innerText = error.message;
@@ -355,9 +362,11 @@
         function init() {
             const user = ARKAD_AUTH.getCurrentUser();
             if (user) {
-                showProfile(user);
-                const current = ARKAD_AUTH.getCurrent();
-                profileMsg.innerText = `Login restaurado: ${new Date(current.at).toLocaleString()}`;
+                // Se usuário já está logado, redirecionar para o chat
+                profileMsg.innerText = `Usuário já logado. Redirecionando...`;
+                setTimeout(() => {
+                    redirectToChat();
+                }, 1000);
             } else {
                 showLogin();
             }

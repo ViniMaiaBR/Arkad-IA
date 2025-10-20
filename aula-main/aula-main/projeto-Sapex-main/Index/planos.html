@@ -3,216 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nossos Planos | ARKAD AI</title>
+    <title>Planos e Preços | ARKAD AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .content-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-        }
-
-        .content-box {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 1200px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .content-box h1 {
-            color: #fff;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .content-box p {
-            color: #fff;
-            text-align: justify;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .plans-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-
-        .plan-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            transition: transform 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .plan-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .plan-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .plan-header {
-            margin-bottom: 20px;
-        }
-
-        .plan-header h3 {
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .plan-price {
-            font-size: 2.5rem;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .plan-price span {
-            font-size: 1rem;
-            color: #ccc;
-        }
-
-        .plan-features {
-            list-style: none;
-            padding: 0;
-            margin: 20px 0;
-        }
-
-        .plan-features li {
-            color: #fff;
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .plan-features i {
-            color: var(--primary-color);
-        }
-
-        .plan-button {
-            background: var(--primary-color);
-            color: #fff;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            width: 100%;
-            margin-top: auto;
-        }
-
-        .plan-button:hover {
-            background: #009698;
-        }
-
-        .popular-tag {
-            background: var(--primary-color);
-            color: #fff;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            margin-bottom: 15px;
-            display: inline-block;
-        }
-    </style>
 </head>
 <body>
     <canvas id="neural-bg"></canvas>
+    
+    <header>
+        <nav class="navbar">
+            <div class="logo" onclick="window.location.href='index.html'">
+                <img src="../images/logo.svg" alt="Logo ARKAD AI">
+                <span>ARKAD AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">INÍCIO</a>
+                <a href="sobre.html">SOBRE</a>
+                <a href="servicos.html">SERVIÇOS</a>
+                <a href="contato.html">CONTATO</a>
+            </div>
+        </nav>
+    </header>
 
-    <div class="content-container">
-        <div class="content-box">
-            <h1><i class="fas fa-cubes"></i> Nossos Planos</h1>
-            <p>Escolha o plano ideal para impulsionar seu negócio com nossas soluções de IA. Oferecemos opções flexíveis para atender às suas necessidades específicas.</p>
-            
-            <div class="plans-grid">
-                <div class="plan-card">
-                    <div class="plan-content">
+    <main>
+        <!-- SEÇÃO DE PLANOS/ASSINATURAS -->
+        <section class="pricing-section">
+            <div class="pricing-container">
+                <div class="pricing-header">
+                    <h2>Escolha o Plano Ideal para Você</h2>
+                    <p>Planos flexíveis para atender desde startups até grandes empresas</p>
+                </div>
+                
+                <div class="pricing-grid">
+                    <!-- Plano Básico -->
+                    <div class="pricing-card">
                         <div class="plan-header">
-                            <h3>Plano Básico</h3>
-                            <div class="plan-price">
-                                R$ 199<span>/mês</span>
+                            <h3>Básico</h3>
+                            <div class="price">
+                                <span class="currency">R$</span>
+                                <span class="amount">29</span>
+                                <span class="period">/mês</span>
                             </div>
                         </div>
-                        <ul class="plan-features">
-                            <li><i class="fas fa-check"></i> Análise de Dados Básica</li>
-                            <li><i class="fas fa-check"></i> Suporte por Email</li>
-                            <li><i class="fas fa-check"></i> 5 Consultas IA/mês</li>
-                            <li><i class="fas fa-check"></i> Relatórios Básicos</li>
-                        </ul>
+                        <div class="plan-description">
+                            <p>Ideal para quem está começando.</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Até 100 consultas por mês</li>
+                                <li><i class="fas fa-check"></i> Chat básico com IA</li>
+                                <li><i class="fas fa-check"></i> Relatórios simples</li>
+                                <li><i class="fas fa-check"></i> Integração padrão</li>
+                                <li><i class="fas fa-check"></i> Suporte por e-mail</li>
+                            </ul>
+                        </div>
+                        <button class="plan-btn" onclick="selectPlan('basic')">Escolher Plano</button>
                     </div>
-                    <button class="plan-button" onclick="window.location.href='contato.html'">Começar Agora</button>
+
+                    <!-- Plano Profissional -->
+                    <div class="pricing-card featured">
+                        <div class="popular-badge">Mais Popular</div>
+                        <div class="plan-header">
+                            <h3>Profissional</h3>
+                            <div class="price">
+                                <span class="currency">R$</span>
+                                <span class="amount">79</span>
+                                <span class="period">/mês</span>
+                            </div>
+                        </div>
+                        <div class="plan-description">
+                            <p>Para quem precisa de mais recursos e automação.</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Consultas ilimitadas</li>
+                                <li><i class="fas fa-check"></i> Chat avançado com IA</li>
+                                <li><i class="fas fa-check"></i> Relatórios detalhados e personalizados</li>
+                                <li><i class="fas fa-check"></i> Integrações avançadas</li>
+                                <li><i class="fas fa-check"></i> Análise de dados e automação básica</li>
+                                <li><i class="fas fa-check"></i> Suporte prioritário</li>
+                            </ul>
+                        </div>
+                        <button class="plan-btn featured-btn" onclick="selectPlan('professional')">Escolher Plano</button>
+                    </div>
+
+                    <!-- Plano Empresarial -->
+                    <div class="pricing-card">
+                        <div class="plan-header">
+                            <h3>Empresarial</h3>
+                            <div class="price">
+                                <span class="currency">R$</span>
+                                <span class="amount">199</span>
+                                <span class="period">/mês</span>
+                            </div>
+                        </div>
+                        <div class="plan-description">
+                            <p>Soluções completas e suporte premium para equipes.</p>
+                        </div>
+                        <div class="plan-features">
+                            <ul>
+                                <li><i class="fas fa-check"></i> Tudo do plano Profissional</li>
+                                <li><i class="fas fa-check"></i> IA personalizada para sua empresa</li>
+                                <li><i class="fas fa-check"></i> Relatórios e dashboards customizados</li>
+                                <li><i class="fas fa-check"></i> Automação completa</li>
+                                <li><i class="fas fa-check"></i> Análise avançada de dados</li>
+                                <li><i class="fas fa-check"></i> Suporte 24/7 e treinamento da equipe</li>
+                            </ul>
+                        </div>
+                        <button class="plan-btn" onclick="selectPlan('enterprise')">Escolher Plano</button>
+                    </div>
                 </div>
 
-                <div class="plan-card">
-                    <div class="popular-tag">Mais Popular</div>
-                    <div class="plan-content">
-                        <div class="plan-header">
-                            <h3>Plano Profissional</h3>
-                            <div class="plan-price">
-                                R$ 399<span>/mês</span>
-                            </div>
-                        </div>
-                        <ul class="plan-features">
-                            <li><i class="fas fa-check"></i> Análise de Dados Avançada</li>
-                            <li><i class="fas fa-check"></i> Suporte Prioritário 24/7</li>
-                            <li><i class="fas fa-check"></i> 20 Consultas IA/mês</li>
-                            <li><i class="fas fa-check"></i> Relatórios Personalizados</li>
-                            <li><i class="fas fa-check"></i> API Access</li>
-                        </ul>
+                <div class="pricing-footer">
+                    <p>Todos os planos incluem acesso gratuito por 7 dias. Cancele a qualquer momento.</p>
+                    <div class="payment-methods">
+                        <span>Métodos de pagamento:</span>
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-paypal"></i>
+                        <i class="fab fa-pix"></i>
                     </div>
-                    <button class="plan-button" onclick="window.location.href='contato.html'">Começar Agora</button>
-                </div>
-
-                <div class="plan-card">
-                    <div class="plan-content">
-                        <div class="plan-header">
-                            <h3>Plano Empresarial</h3>
-                            <div class="plan-price">
-                                R$ 599<span>/mês</span>
-                            </div>
-                        </div>
-                        <ul class="plan-features">
-                            <li><i class="fas fa-check"></i> Análise de Dados Premium</li>
-                            <li><i class="fas fa-check"></i> Suporte Dedicado 24/7</li>
-                            <li><i class="fas fa-check"></i> Consultas IA Ilimitadas</li>
-                            <li><i class="fas fa-check"></i> Relatórios Avançados</li>
-                            <li><i class="fas fa-check"></i> API Access Ilimitado</li>
-                            <li><i class="fas fa-check"></i> Treinamento da Equipe</li>
-                        </ul>
-                    </div>
-                    <button class="plan-button" onclick="window.location.href='contato.html'">Começar Agora</button>
                 </div>
             </div>
+        </section>
 
-            <div style="text-align: center; margin-top: 30px;">
-                <button class="get-started-btn" onclick="window.location.href='sobre.html'" style="background: transparent; border: 2px solid #fff;">
-                    <i class="fas fa-arrow-left"></i> Voltar ao Sobre
-                </button>
+        <!-- SEÇÃO DE COMPARAÇÃO DETALHADA -->
+        <section class="comparison-section">
+            <div class="comparison-container">
+                <h2>Comparação Detalhada dos Planos</h2>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Recursos</th>
+                                <th>Básico</th>
+                                <th>Profissional</th>
+                                <th>Empresarial</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Consultas por mês</td>
+                                <td>100</td>
+                                <td>500</td>
+                                <td>Ilimitadas</td>
+                            </tr>
+                            <tr>
+                                <td>Suporte</td>
+                                <td>Email</td>
+                                <td>Prioritário</td>
+                                <td>24/7</td>
+                            </tr>
+                            <tr>
+                                <td>Integrações</td>
+                                <td>Básicas</td>
+                                <td>Avançadas</td>
+                                <td>Todas</td>
+                            </tr>
+                            <tr>
+                                <td>Relatórios</td>
+                                <td>Simples</td>
+                                <td>Detalhados</td>
+                                <td>Customizados</td>
+                            </tr>
+                            <tr>
+                                <td>IA Personalizada</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Treinamento</td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-times"></i></td>
+                                <td><i class="fas fa-check"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
+
     <script src="../js/neural-background.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Função para seleção de planos
+        function selectPlan(planType) {
+            const user = ARKAD_AUTH.getCurrentUser();
+            
+            if (!user) {
+                // Usuário não logado - redirecionar para login
+                alert('Você precisa fazer login para escolher um plano.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Simular seleção de plano (em produção, integrar com sistema de pagamento)
+            const planNames = {
+                'basic': 'Básico',
+                'professional': 'Profissional', 
+                'enterprise': 'Empresarial'
+            };
+            
+            const planPrices = {
+                'basic': 'R$ 29/mês',
+                'professional': 'R$ 79/mês',
+                'enterprise': 'R$ 199/mês'
+            };
+            
+            // Salvar plano selecionado no localStorage
+            localStorage.setItem('arkad_selected_plan', JSON.stringify({
+                type: planType,
+                name: planNames[planType],
+                price: planPrices[planType],
+                selectedAt: new Date().toISOString()
+            }));
+            
+            // Mostrar confirmação
+            alert(`Plano ${planNames[planType]} selecionado!\n\nPreço: ${planPrices[planType]}\n\nEm um ambiente real, você seria redirecionado para o pagamento.`);
+            
+            // Redirecionar para o chat
+            window.location.href = 'chat.html';
+        }
+    </script>
 </body>
-</html> 
+</html>

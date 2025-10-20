@@ -44,7 +44,7 @@
                 <a href="contato.html">CONTATO</a>
                 <div class="search-container">
                 </div>
-                <button class="get-started-btn" onclick="window.location.href='chat.html'">COMEÇAR AGORA</button>
+                <button class="get-started-btn" onclick="checkAuthAndRedirect()">COMEÇAR AGORA</button>
             </div>
         </nav>
     </header>
@@ -55,7 +55,7 @@
             <p>Transforme suas operações empresariais e descubra novas<br>oportunidades através de nossas soluções de IA de ponta.</p>
             <div class="hero-buttons">
                 <button class="learn-more-btn" onclick="window.location.href='sobre.html'">SAIBA MAIS</button>
-                <button class="get-started-btn" onclick="window.location.href='chat.html'">COMEÇAR AGORA</button>
+                <button class="get-started-btn" onclick="checkAuthAndRedirect()">COMEÇAR AGORA</button>
             </div>
             <div class="hero-search">
                 <div class="search-container">
@@ -72,12 +72,31 @@
     </main>
 
     <script src="../js/neural-background.js"></script>
+    <script src="../js/auth.js"></script>
     <script>
+        // Verificar autenticação e redirecionar
+        function checkAuthAndRedirect() {
+            const user = ARKAD_AUTH.getCurrentUser();
+            if (user) {
+                window.location.href = 'chat.html';
+            } else {
+                window.location.href = 'login.html';
+            }
+        }
+
         function redirectToChat() {
+            const user = ARKAD_AUTH.getCurrentUser();
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
             const searchInput = document.getElementById('searchInput');
             const query = searchInput.value.trim();
             if (query) {
                 window.location.href = `chat.html?query=${encodeURIComponent(query)}`;
+            } else {
+                window.location.href = 'chat.html';
             }
         }
 
@@ -88,6 +107,17 @@
             }
         });
 
+        // Verificar se usuário está logado ao carregar a página
+        function initAuth() {
+            const user = ARKAD_AUTH.getCurrentUser();
+            if (user) {
+                // Usuário logado - pode adicionar informações do usuário na interface
+                console.log('Usuário logado:', user.name);
+            }
+        }
+
+        // Inicializar quando a página carregar
+        initAuth();
     </script>
 
     <footer class="footer">
@@ -97,7 +127,7 @@
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
                 <a href="#"><i class="fab fa-google-plus-g"></i></a>
-                <a href="https://www.linkedin.com/in/vinicius-maia-190279219?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://www.linkedin.com/company/arkadai/?viewAsMember=true"><i class="fab fa-linkedin-in"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
             </div>
         </div>

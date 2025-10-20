@@ -1,123 +1,370 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | ARKAD AI</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Login & Cadastro | ARKAD AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .login-container {
+        :root {
+            font-family: Inter, system-ui, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+            margin: 0;
+        }
+        
+        body {
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
-            padding: 20px;
+            background: linear-gradient(135deg, #000000 0%, #0A2647 50%, #144272 100%);
             position: relative;
         }
-
-        .login-box {
+        
+        .card {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(20, 30, 60, 0.08);
+            width: 360px;
             position: relative;
             z-index: 1;
         }
-
-        .login-box h1 {
+        
+        h1 {
+            font-size: 18px;
+            margin: 0 0 12px;
             color: #fff;
             text-align: center;
-            margin-bottom: 30px;
         }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
+        
+        label {
             display: block;
+            font-size: 13px;
+            margin-top: 8px;
             color: #fff;
-            margin-bottom: 5px;
         }
-
-        .form-group input {
+        
+        input[type=text], input[type=email], input[type=password] {
             width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #d7dbe6;
+            margin-top: 6px;
             background: rgba(255, 255, 255, 0.9);
-            font-size: 16px;
         }
-
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
+        
+        button {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 0;
+            background: #00B5B8;
+            color: #fff;
             cursor: pointer;
             transition: background 0.3s;
         }
-
-        .login-btn:hover {
-            background: #0056b3;
+        
+        button:hover {
+            background: #009698;
         }
-
-        .error-message {
-            color: #ff4444;
-            text-align: center;
-            margin-top: 10px;
-            display: none;
+        
+        .muted {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 8px;
         }
-
-        .success-message {
-            color: #00C851;
-            text-align: center;
-            margin-top: 10px;
-            display: none;
+        
+        .switch {
+            font-size: 13px;
+            color: #00B5B8;
+            cursor: pointer;
+        }
+        
+        .err {
+            color: #b91c1c;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        
+        .ok {
+            color: #059669;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .flex {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .profile {
+            margin-top: 14px;
+            padding: 12px;
+            border-radius: 8px;
+            background: rgba(20, 66, 114, 0.2);
+        }
+        
+        small {
+            color: #475569;
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
     <canvas id="neural-bg"></canvas>
+    <button class="back-btn" onclick="window.location.href='index.html'">
+        <i class="fas fa-arrow-left"></i> Voltar
+    </button>
+    
+    <div class="card">
+        <h1 id="title">Entrar</h1>
 
-    <div class="login-container">
-        <div class="login-box">
-            <h1>Login ARKAD AI</h1>
-            <form id="loginForm" onsubmit="return handleLogin(event)">
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit" class="login-btn">Entrar</button>
-                <div id="errorMessage" class="error-message"></div>
-                <div id="successMessage" class="success-message"></div>
-            </form>
-            <div style="text-align: center; margin-top: 20px;">
-                <p style="color: #fff; margin-bottom: 10px;">Não tem uma conta?</p>
-                <button class="get-started-btn" onclick="window.location.href='cadastro.html'" style="background: transparent; border: 2px solid #fff; margin-bottom: 10px;">
-                    Criar Conta
-                </button>
-                <button class="get-started-btn" onclick="window.location.href='index.html'" style="background: transparent; border: 2px solid #fff;">
-                    <i class="fas fa-arrow-left"></i> Voltar ao Início
-                </button>
+        <!-- LOGIN FORM -->
+        <form id="login-form">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" placeholder="seu@exemplo.com" required />
+
+            <label for="login-password">Senha</label>
+            <input id="login-password" type="password" placeholder="••••••••" required />
+
+            <div class="flex">
+                <input id="remember" type="checkbox" />
+                <label for="remember">Lembrar-me</label>
             </div>
+
+            <div class="actions">
+                <button type="submit">Entrar</button>
+                <button id="to-register" type="button" style="background:#e6eefc;color:#0f172a">Criar conta</button>
+            </div>
+
+            <div id="login-msg" class="err" aria-live="polite"></div>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form id="register-form" style="display:none">
+            <label for="name">Nome</label>
+            <input id="name" type="text" placeholder="Seu nome" required />
+
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="seu@exemplo.com" required />
+
+            <label for="password">Senha</label>
+            <input id="password" type="password" placeholder="mínimo 6 caracteres" required />
+
+            <label for="confirm">Confirme a senha</label>
+            <input id="confirm" type="password" placeholder="repita a senha" required />
+
+            <div class="actions">
+                <button type="submit">Cadastrar</button>
+                <button id="to-login" type="button" style="background:#e6eefc;color:#0f172a">Voltar</button>
+            </div>
+
+            <div id="reg-msg" class="err" aria-live="polite"></div>
+        </form>
+
+        <!-- PROFILE (after login) -->
+        <div id="profile" style="display:none" class="profile">
+            <div><strong id="p-name"></strong></div>
+            <div><small id="p-email"></small></div>
+            <div style="margin-top:12px">
+                <button id="logout">Sair</button>
+                <button id="delete" style="background:#ef4444;margin-left:8px">Excluir conta</button>
+            </div>
+            <div id="profile-msg" class="muted"></div>
         </div>
+
+        <p class="muted" style="margin-top:12px">Os dados de usuário ficam salvos localmente no seu navegador (localStorage) como JSON. Em um ambiente real, substitua por servidor + banco de dados seguro.</p>
     </div>
 
-    <script src="../js/user-storage-json.js"></script>
-    <script src="../js/login.js"></script>
     <script src="../js/neural-background.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // ----- UI ELEMENTOS -----
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const toRegister = document.getElementById('to-register');
+        const toLogin = document.getElementById('to-login');
+        const title = document.getElementById('title');
+        const profile = document.getElementById('profile');
+        const pName = document.getElementById('p-name');
+        const pEmail = document.getElementById('p-email');
+        const loginMsg = document.getElementById('login-msg');
+        const regMsg = document.getElementById('reg-msg');
+        const profileMsg = document.getElementById('profile-msg');
+
+        // ----- FUNÇÕES DE INTERFACE -----
+        function showLogin() {
+            title.innerText = 'Entrar';
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            profile.style.display = 'none';
+        }
+
+        function showRegister() {
+            title.innerText = 'Criar conta';
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            profile.style.display = 'none';
+        }
+
+        function showProfile(user) {
+            title.innerText = 'Perfil';
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'none';
+            profile.style.display = 'block';
+            pName.innerText = user.name;
+            pEmail.innerText = user.email;
+        }
+
+        // ----- EVENTOS -----
+        toRegister.onclick = () => {
+            showRegister();
+            regMsg.innerText = '';
+        };
+
+        toLogin.onclick = () => {
+            showLogin();
+            loginMsg.innerText = '';
+        };
+
+        // Cadastro
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            regMsg.innerText = '';
+            regMsg.className = 'err';
+
+            try {
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirm = document.getElementById('confirm').value;
+
+                // Validações
+                if (!ARKAD_AUTH.validateName(name)) {
+                    regMsg.innerText = 'Nome deve ter pelo menos 2 caracteres.';
+                    return;
+                }
+
+                if (!ARKAD_AUTH.validateEmail(email)) {
+                    regMsg.innerText = 'Email inválido.';
+                    return;
+                }
+
+                if (!ARKAD_AUTH.validatePassword(password)) {
+                    regMsg.innerText = 'Senha precisa ter ao menos 6 caracteres.';
+                    return;
+                }
+
+                if (password !== confirm) {
+                    regMsg.innerText = 'Senhas não coincidem.';
+                    return;
+                }
+
+                // Registrar usuário
+                await ARKAD_AUTH.registerUser(name, email, password);
+                
+                regMsg.className = 'ok';
+                regMsg.innerText = 'Conta criada com sucesso! Agora faça login.';
+                
+                // Limpar formulário e voltar ao login
+                setTimeout(() => {
+                    document.getElementById('name').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('password').value = '';
+                    document.getElementById('confirm').value = '';
+                    regMsg.innerText = '';
+                    showLogin();
+                }, 800);
+
+            } catch (error) {
+                regMsg.innerText = error.message;
+            }
+        });
+
+        // Login
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginMsg.innerText = '';
+            loginMsg.className = 'err';
+
+            try {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                const remember = document.getElementById('remember').checked;
+
+                const user = await ARKAD_AUTH.loginUser(email, password, remember);
+                
+                loginMsg.className = 'ok';
+                loginMsg.innerText = 'Login realizado!';
+                showProfile(user);
+
+            } catch (error) {
+                loginMsg.innerText = error.message;
+            }
+        });
+
+        // Logout
+        document.getElementById('logout').addEventListener('click', () => {
+            ARKAD_AUTH.logoutUser();
+            showLogin();
+            profileMsg.innerText = 'Você saiu.';
+        });
+
+        // Excluir conta
+        document.getElementById('delete').addEventListener('click', () => {
+            if (!confirm('Tem certeza que deseja excluir a conta? Isso removerá os dados locais.')) return;
+            
+            const current = ARKAD_AUTH.getCurrent();
+            if (!current) {
+                alert('Nenhum usuário logado');
+                return;
+            }
+
+            ARKAD_AUTH.deleteUser(current.email);
+            showLogin();
+            alert('Conta excluída.');
+        });
+
+        // ----- INICIALIZAÇÃO -----
+        function init() {
+            const user = ARKAD_AUTH.getCurrentUser();
+            if (user) {
+                showProfile(user);
+                const current = ARKAD_AUTH.getCurrent();
+                profileMsg.innerText = `Login restaurado: ${new Date(current.at).toLocaleString()}`;
+            } else {
+                showLogin();
+            }
+        }
+
+        // Inicializar quando a página carregar
+        init();
+    </script>
 </body>
 </html> 

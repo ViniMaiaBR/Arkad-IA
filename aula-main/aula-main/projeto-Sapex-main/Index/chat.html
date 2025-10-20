@@ -12,7 +12,7 @@
     <canvas id="neural-bg"></canvas>
     <header>
         <nav class="navbar">
-            <div class="logo">
+            <div class="logo" onclick="window.location.href='index.html'">
                 <img src="../images/logo.svg" alt="Logo ARKAD AI">
                 <span>ARKAD AI</span>
             </div>
@@ -396,5 +396,23 @@
         }
     </script>
     <script src="../js/neural-background.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Verificar autenticação ao carregar a página
+        function checkAuth() {
+            const user = ARKAD_AUTH.getCurrentUser();
+            if (!user) {
+                alert('Você precisa fazer login para acessar o chat.');
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        // Inicializar verificação de autenticação
+        if (!checkAuth()) {
+            // Redirecionamento já foi feito
+        }
+    </script>
 </body>
 </html> 

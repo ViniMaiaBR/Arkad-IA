@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de PDF - ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        .pdf-generator-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .pdf-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pdf-section h2 {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: var(--text-color);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, var(--primary-color), #00a8a8);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 181, 184, 0.3);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .preview-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .preview-section h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .preview-content {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .status-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .status-success {
+            background: rgba(40, 167, 69, 0.2);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .status-error {
+            background: rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .examples-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .example-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .example-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .example-card p {
+            color: var(--light-text);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .example-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .example-btn:hover {
+            background: #00a8a8;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="neural-bg"></canvas>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="../images/logo.svg" alt="Logo ARKAD AI">
+                <span>ARKAD AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">INÍCIO</a>
+                <a href="sobre.html">SOBRE</a>
+                <a href="servicos.html">SERVIÇOS</a>
+                <a href="contato.html">CONTATO</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="pdf-generator-container">
+        <div class="pdf-section">
+            <h2><i class="fas fa-file-pdf"></i> Gerador de PDF - Resultados da IA</h2>
+            <p style="color: var(--light-text); margin-bottom: 30px;">
+                Gere relatórios em PDF com os resultados das análises de IA. Personalize o conteúdo e baixe documentos profissionais.
+            </p>
+
+            <form class="pdf-form" id="pdfForm">
+                <div class="form-group">
+                    <label for="reportTitle">Título do Relatório</label>
+                    <input type="text" id="reportTitle" placeholder="Ex: Análise de Dados de Vendas" value="Relatório de Análise de IA">
+                </div>
+
+                <div class="form-group">
+                    <label for="reportSummary">Resumo da Análise</label>
+                    <textarea id="reportSummary" placeholder="Descreva o resumo da análise realizada pela IA...">A IA realizou uma análise completa dos dados fornecidos, identificando padrões importantes e gerando insights valiosos para tomada de decisão.</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="reportType">Tipo de Relatório</label>
+                    <select id="reportType">
+                        <option value="analysis">Análise de Dados</option>
+                        <option value="chat">Histórico de Chat</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="resultsData">Resultados (JSON)</label>
+                    <textarea id="resultsData" placeholder='[{"title": "Resultado 1", "description": "Descrição do resultado", "value": "95%"}]'>[
+  {
+    "title": "Precisão da Análise",
+    "description": "Taxa de precisão da análise realizada pela IA",
+    "value": "95%"
+  },
+  {
+    "title": "Tempo de Processamento",
+    "description": "Tempo necessário para processar todos os dados",
+    "value": "2.3 segundos"
+  },
+  {
+    "title": "Confiança",
+    "description": "Nível de confiança da IA nos resultados",
+    "value": "Alto"
+  }
+]</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="recommendations">Recomendações</label>
+                    <textarea id="recommendations" placeholder="Liste as recomendações da IA (uma por linha)">Implementar monitoramento contínuo dos dados
+Revisar os resultados a cada 30 dias
+Considerar expansão do dataset para maior precisão
+Automatizar o processo de análise</textarea>
+                </div>
+
+                <button type="submit" class="btn-generate" id="generateBtn">
+                    <i class="fas fa-file-pdf"></i>
+                    Gerar PDF
+                </button>
+            </form>
+
+            <div class="status-message" id="statusMessage"></div>
+        </div>
+
+        <div class="pdf-section">
+            <h2><i class="fas fa-lightbulb"></i> Exemplos Rápidos</h2>
+            <p style="color: var(--light-text); margin-bottom: 20px;">
+                Clique em um dos exemplos abaixo para preencher automaticamente o formulário:
+            </p>
+
+            <div class="examples-grid">
+                <div class="example-card" onclick="loadExample('analysis')">
+                    <h4>Análise de Dados</h4>
+                    <p>Relatório completo de análise de dados com métricas e insights.</p>
+                    <button class="example-btn">Usar Exemplo</button>
+                </div>
+
+                <div class="example-card" onclick="loadExample('chat')">
+                    <h4>Histórico de Chat</h4>
+                    <p>Exportar conversa completa com a IA em formato PDF.</p>
+                    <button class="example-btn">Usar Exemplo</button>
+                </div>
+
+                <div class="example-card" onclick="loadExample('business')">
+                    <h4>Relatório Empresarial</h4>
+                    <p>Relatório executivo com recomendações estratégicas.</p>
+                    <button class="example-btn">Usar Exemplo</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="pdf-section">
+            <h2><i class="fas fa-eye"></i> Pré-visualização</h2>
+            <div class="preview-section">
+                <h3>Visualização do PDF</h3>
+                <div class="preview-content" id="previewContent">
+                    <p style="text-align: center; color: #666; font-style: italic;">
+                        Preencha o formulário acima para ver a pré-visualização do PDF
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/neural-background.js"></script>
+    <script src="../js/pdf-generator.js"></script>
+    <script>
+        // Carregar exemplos
+        function loadExample(type) {
+            const examples = {
+                analysis: {
+                    title: "Análise de Dados de Vendas",
+                    summary: "Análise completa dos dados de vendas do último trimestre, identificando tendências e oportunidades de crescimento.",
+                    type: "analysis",
+                    results: [
+                        {
+                            "title": "Crescimento de Vendas",
+                            "description": "Aumento percentual nas vendas comparado ao trimestre anterior",
+                            "value": "+15.3%"
+                        },
+                        {
+                            "title": "Produto Mais Vendido",
+                            "description": "Produto com maior volume de vendas no período",
+                            "value": "Produto A - 2.500 unidades"
+                        },
+                        {
+                            "title": "Região de Maior Crescimento",
+                            "description": "Região com maior crescimento nas vendas",
+                            "value": "Sudeste - +22.1%"
+                        }
+                    ],
+                    recommendations: [
+                        "Aumentar investimento em marketing na região Sudeste",
+                        "Expandir linha de produtos similares ao Produto A",
+                        "Implementar sistema de previsão de demanda",
+                        "Treinar equipe de vendas com foco nas tendências identificadas"
+                    ]
+                },
+                chat: {
+                    title: "Histórico de Conversa com IA",
+                    summary: "Conversa completa com o assistente de IA sobre otimização de processos.",
+                    type: "chat",
+                    messages: [
+                        {
+                            "type": "user",
+                            "content": "Como posso otimizar os processos da minha empresa?",
+                            "timestamp": "14:30"
+                        },
+                        {
+                            "type": "ai",
+                            "content": "Para otimizar seus processos, recomendo: 1) Mapear todos os processos atuais, 2) Identificar gargalos, 3) Implementar automação onde possível, 4) Treinar a equipe nas novas práticas.",
+                            "timestamp": "14:31"
+                        },
+                        {
+                            "type": "user",
+                            "content": "Quais ferramentas de automação você recomenda?",
+                            "timestamp": "14:32"
+                        },
+                        {
+                            "type": "ai",
+                            "content": "Para automação, sugiro: RPA (Robotic Process Automation), sistemas de workflow, integração entre sistemas, e IA para análise de dados. Comece com processos simples e vá expandindo.",
+                            "timestamp": "14:33"
+                        }
+                    ]
+                },
+                business: {
+                    title: "Relatório Executivo - Estratégia de IA",
+                    summary: "Análise estratégica sobre implementação de IA na empresa, com recomendações executivas e projeções financeiras.",
+                    type: "analysis",
+                    results: [
+                        {
+                            "title": "ROI Projetado",
+                            "description": "Retorno sobre investimento esperado em 12 meses",
+                            "value": "340%"
+                        },
+                        {
+                            "title": "Redução de Custos",
+                            "description": "Economia estimada com automação",
+                            "value": "R$ 2.5M/ano"
+                        },
+                        {
+                            "title": "Tempo de Implementação",
+                            "description": "Prazo estimado para implementação completa",
+                            "value": "6-8 meses"
+                        }
+                    ],
+                    recommendations: [
+                        "Iniciar projeto piloto em 30 dias",
+                        "Contratar especialista em IA",
+                        "Investir R$ 500K no primeiro ano",
+                        "Formar comitê de transformação digital"
+                    ]
+                }
+            };
+
+            const example = examples[type];
+            if (example) {
+                document.getElementById('reportTitle').value = example.title;
+                document.getElementById('reportSummary').value = example.summary;
+                document.getElementById('reportType').value = example.type;
+                
+                if (example.results) {
+                    document.getElementById('resultsData').value = JSON.stringify(example.results, null, 2);
+                }
+                
+                if (example.recommendations) {
+                    document.getElementById('recommendations').value = example.recommendations.join('\n');
+                }
+
+                updatePreview();
+            }
+        }
+
+        // Atualizar pré-visualização
+        function updatePreview() {
+            const title = document.getElementById('reportTitle').value;
+            const summary = document.getElementById('reportSummary').value;
+            const type = document.getElementById('reportType').value;
+            const resultsData = document.getElementById('resultsData').value;
+            const recommendations = document.getElementById('recommendations').value;
+
+            let results = [];
+            try {
+                results = JSON.parse(resultsData);
+            } catch (e) {
+                results = [];
+            }
+
+            const recList = recommendations.split('\n').filter(r => r.trim());
+
+            const data = {
+                summary: summary,
+                results: results,
+                recommendations: recList
+            };
+
+            const previewContent = document.getElementById('previewContent');
+            
+            if (type === 'chat') {
+                // Para chat, mostrar estrutura de mensagens
+                previewContent.innerHTML = `
+                    <h3 style="color: #00B5B8; margin-bottom: 15px;">${title}</h3>
+                    <p style="margin-bottom: 20px; color: #666;">${summary}</p>
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <p style="margin: 0; color: #666; font-style: italic;">Estrutura de mensagens do chat será incluída no PDF</p>
+                    </div>
+                `;
+            } else {
+                // Para análise, mostrar dados estruturados
+                const element = window.pdfGenerator.createAnalysisElement(data);
+                previewContent.innerHTML = element.innerHTML;
+            }
+        }
+
+        // Gerar PDF
+        document.getElementById('pdfForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const generateBtn = document.getElementById('generateBtn');
+            const statusMessage = document.getElementById('statusMessage');
+            
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando PDF...';
+            statusMessage.style.display = 'none';
+
+            try {
+                const title = document.getElementById('reportTitle').value;
+                const summary = document.getElementById('reportSummary').value;
+                const type = document.getElementById('reportType').value;
+                const resultsData = document.getElementById('resultsData').value;
+                const recommendations = document.getElementById('recommendations').value;
+
+                let results = [];
+                try {
+                    results = JSON.parse(resultsData);
+                } catch (e) {
+                    throw new Error('Formato JSON inválido nos resultados');
+                }
+
+                const recList = recommendations.split('\n').filter(r => r.trim());
+
+                const data = {
+                    summary: summary,
+                    results: results,
+                    recommendations: recList
+                };
+
+                let result;
+                if (type === 'chat') {
+                    data.messages = [
+                        { type: 'user', content: 'Pergunta do usuário', timestamp: '14:30' },
+                        { type: 'ai', content: summary, timestamp: '14:31' }
+                    ];
+                    result = await window.generateChatPDF(data, { filename: `${title.replace(/\s+/g, '_')}.pdf` });
+                } else {
+                    result = await window.generateAIPDF(data, { filename: `${title.replace(/\s+/g, '_')}.pdf` });
+                }
+
+                if (result.success) {
+                    statusMessage.className = 'status-message status-success';
+                    statusMessage.innerHTML = `<i class="fas fa-check-circle"></i> ${result.message}`;
+                } else {
+                    statusMessage.className = 'status-message status-error';
+                    statusMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${result.message}`;
+                }
+                statusMessage.style.display = 'block';
+
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                statusMessage.className = 'status-message status-error';
+                statusMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> Erro: ${error.message}`;
+                statusMessage.style.display = 'block';
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Gerar PDF';
+            }
+        });
+
+        // Atualizar pré-visualização quando campos mudarem
+        ['reportTitle', 'reportSummary', 'reportType', 'resultsData', 'recommendations'].forEach(id => {
+            document.getElementById(id).addEventListener('input', updatePreview);
+        });
+
+        // Pré-visualização inicial
+        updatePreview();
+    </script>
+</body>
+</html>

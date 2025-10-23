@@ -50,22 +50,54 @@
     </header>
 
     <main>
-        <!-- HERO INTEGRADO COM CHAT -->
+        <!-- TELA INICIAL UNIFICADA -->
         <section class="hero-integrated">
             <div class="hero-content">
                 <div class="hero-text">
                     <h1>Potencializando Seu<br>Negócio com IA</h1>
                     <p>Transforme suas operações empresariais e descubra novas<br>oportunidades através de nossas soluções de IA de ponta.</p>
+                    
+                    <!-- OPÇÕES DE ACESSO -->
+                    <div class="access-options" id="accessOptions">
+                        <div class="access-card">
+                            <div class="access-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <h3>Já tem conta?</h3>
+                            <p>Faça login para acessar todos os recursos da plataforma</p>
+                            <button class="access-btn login-btn" onclick="redirectToLogin()">
+                                <i class="fas fa-sign-in-alt"></i>
+                                FAZER LOGIN
+                            </button>
+                        </div>
+                        
+                        <div class="access-card">
+                            <div class="access-icon">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <h3>Testar sem Cadastro</h3>
+                            <p>Experimente nossa IA gratuitamente e veja o potencial</p>
+                            <button class="access-btn demo-btn" onclick="startDemo()">
+                                <i class="fas fa-play"></i>
+                                TESTAR AGORA
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="hero-buttons">
                         <button class="learn-more-btn" onclick="window.location.href='sobre.html'">SAIBA MAIS</button>
-                        <button class="get-started-btn" onclick="checkAuthAndRedirect()">COMEÇAR AGORA</button>
+                        <button class="get-started-btn" onclick="window.location.href='planos.html'">VER PLANOS</button>
                     </div>
                 </div>
                 
-                <div class="hero-chat">
+                <!-- CHAT DEMO (inicialmente oculto) -->
+                <div class="hero-chat" id="demoChat" style="display: none;">
                     <div class="chat-header">
-                        <h3><i class="fas fa-robot"></i> Chat Gratuito com IA</h3>
-                        <p>Experimente nossa inteligência artificial</p>
+                        <h3><i class="fas fa-robot"></i> Chat Demo - Teste nossa IA</h3>
+                        <p>Experimente gratuitamente sem cadastro</p>
+                        <button class="close-demo-btn" onclick="closeDemo()">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                     
                     <div class="chat-container">
@@ -87,7 +119,8 @@
                     </div>
                     
                     <div class="chat-info">
-                        <p><i class="fas fa-info-circle"></i> Chat gratuito. Para recursos avançados, <a href="planos.html">conheça nossos planos</a>.</p>
+                        <p><i class="fas fa-info-circle"></i> Chat demo gratuito. Para recursos avançados, <a href="planos.html">conheça nossos planos</a>.</p>
+                        <p><i class="fas fa-lock"></i> Para salvar conversas e acessar recursos premium, <a href="login.html">faça login</a>.</p>
                     </div>
                 </div>
             </div>
@@ -97,7 +130,89 @@
     <script src="../js/neural-background.js"></script>
     <script src="../js/auth.js"></script>
     <script>
-        // Verificar autenticação e redirecionar
+        // Redirecionar para login
+        function redirectToLogin() {
+            window.location.href = 'login.html';
+        }
+
+        // Iniciar demo sem cadastro
+        function startDemo() {
+            const demoChat = document.getElementById('demoChat');
+            const accessOptions = document.getElementById('accessOptions');
+            const heroButtons = document.querySelector('.hero-buttons');
+            
+            // Adicionar classes para transições suaves
+            accessOptions.classList.add('hidden');
+            heroButtons.classList.add('hidden');
+            
+            // Aguardar transição e mostrar chat
+            setTimeout(() => {
+                accessOptions.style.display = 'none';
+                heroButtons.style.display = 'none';
+                demoChat.style.display = 'block';
+                
+                // Adicionar classe show para animação
+                setTimeout(() => {
+                    demoChat.classList.add('show');
+                }, 50);
+            }, 300);
+            
+            // Scroll suave para o chat
+            setTimeout(() => {
+                demoChat.scrollIntoView({ behavior: 'smooth' });
+            }, 400);
+            
+            // Focar no input do chat
+            setTimeout(() => {
+                const chatInput = document.getElementById('freeChatInput');
+                if (chatInput) {
+                    chatInput.focus();
+                }
+            }, 800);
+        }
+
+        // Fechar demo e voltar às opções
+        function closeDemo() {
+            const demoChat = document.getElementById('demoChat');
+            const accessOptions = document.getElementById('accessOptions');
+            const heroButtons = document.querySelector('.hero-buttons');
+            
+            // Remover classe show para animação de saída
+            demoChat.classList.remove('show');
+            
+            // Aguardar transição e ocultar chat
+            setTimeout(() => {
+                demoChat.style.display = 'none';
+                
+                // Mostrar opções de acesso e botões
+                accessOptions.style.display = 'grid';
+                heroButtons.style.display = 'flex';
+                
+                // Remover classes hidden
+                setTimeout(() => {
+                    accessOptions.classList.remove('hidden');
+                    heroButtons.classList.remove('hidden');
+                }, 50);
+            }, 300);
+            
+            // Limpar mensagens do chat demo
+            const messagesContainer = document.getElementById('freeChatMessages');
+            messagesContainer.innerHTML = `
+                <div class="message ai-message">
+                    <div class="message-content">
+                        <i class="fas fa-robot"></i>
+                        <p>Olá! Sou sua assistente de IA gratuita. Como posso ajudar você hoje?</p>
+                    </div>
+                </div>
+            `;
+            
+            // Scroll para o topo
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 400);
+        }
+
+        // Verificar autenticação e redirecionar (função original mantida para compatibilidade)
         function checkAuthAndRedirect() {
             const user = ARKAD_AUTH.getCurrentUser();
             if (user) {

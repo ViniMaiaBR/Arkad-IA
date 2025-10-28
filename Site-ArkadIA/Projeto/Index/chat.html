@@ -339,7 +339,57 @@
                 }
             };
             
+            // Botão de visualizar/editar PDF
+            const editButton = document.createElement('button');
+            editButton.className = 'edit-pdf-btn';
+            editButton.innerHTML = '<i class="fas fa-edit"></i> ✏️ Visualizar/Editar PDF';
+            editButton.style.background = 'linear-gradient(135deg, var(--primary-color), #00a8a8)';
+            editButton.style.color = 'white';
+            editButton.style.border = 'none';
+            editButton.style.padding = '12px 20px';
+            editButton.style.borderRadius = '10px';
+            editButton.style.cursor = 'pointer';
+            editButton.style.fontWeight = '600';
+            editButton.style.transition = 'all 0.3s ease';
+            
+            editButton.onmouseover = () => {
+                editButton.style.transform = 'translateY(-2px)';
+                editButton.style.boxShadow = '0 5px 15px rgba(0, 181, 184, 0.3)';
+            };
+            
+            editButton.onmouseout = () => {
+                editButton.style.transform = 'none';
+                editButton.style.boxShadow = 'none';
+            };
+            
+            editButton.onclick = () => {
+                try {
+                    // Obter dados da análise do escritório TI
+                    const analysisData = window.escritorioTIFlow.getCurrentAnalysisData();
+                    
+                    // Preparar dados para a página de processamento
+                    const reportData = {
+                        title: analysisData ? analysisData.title : 'Análise de Escritório TI',
+                        client: 'Cliente Arkad',
+                        company: 'Arkad AI Consultoria',
+                        text: analysisData ? analysisData.fullText : 'Análise completa gerada pelo chat'
+                    };
+                    
+                    // Armazenar dados no localStorage para a página processar-ia-pdf.html usar
+                    localStorage.setItem('chatReportData', JSON.stringify(reportData));
+                    
+                    // Redirecionar para a página de processamento
+                    window.location.href = 'processar-ia-pdf.html';
+                } catch (error) {
+                    console.error('Erro ao abrir editor de PDF:', error);
+                    addMessage("❌ **Erro ao abrir editor de PDF**\n\nPor favor, tente novamente.", 'ai');
+                }
+            };
+            
+            downloadButtonDiv.style.display = 'flex';
+            downloadButtonDiv.style.gap = '10px';
             downloadButtonDiv.appendChild(downloadButton);
+            downloadButtonDiv.appendChild(editButton);
             messagesContainer.appendChild(downloadButtonDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }

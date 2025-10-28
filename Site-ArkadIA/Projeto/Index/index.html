@@ -162,11 +162,13 @@
                 demoChat.scrollIntoView({ behavior: 'smooth' });
             }, 400);
             
-            // Focar no input do chat
+            // Focar no input do chat e configurar listener de Enter
             setTimeout(() => {
                 const chatInput = document.getElementById('freeChatInput');
                 if (chatInput) {
                     chatInput.focus();
+                    // Garantir que o listener de Enter esteja ativo
+                    setupChatEnterListener();
                 }
             }, 800);
         }
@@ -311,16 +313,27 @@
             }
         }
 
-        // Adicionar evento de Enter no input do chat gratuito
-        document.addEventListener('DOMContentLoaded', function() {
+        // Função para adicionar evento de Enter no input do chat gratuito
+        function setupChatEnterListener() {
             const freeChatInput = document.getElementById('freeChatInput');
             if (freeChatInput) {
-                freeChatInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        sendFreeMessage();
-                    }
-                });
+                // Remove listener anterior se existir
+                freeChatInput.removeEventListener('keypress', handleChatEnter);
+                // Adiciona novo listener
+                freeChatInput.addEventListener('keypress', handleChatEnter);
             }
+        }
+
+        // Handler para o evento de Enter
+        function handleChatEnter(e) {
+            if (e.key === 'Enter') {
+                sendFreeMessage();
+            }
+        }
+
+        // Adicionar evento de Enter no input do chat gratuito quando o DOM carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            setupChatEnterListener();
         });
 
         // Inicializar quando a página carregar

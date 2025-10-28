@@ -886,6 +886,28 @@ ${this.getPlanFeatures(planType)}
             type: 'txt_generated'
         };
     }
+
+    // Obter dados da análise atual para envio ao editor de PDF
+    getCurrentAnalysisData() {
+        const planType = this.userData.planType ? this.userData.planType.toLowerCase() : 'basico';
+        const officeData = this.officeData;
+        
+        // Calcular custos totais
+        const totalInvestment = this.calculateTotalInvestment(planType, officeData);
+        const monthlyCosts = this.calculateMonthlyCosts(planType, officeData);
+        
+        // Gerar texto completo da análise
+        const fullReport = this.generateOfficeReport(planType, totalInvestment, monthlyCosts);
+        
+        return {
+            title: `Análise de Escritório TI - ${this.userData.planType || 'Plano Básico'}`,
+            planType: this.userData.planType || 'Plano Básico',
+            totalInvestment: totalInvestment,
+            monthlyCosts: monthlyCosts,
+            fullText: fullReport,
+            officeData: officeData
+        };
+    }
 }
 
 // Criar instância global

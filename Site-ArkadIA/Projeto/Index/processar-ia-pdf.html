@@ -80,8 +80,12 @@
         }
 
         .ai-text-area {
-            min-height: 300px;
+            min-height: 10px;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
         }
+    
 
         .btn-process {
             background: linear-gradient(135deg, var(--primary-color), #00a8a8);
@@ -423,7 +427,32 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
     <script src="../js/neural-background.js"></script>
     <script src="../js/pdf-generator.js"></script>
     <script src="../js/ai-text-processor.js"></script>
+    <script src="../js/escritorio-ti-flow.js"></script>
     <script>
+        // Carregar dados do chat se estiver vindo de lá
+        window.onload = function() {
+            const chatReportData = localStorage.getItem('chatReportData');
+            if (chatReportData) {
+                try {
+                    const data = JSON.parse(chatReportData);
+                    
+                    // Preencher campos do formulário com os dados do chat
+                    if (data.title) document.getElementById('reportTitle').value = data.title;
+                    if (data.client) document.getElementById('clientName').value = data.client;
+                    if (data.company) document.getElementById('companyName').value = data.company;
+                    if (data.text) document.getElementById('aiText').value = data.text;
+                    
+                    // Limpar localStorage após carregar
+                    localStorage.removeItem('chatReportData');
+                    
+                    // Atualizar preview
+                    updatePreview();
+                } catch (error) {
+                    console.error('Erro ao carregar dados do chat:', error);
+                }
+            }
+        };
+        
         // Exemplos de texto da IA
         const examples = {
             expansion: {

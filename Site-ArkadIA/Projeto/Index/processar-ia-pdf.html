@@ -220,6 +220,16 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
+
+        /* Estilo para logo clicável */
+        .logo {
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
     </style>
 </head>
 <body>
@@ -241,7 +251,7 @@
 
     <header>
         <nav class="navbar">
-            <div class="logo">
+            <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
                 <img src="../images/logo.svg" alt="Logo ARKAD AI">
                 <span>ARKAD AI</span>
             </div>

@@ -9,9 +9,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
+        /* Esconder header/elementos quando embutido via ?embed=1 */
+        body.embed header { display: none !important; }
+        body.embed .animated-background { display: none !important; }
+        body.embed .processor-container { padding-top: 20px; }
         .processor-container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 100px auto 0 auto; /* compensa header fixo */
             padding: 40px 20px;
         }
 
@@ -80,7 +84,7 @@
         }
 
         .ai-text-area {
-            min-height: 10px;
+            min-height: 500px;
             border-radius: 10px;
             padding: 20px;
             margin-top: 20px;
@@ -205,6 +209,13 @@
             background: #00a8a8;
         }
 
+        .prompt-note {
+            margin-top: 10px;
+            color: var(--light-text);
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
         .processing-indicator {
             display: none;
             text-align: center;
@@ -229,6 +240,42 @@
         .logo:hover {
             transform: scale(1.05);
             filter: brightness(1.1);
+        }
+
+        /* Botão de voltar ao chat */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: rgba(0, 181, 184, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .back-wrapper {
+            padding: 0 20px;
+            margin: 100px 0 10px 0; /* abaixo do header fixo */
+        }
+
+        .prompts-wrapper {
+            padding: 0 20px;
+            margin: 20px 0 60px 0;
+        }
+
+        .prompts-container {
+            max-width: 1200px;
+            margin: 0 auto 0 auto;
+            padding: 0 20px;
         }
     </style>
 </head>
@@ -264,6 +311,10 @@
             </div>
         </nav>
     </header>
+ 
+    <div class="back-wrapper">
+        <a href="chat.html" class="btn-back"><i class="fas fa-comments"></i> Voltar ao Chat com IA</a>
+    </div>
 
     <div class="processor-container">
         <div class="processor-section">
@@ -393,34 +444,11 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
             </form>
 
             <div class="status-message" id="statusMessage"></div>
-        </div>
 
-        <div class="processor-section">
-            <h2><i class="fas fa-lightbulb"></i> Exemplos de Texto da IA</h2>
-            <p style="color: var(--light-text); margin-bottom: 20px;">
-                Clique em um dos exemplos abaixo para preencher automaticamente o formulário:
-            </p>
 
-            <div class="examples-section">
-                <div class="example-card" onclick="loadExample('expansion')">
-                    <h4>Expansão de Negócios</h4>
-                    <p>Análise estratégica para abertura de novo escritório com projeções financeiras e cronograma de implementação.</p>
-                    <button class="example-btn">Usar Exemplo</button>
                 </div>
 
-                <div class="example-card" onclick="loadExample('automation')">
-                    <h4>Automação de Processos</h4>
-                    <p>Plano de implementação de automação com IA para otimização de processos empresariais e redução de custos.</p>
-                    <button class="example-btn">Usar Exemplo</button>
-                </div>
-
-                <div class="example-card" onclick="loadExample('marketing')">
-                    <h4>Estratégia de Marketing</h4>
-                    <p>Análise de mercado e desenvolvimento de estratégia de marketing digital com foco em crescimento e ROI.</p>
-                    <button class="example-btn">Usar Exemplo</button>
-                </div>
-            </div>
-        </div>
+        
 
         <div class="processor-section">
             <h2><i class="fas fa-eye"></i> Pré-visualização do PDF</h2>
@@ -435,11 +463,34 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
         </div>
     </div>
 
+    <div class="prompts-wrapper">
+        <div class="prompts-container">
+            <div class="processor-section">
+                <h2 style="display:flex; align-items:center; gap:10px; color: var(--primary-color);"><i class="fas fa-lightbulb"></i> Perguntas que pode fazer para IA</h2>
+                <p style="color: var(--light-text); margin-bottom: 20px;">
+                    Use um dos passo-a-passo abaixo para guiar seu diálogo com a IA.
+                </p>
+                <div class="examples-section" id="promptsContainer">
+                    <p style="color: var(--light-text);">Carregando prompts...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/neural-background.js"></script>
     <script src="../js/pdf-generator.js"></script>
     <script src="../js/ai-text-processor.js"></script>
     <script src="../js/escritorio-ti-flow.js"></script>
     <script>
+        // Ativar modo embutido quando ?embed=1
+        (function(){
+            try {
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('embed') === '1') {
+                    document.body.classList.add('embed');
+                }
+            } catch (e) {}
+        })();
         // Carregar dados do chat se estiver vindo de lá
         window.onload = function() {
             const chatReportData = localStorage.getItem('chatReportData');
@@ -464,153 +515,59 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
             }
         };
         
-        // Exemplos de texto da IA
-        const examples = {
-            expansion: {
-                title: "Proposta de Expansão – Escritório Adicional",
-                client: "Vinicius Silva",
-                company: "Arkad Consultoria Empresarial",
-                text: `Relatório Estratégico Arkad AI
+        // Carregar prompts de arquivos .txt da pasta Prompts
+        const promptDefinitions = [
+            { id: 'expansao', title: 'Expansão de Negócios', file: '../Prompts/EXPANSÃO DE NEGÓCIOS.txt' },
+            { id: 'automacao', title: 'Automação de Processos', file: '../Prompts/AUTOMAÇÃO DE PROCESSOS.txt' },
+            { id: 'marketing', title: 'Estratégia de Marketing', file: '../Prompts/ESTRATÉGIA DE MARKETING.txt' }
+        ];
 
-Proposta de Expansão – Escritório Adicional
+        const promptsMap = {};
 
-Objetivo do Projeto
-O cliente solicitou à Arkad AI a elaboração de um plano estratégico e financeiro para abertura de um escritório adicional, com base em análise de viabilidade, estimativa de custos, previsão de ROI e diretrizes operacionais.
+        async function loadPrompts() {
+            const container = document.getElementById('promptsContainer');
+            if (!container) return;
+            container.innerHTML = '';
 
-1. Diagnóstico e Contexto Atual
-Situação Atual: A empresa opera atualmente em Santo André (SP), com estrutura física e equipe enxuta, focada em consultoria tecnológica e estratégica.
+            for (const def of promptDefinitions) {
+                try {
+                    const res = await fetch(def.file);
+                    if (!res.ok) throw new Error('Erro ao carregar ' + def.file);
+                    const text = await res.text();
+                    promptsMap[def.id] = text;
+                    const firstLine = (text.split(/\r?\n/)[0] || '').trim();
 
-Motivos para Expansão:
-- Crescimento constante da demanda em outras regiões
-- Necessidade de equipe híbrida para projetos empresariais
-- Maior proximidade com clientes de médio e grande porte
-
-2. Estratégia de Implementação
-Desenvolvimento de estratégia em 3 fases principais:
-- Fase 1: Planejamento e Instalação (0–3 meses)
-- Fase 2: Operação Piloto (4–12 meses)
-- Fase 3: Consolidação e Escala (13–24 meses)
-
-3. Projeção Financeira
-Investimento Total: R$ 250.000
-Receita Projetada: R$ 320.000
-ROI Estimado: 28% ao ano
-
-Conclusão
-A análise indica que a abertura do novo escritório é financeiramente viável e estrategicamente alinhada com os objetivos de expansão.`
-            },
-            automation: {
-                title: "Plano de Automação com IA",
-                client: "Maria Santos",
-                company: "Tech Solutions Ltda",
-                text: `Relatório Estratégico Arkad AI
-
-Plano de Automação com IA
-
-Objetivo do Projeto
-Implementar soluções de automação com inteligência artificial para otimizar processos empresariais, reduzir custos operacionais e aumentar a eficiência da equipe.
-
-1. Diagnóstico Atual
-Situação Atual: A empresa possui processos manuais que consomem tempo significativo da equipe e geram custos operacionais elevados.
-
-Processos Identificados para Automação:
-- Atendimento ao cliente
-- Análise de dados e relatórios
-- Gestão de leads e vendas
-- Processamento de documentos
-
-2. Estratégia de Implementação
-Fase 1: Análise e Planejamento (1-2 meses)
-- Mapeamento completo dos processos atuais
-- Identificação de oportunidades de automação
-- Definição de KPIs e métricas de sucesso
-
-Fase 2: Desenvolvimento e Testes (2-4 meses)
-- Implementação de chatbots inteligentes
-- Automação de relatórios e análises
-- Integração com sistemas existentes
-
-Fase 3: Deploy e Otimização (4-6 meses)
-- Lançamento gradual das soluções
-- Treinamento da equipe
-- Monitoramento e ajustes contínuos
-
-3. Tecnologias Recomendadas
-- Chatbots com IA para atendimento
-- Processamento de linguagem natural
-- Machine Learning para análise
-- Integração com APIs existentes
-
-4. Projeção Financeira
-Investimento Inicial: R$ 150.000
-Economia Anual: R$ 200.000
-ROI: 33% no primeiro ano
-
-Conclusão
-A implementação de automação com IA trará benefícios significativos em eficiência, redução de custos e satisfação do cliente.`
-            },
-            marketing: {
-                title: "Estratégia de Marketing Digital",
-                client: "Carlos Oliveira",
-                company: "Digital Marketing Pro",
-                text: `Relatório Estratégico Arkad AI
-
-Estratégia de Marketing Digital
-
-Objetivo do Projeto
-Desenvolver uma estratégia abrangente de marketing digital para aumentar a visibilidade da marca, gerar leads qualificados e acelerar o crescimento da empresa.
-
-1. Análise de Mercado
-Situação Atual: A empresa possui presença digital limitada e necessita de uma estratégia consolidada para competir no mercado digital.
-
-Oportunidades Identificadas:
-- Mercado digital em crescimento
-- Baixa concorrência em nichos específicos
-- Potencial de expansão online
-
-2. Estratégia de Marketing
-Canais Prioritários:
-- SEO e Marketing de Conteúdo
-- Redes Sociais (LinkedIn, Instagram)
-- Email Marketing
-- Google Ads e Facebook Ads
-
-3. Plano de Execução
-Fase 1: Fundação (1-3 meses)
-- Desenvolvimento de site otimizado
-- Criação de conteúdo estratégico
-- Configuração de ferramentas de marketing
-
-Fase 2: Crescimento (3-6 meses)
-- Campanhas de aquisição de leads
-- Otimização de conversão
-- Expansão de canais
-
-Fase 3: Escala (6-12 meses)
-- Automação de marketing
-- Parcerias estratégicas
-- Expansão internacional
-
-4. Projeção de Resultados
-Investimento: R$ 100.000
-Leads Gerados: 500/mês
-ROI Esperado: 300% em 12 meses
-
-Conclusão
-A estratégia de marketing digital proposta trará crescimento sustentável e posicionamento competitivo no mercado.`
+                    const card = document.createElement('div');
+                    card.className = 'example-card';
+                    card.innerHTML = `
+                        <h4>${def.title}</h4>
+                        <p style="white-space: pre-line; color: var(--light-text); font-size: 14px; max-height: 130px; overflow: hidden;">${firstLine.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+                        <div class="prompt-note">Volte para o chat e ele irá te fazer as perguntas.</div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+                            <button class="example-btn" data-action="chat" data-id="${def.id}">Deixa a IA me fazer as perguntas</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                } catch (e) {
+                    const errorCard = document.createElement('div');
+                    errorCard.className = 'example-card';
+                    errorCard.innerHTML = `<h4>${def.title}</h4><p style="color: var(--light-text);">Não foi possível carregar o prompt (${def.file}).</p>`;
+                    container.appendChild(errorCard);
+                }
             }
-        };
 
-        // Carregar exemplo
-        function loadExample(type) {
-            const example = examples[type];
-            if (example) {
-                document.getElementById('reportTitle').value = example.title;
-                document.getElementById('clientName').value = example.client;
-                document.getElementById('companyName').value = example.company;
-                document.getElementById('aiText').value = example.text;
-                updatePreview();
-            }
+            container.addEventListener('click', async (ev) => {
+                const btn = ev.target.closest('button');
+                if (!btn) return;
+                const id = btn.getAttribute('data-id');
+                const action = btn.getAttribute('data-action');
+                const content = promptsMap[id];
+                if (!content) return;
+
+                if (action === 'chat') {
+                    window.location.href = 'chat.html';
+                }
+            });
         }
 
         // Atualizar pré-visualização
@@ -702,6 +659,7 @@ A estratégia de marketing digital proposta trará crescimento sustentável e po
 
         // Pré-visualização inicial
         updatePreview();
+        loadPrompts();
     </script>
     <script src="../js/header-scroll.js"></script>
 </body>

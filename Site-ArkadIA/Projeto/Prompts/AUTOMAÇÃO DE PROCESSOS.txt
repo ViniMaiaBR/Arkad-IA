@@ -1,0 +1,11 @@
+Vamos descobrir como tornar seus processos mais rápidos e inteligentes.
+
+1️⃣ Qual área você deseja automatizar? (ex: atendimento ao cliente, financeiro, RH, vendas, marketing)
+2️⃣ Descreva como o processo funciona hoje (ex: manual, planilhas, e-mails, etc.)
+3️⃣ Quais são os principais problemas que você enfrenta? (ex: retrabalho, lentidão, erros humanos)
+4️⃣ Você já utiliza alguma ferramenta digital atualmente?
+5️⃣ Deseja que eu proponha integrações com sistemas existentes (ex: ERP, CRM, WhatsApp, e-mail)?
+6️⃣ Você quer que a automação seja total ou parcial (mantendo supervisão humana)?
+7️⃣ Qual é o orçamento estimado disponível para essa automação?
+
+ No final, posso gerar um mapa de automação mostrando ganhos de tempo, custo e produtividade — pronto para implementação.

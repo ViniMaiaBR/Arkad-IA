@@ -33,7 +33,7 @@
     </div>
     <header>
         <nav class="navbar">
-            <div class="logo">
+            <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
                 <img src="../images/logo.svg" alt="Logo ARKAD AI">
                 <span>ARKAD AI</span>
             </div>
@@ -141,19 +141,29 @@
             const demoChat = document.getElementById('demoChat');
             const accessOptions = document.getElementById('accessOptions');
             const heroButtons = document.querySelector('.hero-buttons');
+            const heroContent = document.querySelector('.hero-content');
             
             // Adicionar classes para transições suaves
-            accessOptions.classList.add('hidden');
             heroButtons.classList.add('hidden');
             
             // Aguardar transição e mostrar chat
             setTimeout(() => {
-                accessOptions.style.display = 'none';
+                // Ajustar layout: manter apenas o card de login sob o texto, à esquerda
                 heroButtons.style.display = 'none';
+                accessOptions.classList.add('demo-left');
+                accessOptions.classList.add('slide-left');
+                if (heroContent) heroContent.classList.add('with-chat');
+
+                // Esconder o segundo card (Testar sem Cadastro)
+                const cards = accessOptions.querySelectorAll('.access-card');
+                if (cards[1]) {
+                    cards[1].style.display = 'none';
+                }
                 demoChat.style.display = 'block';
                 
                 // Adicionar classe show para animação
                 setTimeout(() => {
+                    demoChat.classList.add('slide-right');
                     demoChat.classList.add('show');
                 }, 50);
             }, 300);
@@ -179,21 +189,28 @@
             const demoChat = document.getElementById('demoChat');
             const accessOptions = document.getElementById('accessOptions');
             const heroButtons = document.querySelector('.hero-buttons');
+            const heroContent = document.querySelector('.hero-content');
             
             // Remover classe show para animação de saída
             demoChat.classList.remove('show');
+            demoChat.classList.remove('slide-right');
             
             // Aguardar transição e ocultar chat
             setTimeout(() => {
                 demoChat.style.display = 'none';
                 
-                // Mostrar opções de acesso e botões
-                accessOptions.style.display = 'grid';
+                // Restaurar opções de acesso e botões
+                accessOptions.classList.remove('demo-left');
+                accessOptions.classList.remove('slide-left');
+                if (heroContent) heroContent.classList.remove('with-chat');
+                const cards = accessOptions.querySelectorAll('.access-card');
+                if (cards[1]) {
+                    cards[1].style.display = '';
+                }
                 heroButtons.style.display = 'flex';
                 
                 // Remover classes hidden
                 setTimeout(() => {
-                    accessOptions.classList.remove('hidden');
                     heroButtons.classList.remove('hidden');
                 }, 50);
             }, 300);

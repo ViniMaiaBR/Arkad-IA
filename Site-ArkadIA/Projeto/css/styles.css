@@ -80,6 +80,17 @@ header.header-scrolled {
     font-weight: 600;
 }
 
+/* Animação global do logo */
+.logo {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
 .logo img {
     height: 2rem;
 }
@@ -1180,6 +1191,7 @@ header.header-scrolled {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     margin-bottom: 3rem;
+    align-items: stretch;
 }
 
 .pricing-card {
@@ -1191,6 +1203,8 @@ header.header-scrolled {
     transition: all 0.3s ease;
     border: 2px solid transparent;
     backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
 }
 
 .pricing-card:hover {
@@ -1267,6 +1281,11 @@ header.header-scrolled {
 
 .plan-features li:last-child {
     border-bottom: none;
+}
+
+/* Garante que a área de features cresça e empurre o botão para o fim, igualando alturas */
+.plan-features {
+    flex: 1 1 auto;
 }
 
 .plan-features i {
@@ -1520,13 +1539,19 @@ header.header-scrolled {
     max-width: 1400px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 4rem;
     align-items: center;
+    justify-items: center;
+}
+
+/* quando o chat demo estiver ativo, vira 2 colunas */
+.hero-content.with-chat {
+    grid-template-columns: 1fr 1fr;
 }
 
 .hero-text {
-    text-align: left;
+    text-align: center;
 }
 
 .hero-text h1 {
@@ -1725,7 +1750,8 @@ header.header-scrolled {
 
 /* Responsividade para hero integrado */
 @media (max-width: 1024px) {
-    .hero-content {
+    .hero-content,
+    .hero-content.with-chat {
         grid-template-columns: 1fr;
         gap: 3rem;
         text-align: center;
@@ -1807,9 +1833,10 @@ header.header-scrolled {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
-    margin: 3rem 0;
+    margin: 3rem auto; /* centraliza horizontalmente */
     max-width: 800px;
     transition: all 0.3s ease;
+    justify-items: center; /* centraliza os cards nas colunas */
 }
 
 .access-options.hidden {
@@ -1850,6 +1877,15 @@ header.header-scrolled {
 
 .access-card:hover::before {
     opacity: 1;
+}
+
+/* Estado ao iniciar a demo: manter apenas o card de login e alinhar à esquerda */
+.access-options.demo-left {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-left: 0; /* encosta à esquerda do bloco de texto */
+    margin-right: auto;
+    justify-items: start; /* alinha card à esquerda */
 }
 
 .access-icon {
@@ -1949,6 +1985,25 @@ header.header-scrolled {
 .hero-chat.show {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* animações laterais ao ativar a demo */
+.hero-chat.slide-right.show {
+    animation: slideInRight 0.4s ease both;
+}
+
+.access-options.slide-left {
+    animation: slideOutLeft 0.4s ease both;
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(30px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutLeft {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(-20px); opacity: 1; }
 }
 
 .hero-chat .chat-header {

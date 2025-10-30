@@ -7,6 +7,90 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .chat-layout {
+            max-width: 1600px;
+            margin: 2rem auto;
+            display: grid;
+            grid-template-columns: 1fr 0.8fr;
+            gap: 2rem;
+            align-items: stretch;
+        }
+        /* Tornar o chat mais alto e evitar corte do input */
+        .chat-container { height: auto; min-height: calc(100vh - 340px); }
+        .chat-messages { flex: 1 1 auto; max-height: none; }
+        .chat-column { display: flex; flex-direction: column; gap: 0.75rem; }
+        .pdf-preview {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(10, 38, 71, 0.25);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 200px);
+        }
+        .pdf-preview-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem 0.5rem 1rem 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 0.75rem;
+        }
+        .pdf-preview-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+        .pdf-iframe {
+            width: 100%;
+            flex: 1 1 auto;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+        }
+        .pdf-actions { display: flex; justify-content: center; margin-top: 0.75rem; }
+        .open-processor-btn {
+            background: linear-gradient(135deg, var(--primary-color), #00a8a8);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .open-processor-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 181, 184, 0.3); }
+        .toggle-preview-btn {
+            background: rgba(255,255,255,0.1);
+            color: var(--text-color);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 0.5rem;
+            text-decoration: none;
+        }
+        .toggle-preview-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+
+        /* Esconde preview e expande chat quando oculto */
+        .chat-layout.preview-hidden { grid-template-columns: 1fr; }
+        .chat-layout.preview-hidden .pdf-preview { display: none; }
+
+        @media (max-width: 992px) {
+            .chat-layout { grid-template-columns: 1fr; }
+            .pdf-preview { min-height: 400px; }
+        }
+    </style>
 </head>
 <body>
     <canvas id="neural-bg"></canvas>
@@ -23,25 +107,40 @@
     </header>
 
     <main>
-        <div class="chat-container">
-            <div class="chat-header">
-                <h2>Chat com IA</h2>
-                <p>Como posso ajudar você hoje?</p>
-            </div>
-            <div class="chat-messages" id="chatMessages">
+        <div class="chat-layout">
+            <div class="chat-column">
+                <div class="chat-container">
+                <div class="chat-header">
+                    <h2>Chat com IA</h2>
+                    <p>Como posso ajudar você hoje?</p>
+                </div>
+                <div class="chat-messages" id="chatMessages">
                 <div class="message ai-message">
                     <div class="message-content">
                         <i class="fas fa-robot"></i>
                         <p>Olá! Sou a IA da Arkad. Como posso ajudar você hoje?</p>
                     </div>
                 </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="userInput" placeholder="Digite sua mensagem..." class="chat-input">
+                    <button id="sendButton" class="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                </div>
+                <div class="pdf-actions">
+                    <button type="button" id="togglePreviewBtn" class="toggle-preview-btn" title="Mostrar/Fechar preview">
+                        <i class="fas fa-eye-slash"></i> Fechar preview
+                    </button>
+                    <a href="processar-ia-pdf.html" class="open-processor-btn" title="Visualizar/Editar PDF">
+                        <i class="fas fa-file-pdf"></i> Visualizar/Editar PDF
+                    </a>
+                </div>
             </div>
-            <div class="chat-input-container">
-                <input type="text" id="userInput" placeholder="Digite sua mensagem..." class="chat-input">
-                <button id="sendButton" class="send-button">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
+            <aside class="pdf-preview">
+                <iframe class="pdf-iframe" src="processar-ia-pdf.html?embed=1"></iframe>
+            </aside>
         </div>
     </main>
 
@@ -49,6 +148,23 @@
     <script src="../js/chat-ai-responses.js"></script>
     <script src="../js/escritorio-ti-flow.js"></script>
     <script src="../js/header-scroll.js"></script>
+    <script>
+        // Alternar visualização do preview (mostrar/fechar)
+        (function(){
+            const layout = document.querySelector('.chat-layout');
+            const toggleBtn = document.getElementById('togglePreviewBtn');
+            if (layout && toggleBtn) {
+                toggleBtn.addEventListener('click', () => {
+                    const hidden = layout.classList.toggle('preview-hidden');
+                    if (hidden) {
+                        toggleBtn.innerHTML = '<i class="fas fa-eye"></i> Ver preview';
+                    } else {
+                        toggleBtn.innerHTML = '<i class="fas fa-eye-slash"></i> Fechar preview';
+                    }
+                });
+            }
+        })();
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         let messagesContainer;

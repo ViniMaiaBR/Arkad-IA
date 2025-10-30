@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métodos de Pagamento | ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Estilos específicos para a página de métodos de pagamento */
+        .payment-methods-section {
+            padding: 4rem 2rem;
+            min-height: calc(100vh - 200px);
+            position: relative;
+            z-index: 5;
+        }
+
+        .payment-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .payment-header h1 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .payment-header p {
+            font-size: 1.2rem;
+            color: var(--light-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .selected-plan-banner {
+            background: linear-gradient(135deg, var(--primary-color), #009698);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 181, 184, 0.3);
+            display: none;
+        }
+
+        .selected-plan-banner.show {
+            display: block;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .selected-plan-banner h2 {
+            color: var(--text-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .selected-plan-banner .plan-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .selected-plan-banner .plan-info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .selected-plan-banner .plan-info-item i {
+            font-size: 1.5rem;
+            color: var(--text-color);
+        }
+
+        .selected-plan-banner .plan-info-item .label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .selected-plan-banner .plan-info-item .value {
+            font-size: 1.2rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .change-plan-btn {
+            margin-top: 1.5rem;
+            padding: 0.8rem 2rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .change-plan-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .change-plan-btn i {
+            font-size: 1rem;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-bottom: 4rem;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .payment-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .payment-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .payment-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .payment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 181, 184, 0.2);
+            border-color: var(--primary-color);
+        }
+
+        .payment-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .payment-card.selected {
+            border: 2px solid var(--primary-color);
+            background: rgba(0, 181, 184, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 181, 184, 0.3);
+        }
+
+        .payment-card.selected::before {
+            transform: scaleX(1);
+        }
+
+        .payment-card.selected::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary-color);
+            color: var(--text-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            animation: checkmark 0.3s ease;
+        }
+
+        @keyframes checkmark {
+            from {
+                transform: scale(0);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Modal/Pop-up de Aviso */
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .payment-modal.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .payment-modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 16px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 181, 184, 0.3);
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .payment-modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-modal-header i {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .payment-modal-header h2 {
+            color: var(--text-color);
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-modal-body {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .payment-modal-body p {
+            color: var(--light-text);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .payment-modal-footer {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary-color);
+            color: var(--text-color);
+        }
+
+        .modal-btn-primary:hover {
+            background: #009698;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 181, 184, 0.3);
+        }
+
+        .modal-btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: var(--text-color);
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(90deg);
+        }
+
+        .payment-icon {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .payment-card h3 {
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .payment-card p {
+            color: var(--light-text);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .payment-features {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+
+        .payment-features li {
+            padding: 0.6rem 0;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .payment-features li i {
+            color: var(--primary-color);
+            font-size: 1rem;
+            width: 20px;
+        }
+
+        .payment-status {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .payment-status.available {
+            background: rgba(0, 181, 184, 0.2);
+            color: var(--primary-color);
+        }
+
+        .payment-status.popular {
+            background: linear-gradient(135deg, var(--primary-color), #009698);
+            color: var(--text-color);
+        }
+
+        .security-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 3rem;
+            margin-top: 3rem;
+            text-align: center;
+        }
+
+        .security-section h2 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .security-section p {
+            color: var(--light-text);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .security-badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .security-badge i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+        }
+
+        .security-badge span {
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .payment-header h1 {
+                font-size: 2rem;
+            }
+
+            .payment-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem;
+            }
+
+            .payment-card {
+                padding: 2rem;
+            }
+
+            .selected-plan-banner {
+                padding: 1.5rem;
+            }
+
+            .selected-plan-banner h2 {
+                font-size: 1.5rem;
+            }
+
+            .selected-plan-banner .plan-info {
+                gap: 1rem;
+            }
+
+            .selected-plan-banner .plan-info-item .value {
+                font-size: 1rem;
+            }
+
+            .security-section {
+                padding: 2rem 1.5rem;
+            }
+
+            .security-badges {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .payment-methods-section {
+                padding: 2rem 1rem;
+            }
+
+            .payment-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .payment-icon {
+                font-size: 2.5rem;
+            }
+
+            .payment-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="neural-bg"></canvas>
+    
+    <header>
+        <nav class="navbar">
+            <div class="logo" onclick="window.location.href='index.html'">
+                <img src="../images/logo.svg" alt="Logo ARKAD AI">
+                <span>ARKAD AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">INÍCIO</a>
+                <a href="sobre.html">SOBRE</a>
+                <a href="servicos.html">SERVIÇOS</a>
+                <a href="planos.html">PLANOS</a>
+                <a href="contato.html">CONTATO</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="payment-methods-section">
+            <div class="payment-container">
+                <div class="payment-header">
+                    <h1>Métodos de Pagamento</h1>
+                    <p>Oferecemos diversas opções de pagamento seguras e convenientes para você escolher a melhor forma de pagar pelos nossos serviços.</p>
+                </div>
+
+                <!-- Banner do Plano Selecionado -->
+                <div class="selected-plan-banner" id="selectedPlanBanner">
+                    <h2><i class="fas fa-check-circle"></i> Plano Selecionado</h2>
+                    <div class="plan-info">
+                        <div class="plan-info-item">
+                            <i class="fas fa-tag"></i>
+                            <span class="label">Plano</span>
+                            <span class="value" id="selectedPlanName">-</span>
+                        </div>
+                        <div class="plan-info-item">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span class="label">Valor</span>
+                            <span class="value" id="selectedPlanPrice">-</span>
+                        </div>
+                        <div class="plan-info-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span class="label">Selecionado em</span>
+                            <span class="value" id="selectedPlanDate">-</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1.5rem; color: rgba(255, 255, 255, 0.9); font-size: 1rem;">
+                        Escolha abaixo o método de pagamento que você prefere para finalizar sua assinatura.
+                    </p>
+                    <button class="change-plan-btn" onclick="window.location.href='planos.html'">
+                        <i class="fas fa-exchange-alt"></i> Trocar Plano
+                    </button>
+                </div>
+
+                <div class="payment-grid">
+                    <!-- Cartão de Crédito -->
+                    <div class="payment-card" data-payment="cartao" onclick="selectPaymentMethod('cartao', 'Cartão de Crédito')">
+                        <i class="fab fa-cc-visa payment-icon"></i>
+                        <h3>Cartão de Crédito</h3>
+                        <p>Aceitamos os principais cartões de crédito: Visa, Mastercard, Elo e American Express.</p>
+                        <ul class="payment-features">
+                            <li><i class="fas fa-check"></i> Processamento instantâneo</li>
+                            <li><i class="fas fa-check"></i> Parcelamento em até 12x</li>
+                            <li><i class="fas fa-check"></i> Ambiente seguro SSL</li>
+                            <li><i class="fas fa-check"></i> Aprovação imediata</li>
+                        </ul>
+                        <span class="payment-status available">Disponível</span>
+                    </div>
+
+                    <!-- PIX -->
+                    <div class="payment-card" data-payment="pix" onclick="selectPaymentMethod('pix', 'PIX')">
+                        <i class="fas fa-qrcode payment-icon"></i>
+                        <h3>PIX</h3>
+                        <p>Pagamento instantâneo via PIX com confirmação em segundos. Ideal para quem quer agilidade.</p>
+                        <ul class="payment-features">
+                            <li><i class="fas fa-check"></i> Pagamento instantâneo</li>
+                            <li><i class="fas fa-check"></i> Sem taxas adicionais</li>
+                            <li><i class="fas fa-check"></i> Disponível 24/7</li>
+                            <li><i class="fas fa-check"></i> QR Code ou chave PIX</li>
+                        </ul>
+                        <span class="payment-status popular">Mais Popular</span>
+                    </div>
+
+                    <!-- Boleto Bancário -->
+                    <div class="payment-card" data-payment="boleto" onclick="selectPaymentMethod('boleto', 'Boleto Bancário')">
+                        <i class="fas fa-barcode payment-icon"></i>
+                        <h3>Boleto Bancário</h3>
+                        <p>Pague através de boleto bancário com vencimento em até 3 dias úteis.</p>
+                        <ul class="payment-features">
+                            <li><i class="fas fa-check"></i> Aceito em qualquer banco</li>
+                            <li><i class="fas fa-check"></i> Vencimento em 3 dias</li>
+                            <li><i class="fas fa-check"></i> Sem necessidade de cartão</li>
+                            <li><i class="fas fa-check"></i> Download do boleto</li>
+                        </ul>
+                        <span class="payment-status available">Disponível</span>
+                    </div>
+                </div>
+
+                <!-- Modal de Aviso -->
+                <div class="payment-modal" id="paymentModal">
+                    <div class="payment-modal-content">
+                        <button class="close-modal" onclick="closePaymentModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <div class="payment-modal-header">
+                            <i class="fas fa-info-circle"></i>
+                            <h2>Atenção</h2>
+                        </div>
+                        <div class="payment-modal-body">
+                            <p>
+                                A funcionalidade de pagamento será implementada em uma atualização futura do sistema.
+                            </p>
+                            <p>
+                                Estamos trabalhando para oferecer a melhor experiência de pagamento possível.
+                            </p>
+                            <p style="margin-top: 1rem; color: var(--primary-color); font-weight: 600;">
+                                Obrigado pela sua compreensão!
+                            </p>
+                        </div>
+                        <div class="payment-modal-footer">
+                            <button class="modal-btn modal-btn-primary" onclick="closePaymentModal()">
+                                <i class="fas fa-check"></i>
+                                Entendi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção de Segurança -->
+                <div class="security-section">
+                    <h2><i class="fas fa-shield-alt"></i> Segurança e Proteção</h2>
+                    <p>
+                        Todos os pagamentos são processados através de plataformas certificadas e criptografadas. 
+                        Suas informações financeiras são protegidas com os mais altos padrões de segurança da indústria. 
+                        Não armazenamos dados de cartão de crédito em nossos servidores.
+                    </p>
+                    <div class="security-badges">
+                        <div class="security-badge">
+                            <i class="fas fa-lock"></i>
+                            <span>SSL 256 bits</span>
+                        </div>
+                        <div class="security-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>PCI DSS</span>
+                        </div>
+                        <div class="security-badge">
+                            <i class="fas fa-user-shield"></i>
+                            <span>Dados Protegidos</span>
+                        </div>
+                        <div class="security-badge">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Certificado SSL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="social-connect">
+            <p>Conecte-se conosco nas redes sociais!</p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                <a href="https://www.linkedin.com/company/arkadai/?viewAsMember=true"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EMPRESA</h3>
+                <p>Plataforma inteligente de consultoria empresarial que combina tecnologia e análise de mercado para orientar decisões estratégicas, otimizar investimentos e impulsionar o crescimento de empresas de todos os portes.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3>PRODUTOS</h3>
+                <ul>
+                    <li><a href="#">IA Personalizada</a></li>
+                    <li><a href="#">Análise de Dados</a></li>
+                    <li><a href="#">Automação</a></li>
+                    <li><a href="#">Consultoria</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>EQUIPE</h3>
+                <ul>
+                    <li><a href="https://www.linkedin.com/in/vinicius-maia-190279219?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Vinicius Maia</a></li>
+                    <li><a href="https://www.linkedin.com/in/eduardo-romero-gomes-a263a5251?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app">Eduardo Romero</a></li>
+                    <li><a href="https://www.linkedin.com/in/gustavo-spaggiari-897246247?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app">Gustavo Spaggiari</a></li>
+                    <li><a href="https://www.linkedin.com/in/kelvin-herculin-2032482b0?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app">Kelvin Herculin</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>LINKS ÚTEIS</h3>
+                <ul>
+                    <li><a href="nossa-equipe.html">Nossa Equipe</a></li>
+                    <li><a href="#">Seja um Parceiro</a></li>
+                    <li><a href="planos.html">Preços</a></li>
+                    <li><a href="#">Ajuda</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>CONTATO</h3>
+                <ul>
+                    <li><i class="fas fa-home"></i> São Paulo, SP 01234-000, BR</li>
+                    <li><i class="fas fa-envelope"></i> contato@arkadia.com</li>
+                    <li><i class="fas fa-phone"></i> +55 11 4002-8922</li>
+                    <li><i class="fas fa-print"></i> +55 11 1234 5679</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2024 Copyright: <a href="#">ARKAD AI</a></p>
+        </div>
+    </footer>
+
+    <script src="../js/neural-background.js"></script>
+    <script src="../js/auth.js"></script>
+    <script>
+        // Função para exibir o plano selecionado
+        function displaySelectedPlan() {
+            const selectedPlanData = localStorage.getItem('arkad_selected_plan');
+            const banner = document.getElementById('selectedPlanBanner');
+            
+            if (selectedPlanData) {
+                try {
+                    const plan = JSON.parse(selectedPlanData);
+                    
+                    // Preencher informações do plano
+                    document.getElementById('selectedPlanName').textContent = plan.name || 'N/A';
+                    document.getElementById('selectedPlanPrice').textContent = plan.price || 'N/A';
+                    
+                    // Formatar data
+                    if (plan.selectedAt) {
+                        const date = new Date(plan.selectedAt);
+                        const formattedDate = date.toLocaleDateString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        document.getElementById('selectedPlanDate').textContent = formattedDate;
+                    }
+                    
+                    // Mostrar banner
+                    banner.classList.add('show');
+                } catch (error) {
+                    console.error('Erro ao processar dados do plano:', error);
+                }
+            }
+        }
+
+        // Função para selecionar método de pagamento
+        function selectPaymentMethod(paymentType, paymentName) {
+            // Remover seleção anterior
+            const allCards = document.querySelectorAll('.payment-card');
+            allCards.forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Adicionar seleção no card clicado
+            const selectedCard = document.querySelector(`[data-payment="${paymentType}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
+
+            // Salvar método de pagamento selecionado
+            localStorage.setItem('arkad_selected_payment', JSON.stringify({
+                type: paymentType,
+                name: paymentName,
+                selectedAt: new Date().toISOString()
+            }));
+
+            // Mostrar modal de aviso
+            showPaymentModal(paymentName);
+        }
+
+        // Função para mostrar o modal de aviso
+        function showPaymentModal(paymentName) {
+            const modal = document.getElementById('paymentModal');
+            modal.classList.add('show');
+            
+            // Prevenir scroll do body quando modal estiver aberto
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Função para fechar o modal
+        function closePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            modal.classList.remove('show');
+            
+            // Restaurar scroll do body
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fechar modal ao clicar fora dele
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('paymentModal');
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closePaymentModal();
+                }
+            });
+
+            // Fechar modal com ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closePaymentModal();
+                }
+            });
+
+            // Verificar se há método de pagamento já selecionado
+            const selectedPayment = localStorage.getItem('arkad_selected_payment');
+            if (selectedPayment) {
+                try {
+                    const payment = JSON.parse(selectedPayment);
+                    const card = document.querySelector(`[data-payment="${payment.type}"]`);
+                    if (card) {
+                        card.classList.add('selected');
+                    }
+                } catch (error) {
+                    console.error('Erro ao restaurar método de pagamento:', error);
+                }
+            }
+        });
+        
+        // Executar quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            displaySelectedPlan();
+        });
+    </script>
+    <script src="../js/header-scroll.js"></script>
+</body>
+</html>
+

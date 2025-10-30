@@ -42,8 +42,9 @@
                 <a href="servicos.html">SERVIÇOS</a>
                 <a href="planos.html">PLANOS</a>
                 <a href="contato.html">CONTATO</a>
-                <div class="search-container">
-                </div>
+                <button class="profile-btn" id="profileBtn" onclick="openProfileModal()" title="Perfil" style="display: none;">
+                    👤
+                </button>
                 <button class="get-started-btn" onclick="checkAuthAndRedirect()">COMEÇAR AGORA</button>
             </div>
         </nav>
@@ -128,7 +129,7 @@
     </main>
 
     <script src="../js/neural-background.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="../js/backend-storage.js"></script>
     <script>
         // Redirecionar para login
         function redirectToLogin() {
@@ -214,19 +215,24 @@
             }, 400);
         }
 
-        // Verificar autenticação e redirecionar (função original mantida para compatibilidade)
+        // Verificar autenticação e redirecionar
         function checkAuthAndRedirect() {
-            const user = ARKAD_AUTH.getCurrentUser();
-            if (user) {
-                window.location.href = 'chat.html';
-            } else {
-                window.location.href = 'login.html';
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const loginTime = localStorage.getItem('loginTime');
+            if (isLoggedIn === 'true' && loginTime) {
+                const currentTime = Date.now();
+                const timeDiff = currentTime - parseInt(loginTime);
+                if (timeDiff < 24 * 60 * 60 * 1000) { // 24 horas
+                    window.location.href = 'chat.html';
+                    return;
+                }
             }
+            window.location.href = 'login.html';
         }
 
         function redirectToChat() {
-            const user = ARKAD_AUTH.getCurrentUser();
-            if (!user) {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (isLoggedIn !== 'true') {
                 window.location.href = 'login.html';
                 return;
             }
@@ -249,10 +255,15 @@
 
         // Verificar se usuário está logado ao carregar a página
         function initAuth() {
-            const user = ARKAD_AUTH.getCurrentUser();
-            if (user) {
-                // Usuário logado - pode adicionar informações do usuário na interface
-                console.log('Usuário logado:', user.name);
+            const userInfo = localStorage.getItem('userInfo');
+            if (userInfo) {
+                try {
+                    const user = JSON.parse(userInfo);
+                    // Usuário logado - pode adicionar informações do usuário na interface
+                    console.log('Usuário logado:', user.nome || user.name);
+                } catch (error) {
+                    console.error('Erro ao parsear userInfo:', error);
+                }
             }
         }
 
@@ -338,7 +349,224 @@
 
         // Inicializar quando a página carregar
         initAuth();
+
+        // Verificar se usuário está logado para mostrar botão de perfil
+        function checkProfileButton() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const profileBtn = document.getElementById('profileBtn');
+            if (profileBtn) {
+                profileBtn.style.display = isLoggedIn === 'true' ? 'flex' : 'none';
+            }
+        }
+        checkProfileButton();
     </script>
+
+    <!-- Modal de Perfil -->
+    <div id="profileModal" class="profile-modal">
+        <div class="profile-modal-content">
+            <div class="profile-modal-header">
+                <h2>👤 Perfil</h2>
+            </div>
+            <div class="profile-field">
+                <label>Nome</label>
+                <input type="text" id="profileName" readonly />
+            </div>
+            <div class="profile-field">
+                <label>Email</label>
+                <input type="text" id="profileEmail" readonly />
+            </div>
+            <div class="profile-field">
+                <label>Nova Senha</label>
+                <input type="password" id="profileNewPassword" placeholder="Mínimo 6 caracteres" minlength="6" />
+            </div>
+            <div class="profile-field">
+                <label>Confirmar Senha</label>
+                <input type="password" id="profileConfirmPassword" placeholder="Repita a nova senha" minlength="6" />
+                <div class="profile-error-msg" id="profileErrorMsg"></div>
+                <div class="profile-success-msg" id="profileSuccessMsg"></div>
+            </div>
+            <div class="profile-modal-actions">
+                <button class="profile-btn-ok" onclick="closeProfileModal()">OK</button>
+                <button class="profile-btn-logout" onclick="handleProfileLogout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/backend-storage.js"></script>
+    <script>
+        // Funções do Modal de Perfil
+        function openProfileModal() {
+            const modal = document.getElementById('profileModal');
+            const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+            
+            if (!userInfo) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            document.getElementById('profileName').value = userInfo.nome || '';
+            document.getElementById('profileEmail').value = userInfo.email || '';
+            document.getElementById('profileNewPassword').value = '';
+            document.getElementById('profileConfirmPassword').value = '';
+            hideProfileMessages();
+            
+            modal.classList.add('show');
+        }
+
+        function closeProfileModal() {
+            const modal = document.getElementById('profileModal');
+            modal.classList.remove('show');
+            hideProfileMessages();
+        }
+
+        function hideProfileMessages() {
+            const errorMsg = document.getElementById('profileErrorMsg');
+            const successMsg = document.getElementById('profileSuccessMsg');
+            if (errorMsg) errorMsg.style.display = 'none';
+            if (successMsg) successMsg.style.display = 'none';
+        }
+
+        function showProfileError(message) {
+            const errorMsg = document.getElementById('profileErrorMsg');
+            if (errorMsg) {
+                errorMsg.textContent = message;
+                errorMsg.style.display = 'block';
+            }
+            const successMsg = document.getElementById('profileSuccessMsg');
+            if (successMsg) successMsg.style.display = 'none';
+        }
+
+        function showProfileSuccess(message) {
+            const successMsg = document.getElementById('profileSuccessMsg');
+            if (successMsg) {
+                successMsg.textContent = message;
+                successMsg.style.display = 'block';
+            }
+            const errorMsg = document.getElementById('profileErrorMsg');
+            if (errorMsg) errorMsg.style.display = 'none';
+        }
+
+        // Salvar mudança de senha ao pressionar Enter no último campo
+        document.addEventListener('DOMContentLoaded', function() {
+            const confirmPasswordField = document.getElementById('profileConfirmPassword');
+            if (confirmPasswordField) {
+                confirmPasswordField.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        saveProfilePassword();
+                    }
+                });
+            }
+
+            // Salvar senha quando clicar fora do modal
+            const modal = document.getElementById('profileModal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        saveProfilePassword();
+                        closeProfileModal();
+                    }
+                });
+            }
+        });
+
+        async function saveProfilePassword() {
+            const newPassword = document.getElementById('profileNewPassword').value;
+            const confirmPassword = document.getElementById('profileConfirmPassword').value;
+            
+            if (!newPassword && !confirmPassword) {
+                // Nada a fazer se campos vazios
+                return;
+            }
+            
+            if (!newPassword || !confirmPassword) {
+                showProfileError('Preencha ambos os campos de senha.');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showProfileError('A senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showProfileError('As senhas não coincidem.');
+                return;
+            }
+            
+            try {
+                const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+                if (!userInfo || !userInfo.id) {
+                    showProfileError('Erro: Usuário não encontrado.');
+                    return;
+                }
+
+                // Bloquear alteração de senha do admin
+                const isAdmin = (userInfo.email || '').toLowerCase() === 'admin' || (userInfo.nome || '').toLowerCase() === 'admin' || (userInfo.id || '') === 'user_admin_default';
+                if (isAdmin) {
+                    showProfileError('A senha do administrador não pode ser alterada.');
+                    return;
+                }
+                
+                if (!window.backendStorage) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+                
+                if (!window.backendStorage) {
+                    showProfileError('Sistema de armazenamento não disponível.');
+                    return;
+                }
+                
+                // Atualizar senha
+                window.backendStorage.updateUser(userInfo.id, { senha: newPassword });
+                
+                showProfileSuccess('Senha alterada com sucesso!');
+                
+                // Limpar campos após sucesso
+                setTimeout(() => {
+                    document.getElementById('profileNewPassword').value = '';
+                    document.getElementById('profileConfirmPassword').value = '';
+                    hideProfileMessages();
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Erro ao alterar senha:', error);
+                showProfileError(error.message || 'Erro ao alterar senha.');
+            }
+        }
+
+        function handleProfileLogout() {
+            // Fazer logout completo (remove tudo, mesmo "lembrar de mim")
+            try {
+                const currentSession = localStorage.getItem('currentSession');
+                if (currentSession && window.backendStorage) {
+                    try {
+                        const session = JSON.parse(currentSession);
+                        window.backendStorage.endSession(session.id);
+                    } catch (e) {
+                        console.error('Erro ao finalizar sessão:', e);
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao fazer logout:', error);
+            }
+            
+            // Remover todas as informações de login
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('loginTime');
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('currentSession');
+            
+            // Fechar modal e redirecionar
+            closeProfileModal();
+            window.location.href = 'login.html';
+        }
+
+        // Verificar login ao carregar página e atualizar botão de perfil
+        window.addEventListener('load', function() {
+            checkProfileButton();
+        });
+    </script>
+    <script src="../js/header-scroll.js"></script>
 
     <footer class="footer">
         <div class="social-connect">

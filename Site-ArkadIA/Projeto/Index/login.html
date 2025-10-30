@@ -49,26 +49,56 @@
         
         input[type=text], input[type=email], input[type=password] {
             width: 100%;
-            padding: 8px;
+            padding: 10px;
             border-radius: 6px;
-            border: 1px solid #d7dbe6;
+            border: 2px solid rgba(255, 255, 255, 0.2);
             margin-top: 6px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
+            color: #0f172a;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        input[type=text]:focus, input[type=email]:focus, input[type=password]:focus {
+            outline: none;
+            border-color: #00B5B8;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 0 3px rgba(0, 181, 184, 0.1);
+        }
+
+        input[type=text]:invalid:not(:placeholder-shown), 
+        input[type=email]:invalid:not(:placeholder-shown) {
+            border-color: #ef4444;
         }
         
         button {
             margin-top: 12px;
-            padding: 10px 12px;
+            padding: 12px 20px;
             border-radius: 8px;
             border: 0;
             background: #00B5B8;
             color: #fff;
             cursor: pointer;
-            transition: background 0.3s;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            width: 100%;
         }
-        
-        button:hover {
+
+        button:hover:not(:disabled) {
             background: #009698;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 181, 184, 0.3);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
         .muted {
@@ -84,15 +114,23 @@
         }
         
         .err {
-            color: #b91c1c;
+            color: #ef4444;
             font-size: 13px;
             margin-top: 8px;
+            padding: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 6px;
+            border-left: 3px solid #ef4444;
         }
-        
+
         .ok {
-            color: #059669;
+            color: #10b981;
             font-size: 13px;
             margin-top: 8px;
+            padding: 8px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 6px;
+            border-left: 3px solid #10b981;
         }
         
         .actions {
@@ -147,8 +185,8 @@
 
         <!-- LOGIN FORM -->
         <form id="login-form">
-            <label for="login-email">Email</label>
-            <input id="login-email" type="email" placeholder="seu@exemplo.com" required />
+            <label for="login-email">Email ou usuário</label>
+            <input id="login-email" type="text" placeholder="Email" required />
 
             <label for="login-password">Senha</label>
             <input id="login-password" type="password" placeholder="••••••••" required />
@@ -159,8 +197,12 @@
             </div>
 
             <div class="actions">
-                <button type="submit">Entrar</button>
-                <button id="to-register" type="button" style="background:#e6eefc;color:#0f172a">Criar conta</button>
+                <button type="submit" id="login-submit">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+                <button id="to-register" type="button" style="background:#e6eefc;color:#0f172a; margin-top: 8px;">
+                    <i class="fas fa-user-plus"></i> Criar conta
+                </button>
             </div>
 
             <div id="login-msg" class="err" aria-live="polite"></div>
@@ -169,20 +211,24 @@
         <!-- REGISTER FORM -->
         <form id="register-form" style="display:none">
             <label for="name">Nome</label>
-            <input id="name" type="text" placeholder="Seu nome" required />
+            <input id="name" type="text" placeholder="Seu nome" minlength="2" required />
 
-            <label for="email">Email</label>
-            <input id="email" type="email" placeholder="seu@exemplo.com" required />
+            <label for="email">Email ou usuário</label>
+            <input id="email" type="text" placeholder="Email" required />
 
             <label for="password">Senha</label>
-            <input id="password" type="password" placeholder="mínimo 6 caracteres" required />
+            <input id="password" type="password" placeholder="mínimo 6 caracteres" minlength="6" required />
 
             <label for="confirm">Confirme a senha</label>
             <input id="confirm" type="password" placeholder="repita a senha" required />
 
             <div class="actions">
-                <button type="submit">Cadastrar</button>
-                <button id="to-login" type="button" style="background:#e6eefc;color:#0f172a">Voltar</button>
+                <button type="submit" id="register-submit">
+                    <i class="fas fa-user-plus"></i> Cadastrar
+                </button>
+                <button id="to-login" type="button" style="background:#e6eefc;color:#0f172a; margin-top: 8px;">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
             </div>
 
             <div id="reg-msg" class="err" aria-live="polite"></div>
@@ -198,12 +244,11 @@
             </div>
             <div id="profile-msg" class="muted"></div>
         </div>
-
-        <p class="muted" style="margin-top:12px">Os dados de usuário ficam salvos localmente no seu navegador (localStorage) como JSON. Em um ambiente real, substitua por servidor + banco de dados seguro.</p>
     </div>
 
     <script src="../js/neural-background.js"></script>
-    <script src="../js/auth.js"></script>
+    <script src="../js/backend-storage.js"></script>
+    <script src="../js/login.js"></script>
     <script>
         // ----- UI ELEMENTOS -----
         const loginForm = document.getElementById('login-form');
@@ -224,6 +269,8 @@
             loginForm.style.display = 'block';
             registerForm.style.display = 'none';
             profile.style.display = 'none';
+            loginMsg.innerText = '';
+            regMsg.innerText = '';
         }
 
         function showRegister() {
@@ -231,6 +278,8 @@
             loginForm.style.display = 'none';
             registerForm.style.display = 'block';
             profile.style.display = 'none';
+            loginMsg.innerText = '';
+            regMsg.innerText = '';
         }
 
         function showProfile(user) {
@@ -238,13 +287,38 @@
             loginForm.style.display = 'none';
             registerForm.style.display = 'none';
             profile.style.display = 'block';
-            pName.innerText = user.name;
+            pName.innerText = user.nome || user.name;
             pEmail.innerText = user.email;
         }
 
         function redirectToChat() {
             // Redirecionar para o chat após login
             window.location.href = 'chat.html';
+        }
+
+        function showMessage(element, message, type) {
+            element.innerText = message;
+            element.className = type === 'success' ? 'ok' : 'err';
+            element.style.display = 'block';
+        }
+
+        function hideMessage(element) {
+            element.innerText = '';
+            element.style.display = 'none';
+        }
+
+        // Validações
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        function validateName(name) {
+            return name.trim().length >= 2;
         }
 
         // ----- EVENTOS -----
@@ -261,113 +335,265 @@
         // Cadastro
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            regMsg.innerText = '';
-            regMsg.className = 'err';
+            hideMessage(regMsg);
 
             try {
-                const name = document.getElementById('name').value;
-                const email = document.getElementById('email').value;
+                // Aguardar backendStorage estar pronto
+                if (!window.backendStorage) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                const storage = window.backendStorage;
+                if (!storage) {
+                    return; // Sistema não disponível, deixar falhar silenciosamente
+                }
+
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim().toLowerCase();
                 const password = document.getElementById('password').value;
                 const confirm = document.getElementById('confirm').value;
 
-                // Validações
-                if (!ARKAD_AUTH.validateName(name)) {
-                    regMsg.innerText = 'Nome deve ter pelo menos 2 caracteres.';
-                    return;
+                // Validações básicas (deixar HTML5 fazer a maior parte)
+                if (!name || !email || !password || !confirm) {
+                    return; // Deixar validação HTML5 fazer o trabalho
                 }
 
-                if (!ARKAD_AUTH.validateEmail(email)) {
-                    regMsg.innerText = 'Email inválido.';
-                    return;
-                }
-
-                if (!ARKAD_AUTH.validatePassword(password)) {
-                    regMsg.innerText = 'Senha precisa ter ao menos 6 caracteres.';
-                    return;
-                }
-
+                // Validações críticas apenas (essenciais para UX)
                 if (password !== confirm) {
-                    regMsg.innerText = 'Senhas não coincidem.';
+                    showMessage(regMsg, 'As senhas não coincidem.', 'error');
                     return;
                 }
+
+                // Verificar se email já existe (importante para UX)
+                if (storage.emailExists(email)) {
+                    showMessage(regMsg, 'Este email já está cadastrado.', 'error');
+                    return;
+                }
+
+                // Criar data de nascimento padrão
+                const aniversario = '1990-01-01';
+
+                // Desabilitar botão durante processamento
+                const registerSubmit = document.getElementById('register-submit');
+                const originalText = registerSubmit.innerHTML;
+                registerSubmit.disabled = true;
+                registerSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
 
                 // Registrar usuário
-                await ARKAD_AUTH.registerUser(name, email, password);
-                
+                const newUser = await storage.addUser({
+                    nome: name,
+                    email: email,
+                    senha: password,
+                    aniversario: aniversario
+                });
+
                 // Fazer login automático após cadastro
-                const user = await ARKAD_AUTH.loginUser(email, password, true);
+                const usuario = storage.authenticateUser(email, password);
                 
-                regMsg.className = 'ok';
-                regMsg.innerText = 'Conta criada com sucesso! Redirecionando...';
-                
-                // Redirecionar para o chat após 1 segundo
-                setTimeout(() => {
-                    redirectToChat();
-                }, 1000);
+                if (usuario) {
+                    // Armazenar informações do usuário logado
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('loginTime', Date.now());
+                    localStorage.setItem('userInfo', JSON.stringify(usuario));
+                    
+                    if (usuario.session) {
+                        localStorage.setItem('currentSession', JSON.stringify(usuario.session));
+                    }
+
+                    // Única mensagem: Cadastro aprovado
+                    showMessage(regMsg, 'Cadastro aprovado! Redirecionando...', 'success');
+                    
+                    // Redirecionar para o chat após 1 segundo
+                    setTimeout(() => {
+                        redirectToChat();
+                    }, 1000);
+                } else {
+                    registerSubmit.disabled = false;
+                    registerSubmit.innerHTML = originalText;
+                }
 
             } catch (error) {
-                regMsg.innerText = error.message;
+                console.error('Erro no cadastro:', error);
+                // Reabilitar botão
+                const registerSubmit = document.getElementById('register-submit');
+                if (registerSubmit) {
+                    registerSubmit.disabled = false;
+                    registerSubmit.innerHTML = '<i class="fas fa-user-plus"></i> Cadastrar';
+                }
+                // Mostrar apenas erros críticos
+                if (error.message && (error.message.includes('já está cadastrado') || error.message.includes('inválido'))) {
+                    showMessage(regMsg, error.message, 'error');
+                }
             }
         });
 
         // Login
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            loginMsg.innerText = '';
-            loginMsg.className = 'err';
+            hideMessage(loginMsg);
 
             try {
-                const email = document.getElementById('login-email').value;
+                // Aguardar backendStorage estar pronto
+                if (!window.backendStorage) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                const storage = window.backendStorage;
+                if (!storage) {
+                    showMessage(loginMsg, 'Sistema de armazenamento não disponível. Recarregue a página.', 'error');
+                    return;
+                }
+
+                const email = document.getElementById('login-email').value.trim().toLowerCase();
                 const password = document.getElementById('login-password').value;
                 const remember = document.getElementById('remember').checked;
 
-                const user = await ARKAD_AUTH.loginUser(email, password, remember);
+                // Validações básicas (apenas verificar se campos não estão vazios)
+                if (!email || !password) {
+                    return; // Deixar validação HTML5 fazer o trabalho
+                }
+
+                // Desabilitar botão durante processamento
+                const loginSubmit = document.getElementById('login-submit');
+                const originalText = loginSubmit.innerHTML;
+                loginSubmit.disabled = true;
+                loginSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+
+                // Autenticar usuário
+                const usuario = storage.authenticateUser(email, password);
                 
-                loginMsg.className = 'ok';
-                loginMsg.innerText = 'Login realizado! Redirecionando...';
-                
-                // Redirecionar para o chat após 1 segundo
-                setTimeout(() => {
-                    redirectToChat();
-                }, 1000);
+                if (usuario) {
+                    // Armazenar informações do usuário logado
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('loginTime', Date.now());
+                    localStorage.setItem('userInfo', JSON.stringify(usuario));
+                    
+                    if (usuario.session) {
+                        localStorage.setItem('currentSession', JSON.stringify(usuario.session));
+                    }
+
+                    // Única mensagem: Login aprovado
+                    showMessage(loginMsg, 'Login aprovado! Redirecionando...', 'success');
+                    
+                    // Redirecionar para o chat após 1 segundo
+                    setTimeout(() => {
+                        redirectToChat();
+                    }, 1000);
+                } else {
+                    // Reabilitar botão em caso de erro
+                    loginSubmit.disabled = false;
+                    loginSubmit.innerHTML = originalText;
+                    // Não mostrar mensagem de erro, apenas limpar campos
+                    document.getElementById('login-password').value = '';
+                    document.getElementById('login-password').focus();
+                }
 
             } catch (error) {
-                loginMsg.innerText = error.message;
+                console.error('Erro no login:', error);
+                // Reabilitar botão em caso de erro
+                const loginSubmit = document.getElementById('login-submit');
+                if (loginSubmit) {
+                    loginSubmit.disabled = false;
+                    loginSubmit.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+                }
+                // Não mostrar mensagem de erro, apenas log no console
             }
         });
 
         // Logout
-        document.getElementById('logout').addEventListener('click', () => {
-            ARKAD_AUTH.logoutUser();
+        document.getElementById('logout').addEventListener('click', async () => {
+            try {
+                // Finalizar sessão no backendStorage se disponível
+                const currentSession = localStorage.getItem('currentSession');
+                if (currentSession && window.backendStorage) {
+                    const session = JSON.parse(currentSession);
+                    window.backendStorage.endSession(session.id);
+                }
+            } catch (error) {
+                console.error('Erro ao finalizar sessão:', error);
+            }
+            
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('loginTime');
+            localStorage.removeItem('userInfo');
+            localStorage.removeItem('currentSession');
+            
             showLogin();
             profileMsg.innerText = 'Você saiu.';
+            setTimeout(() => {
+                profileMsg.innerText = '';
+            }, 3000);
         });
 
         // Excluir conta
-        document.getElementById('delete').addEventListener('click', () => {
-            if (!confirm('Tem certeza que deseja excluir a conta? Isso removerá os dados locais.')) return;
+        document.getElementById('delete').addEventListener('click', async () => {
+            if (!confirm('Tem certeza que deseja excluir a conta? Isso removerá seus dados permanentemente.')) return;
             
-            const current = ARKAD_AUTH.getCurrent();
-            if (!current) {
-                alert('Nenhum usuário logado');
-                return;
-            }
+            try {
+                const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+                if (!userInfo || !userInfo.id) {
+                    alert('Nenhum usuário logado');
+                    return;
+                }
 
-            ARKAD_AUTH.deleteUser(current.email);
-            showLogin();
-            alert('Conta excluída.');
+                if (window.backendStorage) {
+                    window.backendStorage.deleteUser(userInfo.id);
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('loginTime');
+                    localStorage.removeItem('userInfo');
+                    localStorage.removeItem('currentSession');
+                    alert('Conta excluída com sucesso.');
+                    showLogin();
+                } else {
+                    alert('Erro: Sistema de armazenamento não disponível');
+                }
+            } catch (error) {
+                console.error('Erro ao excluir conta:', error);
+                alert('Erro ao excluir conta: ' + error.message);
+            }
         });
 
         // ----- INICIALIZAÇÃO -----
-        function init() {
-            const user = ARKAD_AUTH.getCurrentUser();
-            if (user) {
-                // Se usuário já está logado, redirecionar para o chat
-                profileMsg.innerText = `Usuário já logado. Redirecionando...`;
-                setTimeout(() => {
-                    redirectToChat();
-                }, 1000);
-            } else {
+        async function init() {
+            try {
+                // Aguardar backendStorage estar pronto
+                if (!window.backendStorage) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                // Verificar se usuário já está logado
+                const isLoggedIn = localStorage.getItem('isLoggedIn');
+                const loginTime = localStorage.getItem('loginTime');
+                const userInfo = localStorage.getItem('userInfo');
+
+                if (isLoggedIn === 'true' && loginTime && userInfo) {
+                    const currentTime = Date.now();
+                    const timeDiff = currentTime - parseInt(loginTime);
+                    
+                    // Verificar se sessão não expirou (24 horas)
+                    if (timeDiff < 24 * 60 * 60 * 1000) {
+                        try {
+                            const user = JSON.parse(userInfo);
+                            profileMsg.innerText = `Usuário já logado. Redirecionando...`;
+                            setTimeout(() => {
+                                redirectToChat();
+                            }, 1000);
+                            return;
+                        } catch (e) {
+                            // Se erro ao parsear, limpar e mostrar login
+                        }
+                    } else {
+                        // Sessão expirada, limpar
+                        localStorage.removeItem('isLoggedIn');
+                        localStorage.removeItem('loginTime');
+                        localStorage.removeItem('userInfo');
+                        localStorage.removeItem('currentSession');
+                    }
+                }
+                
+                showLogin();
+            } catch (error) {
+                console.error('Erro na inicialização:', error);
                 showLogin();
             }
         }
@@ -375,5 +601,6 @@
         // Inicializar quando a página carregar
         init();
     </script>
+    <script src="../js/header-scroll.js"></script>
 </body>
 </html> 

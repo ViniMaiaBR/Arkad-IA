@@ -223,12 +223,10 @@
                 selectedAt: new Date().toISOString()
             }));
             
-            // Mostrar confirmação
-            alert(`Plano ${planNames[planType]} selecionado!\n\nPreço: ${planPrices[planType]}\n\nEm um ambiente real, você seria redirecionado para o pagamento.`);
-            
-            // Redirecionar para o chat
-            window.location.href = 'chat.html';
+            // Redirecionar para página de métodos de pagamento
+            window.location.href = 'metodos-pagamento.html';
         }
     </script>
+    <script src="../js/header-scroll.js"></script>
 </body>
 </html>

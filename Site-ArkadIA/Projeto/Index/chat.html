@@ -45,8 +45,10 @@
         </div>
     </main>
 
+    <script src="../js/backend-storage.js"></script>
     <script src="../js/chat-ai-responses.js"></script>
     <script src="../js/escritorio-ti-flow.js"></script>
+    <script src="../js/header-scroll.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         let messagesContainer;
@@ -56,15 +58,52 @@
         let currentQuestions = [];
         let isOfficeFlow = false;
         let officeFlowStep = 0;
+        let currentChatId = null;
+        let currentUserId = null;
+        let currentSessionId = null;
+
+        // Inicializar chat no backendStorage
+        async function initializeChat() {
+            try {
+                // Aguardar backendStorage estar pronto
+                if (!window.backendStorage) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                // Obter informações do usuário logado
+                const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+                if (userInfo && userInfo.id) {
+                    currentUserId = userInfo.id;
+                    
+                    // Obter ou criar sessão
+                    const sessionInfo = JSON.parse(localStorage.getItem('currentSession') || 'null');
+                    currentSessionId = sessionInfo ? sessionInfo.id : null;
+                    
+                    // Criar novo chat no backendStorage
+                    const chat = window.backendStorage.createChat(
+                        currentUserId, 
+                        currentSessionId, 
+                        'Conversa com IA'
+                    );
+                    currentChatId = chat.id;
+                    console.log('✅ Chat inicializado no backend:', currentChatId);
+                }
+            } catch (error) {
+                console.error('Erro ao inicializar chat:', error);
+            }
+        }
 
         // Mostra a consulta inicial do usuário
-        window.onload = function() {
+        window.onload = async function() {
             messagesContainer = document.getElementById('chatMessages');
+            
+            // Inicializar chat no backendStorage
+            await initializeChat();
             
             const urlParams = new URLSearchParams(window.location.search);
             const query = urlParams.get('query');
             if (query) {
-                addMessage(query, 'user');
+                await addMessage(query, 'user');
                 setTimeout(() => {
                     processUserMessage(query);
                 }, 1000);
@@ -78,12 +117,12 @@
             }
         });
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('userInput');
             const message = input.value.trim();
             
             if (message) {
-                addMessage(message, 'user');
+                await addMessage(message, 'user');
                 input.value = '';
                 
                 setTimeout(() => {
@@ -186,7 +225,7 @@
             }
         }
 
-        function addMessage(text, sender) {
+        async function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
             
@@ -204,6 +243,15 @@
             
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Salvar mensagem no backendStorage se chat estiver inicializado
+            if (currentChatId && window.backendStorage) {
+                try {
+                    window.backendStorage.addMessageToChat(currentChatId, sender, text);
+                } catch (error) {
+                    console.error('Erro ao salvar mensagem no backend:', error);
+                }
+            }
         }
 
         function formatMessage(text) {
@@ -446,23 +494,36 @@
         }
     </script>
     <script src="../js/neural-background.js"></script>
-    <script src="../js/auth.js"></script>
     <script>
-        // Verificar autenticação ao carregar a página
+        // Verificar autenticação ao carregar a página (sem alert, apenas redireciona)
         function checkAuth() {
-            const user = ARKAD_AUTH.getCurrentUser();
-            if (!user) {
-                alert('Você precisa fazer login para acessar o chat.');
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const loginTime = localStorage.getItem('loginTime');
+            const userInfo = localStorage.getItem('userInfo');
+            
+            if (isLoggedIn !== 'true' || !loginTime || !userInfo) {
                 window.location.href = 'login.html';
                 return false;
             }
+            
+            // Verificar se sessão expirou (24 horas)
+            const currentTime = Date.now();
+            const timeDiff = currentTime - parseInt(loginTime);
+            if (timeDiff >= 24 * 60 * 60 * 1000) {
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('loginTime');
+                localStorage.removeItem('userInfo');
+                localStorage.removeItem('currentSession');
+                window.location.href = 'login.html';
+                return false;
+            }
+            
             return true;
         }
 
         // Inicializar verificação de autenticação
-        if (!checkAuth()) {
-            // Redirecionamento já foi feito
-        }
+        checkAuth();
     </script>
+    <script src="../js/header-scroll.js"></script>
 </body>
 </html> 

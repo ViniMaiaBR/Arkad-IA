@@ -11,12 +11,19 @@ function validarSenha(senha) {
     return true;
 }
 
-// Função para verificar se o usuário existe (usando sistema JSON)
+// Função para verificar se o usuário existe (usando backendStorage)
 async function verificarUsuario(email, senha) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            // Usar o sistema de armazenamento JSON
-            const usuario = userStorage.authenticateUser(email, senha);
+            // Aguardar backendStorage estar pronto
+            if (!window.backendStorage) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            // Usar o sistema de armazenamento unificado
+            const usuario = window.backendStorage ? 
+                window.backendStorage.authenticateUser(email, senha) : 
+                (window.userStorage ? window.userStorage.authenticateUser(email, senha) : null);
             resolve(usuario !== null);
         } catch (error) {
             console.error('Erro ao verificar usuário:', error);
@@ -25,14 +32,21 @@ async function verificarUsuario(email, senha) {
     });
 }
 
-// Função para cadastrar novo usuário (usando sistema JSON)
+// Função para cadastrar novo usuário (usando backendStorage)
 async function cadastrarUsuario(email, senha, nome, dataNascimento) {
     if (!validarSenha(senha)) {
         throw new Error('Senha inválida. Deve ter pelo menos 8 caracteres, incluindo maiúscula, minúscula, número e símbolo especial.');
     }
 
     try {
-        // Usar o sistema de armazenamento JSON
+        // Aguardar backendStorage estar pronto
+        if (!window.backendStorage) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        const storage = window.backendStorage || window.userStorage;
+        
+        // Usar o sistema de armazenamento unificado
         const dadosUsuario = {
             nome: nome,
             email: email,
@@ -40,7 +54,7 @@ async function cadastrarUsuario(email, senha, nome, dataNascimento) {
             aniversario: dataNascimento
         };
         
-        const novoUsuario = await userStorage.addUser(dadosUsuario);
+        const novoUsuario = await storage.addUser(dadosUsuario);
         console.log(`Usuário cadastrado: ${nome} (${email}) - Data de nascimento: ${dataNascimento}`);
         return true;
     } catch (error) {
@@ -62,16 +76,27 @@ async function handleLogin(event) {
     successMessage.style.display = 'none';
     
     try {
-        const usuario = userStorage.authenticateUser(email, senha);
+        // Aguardar backendStorage estar pronto
+        if (!window.backendStorage) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        const storage = window.backendStorage || window.userStorage;
+        const usuario = storage.authenticateUser(email, senha);
         
         if (usuario) {
             successMessage.textContent = 'Login realizado com sucesso!';
             successMessage.style.display = 'block';
             
-            // Armazenar informações do usuário logado
+            // Armazenar informações do usuário logado (compatibilidade)
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('loginTime', Date.now());
             localStorage.setItem('userInfo', JSON.stringify(usuario));
+            
+            // Armazenar também a sessão se disponível
+            if (usuario.session) {
+                localStorage.setItem('currentSession', JSON.stringify(usuario.session));
+            }
             
             setTimeout(() => {
                 window.location.href = 'index.html';
@@ -125,10 +150,22 @@ function getLoggedUser() {
 }
 
 // Função para fazer logout
-function logout() {
+async function logout() {
+    // Finalizar sessão no backendStorage se disponível
+    try {
+        const currentSession = localStorage.getItem('currentSession');
+        if (currentSession && window.backendStorage) {
+            const session = JSON.parse(currentSession);
+            window.backendStorage.endSession(session.id);
+        }
+    } catch (error) {
+        console.error('Erro ao finalizar sessão:', error);
+    }
+    
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('loginTime');
     localStorage.removeItem('userInfo');
+    localStorage.removeItem('currentSession');
     window.location.href = 'Index/chat.html';
 }
 

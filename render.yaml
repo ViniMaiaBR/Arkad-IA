@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: arkad-ia
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: GEMINI_API_KEY
+        value: AIzaSyAOw6QNV464bl666GzoY3-M27cpLFpjlHU
+      - key: SESSION_SECRET
+        generateValue: true
+

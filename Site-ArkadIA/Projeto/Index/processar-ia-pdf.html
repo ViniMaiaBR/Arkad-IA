@@ -12,7 +12,75 @@
         /* Esconder header/elementos quando embutido via ?embed=1 */
         body.embed header { display: none !important; }
         body.embed .animated-background { display: none !important; }
-        body.embed .processor-container { padding-top: 20px; }
+        body.embed .back-wrapper { display: none !important; }
+        body.embed .prompts-wrapper { display: none !important; }
+        body.embed .processor-container { padding-top: 20px; margin-top: 0; }
+        body.embed .processor-section:first-child { display: none !important; } /* Esconde formulários */
+        body.embed .processor-section:last-child { 
+            display: block !important; 
+            padding: 10px;
+            margin: 0;
+            background: transparent;
+            border: none;
+        } /* Mostra apenas preview */
+        body.embed .processor-section h2 { display: none; } /* Esconde título "Pré-visualização do PDF" */
+        body.embed .preview-section h3 { display: none; } /* Esconde subtítulo */
+        body.embed .preview-section { 
+            padding: 0;
+            margin: 0;
+            background: transparent;
+            border: none;
+        }
+        body.embed .preview-content { 
+            padding: 15px; 
+            margin: 0;
+            min-height: calc(100vh - 40px);
+            background: rgba(0, 0, 0, 0.8) !important;
+            border-radius: 8px;
+            color: #ffffff !important;
+            backdrop-filter: blur(5px);
+        }
+        /* Forçar texto branco no modo embed */
+        body.embed .preview-content * {
+            color: #ffffff !important;
+        }
+        body.embed .preview-content h1,
+        body.embed .preview-content h2,
+        body.embed .preview-content h3,
+        body.embed .preview-content h4 {
+            color: #00d4d7 !important;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            font-weight: bold;
+        }
+        body.embed .preview-content strong {
+            color: #00e6e9 !important;
+            font-weight: 700;
+        }
+        body.embed .preview-content p,
+        body.embed .preview-content li,
+        body.embed .preview-content span,
+        body.embed .preview-content div {
+            color: #ffffff !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+        }
+        body.embed .preview-content table {
+            background: rgba(0, 0, 0, 0.6) !important;
+        }
+        body.embed .preview-content table td {
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            color: #ffffff !important;
+            background: rgba(0, 0, 0, 0.4);
+        }
+        body.embed .preview-content table th {
+            background: rgba(0, 181, 184, 0.5) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+            font-weight: bold;
+        }
+        /* Esconder footer no modo embed */
+        body.embed footer {
+            display: none !important;
+        }
         .processor-container {
             max-width: 1200px;
             margin: 100px auto 0 auto; /* compensa header fixo */

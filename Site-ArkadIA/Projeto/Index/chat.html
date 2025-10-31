@@ -90,6 +90,58 @@
             .chat-layout { grid-template-columns: 1fr; }
             .pdf-preview { min-height: 400px; }
         }
+
+        /* Indicador de digitação */
+        .typing-indicator .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            margin: 0 2px;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-indicator .dot:nth-child(1) { animation-delay: 0s; }
+        .typing-indicator .dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator .dot:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.7; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        /* Mensagem de aviso destacada */
+        .warning-box {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            padding: 15px;
+            border-left: 5px solid #ffc107;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(255, 193, 7, 0.2);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .warning-box p {
+            margin: 0;
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .warning-box strong {
+            color: #856404;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
@@ -118,7 +170,18 @@
                 <div class="message ai-message">
                     <div class="message-content">
                         <i class="fas fa-robot"></i>
-                        <p>Olá! Sou a IA da Arkad. Como posso ajudar você hoje?</p>
+                        <div class="warning-box">
+                            <p><strong>⚠️ AVISO IMPORTANTE:</strong> A análise a seguir é uma <strong>estimativa aproximada</strong> e tem como único objetivo fornecer uma orientação inicial. Os valores são baseados em médias de mercado e dados fictícios. Um orçamento preciso e profissional requer uma análise aprofundada de suas necessidades específicas. Para obter um plano financeiro detalhado e consultoria especializada, considere a assinatura de nossos planos.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="message ai-message">
+                    <div class="message-content">
+                        <i class="fas fa-robot"></i>
+                        <div>
+                            <p><strong>Olá! Sou a IA da Arkad.</strong> 👋</p>
+                            <p>Como posso ajudar você hoje?</p>
+                        </div>
                     </div>
                 </div>
                 </div>
@@ -145,6 +208,9 @@
     </main>
 
     <script src="../js/backend-storage.js"></script>
+    <script src="../js/gemini-client.js"></script>
+    <script src="../js/chat-gemini-integration.js"></script>
+    <script src="../js/chat-pdf-report-generator.js"></script>
     <script src="../js/chat-ai-responses.js"></script>
     <script src="../js/escritorio-ti-flow.js"></script>
     <script src="../js/header-scroll.js"></script>
@@ -177,6 +243,8 @@
         let currentChatId = null;
         let currentUserId = null;
         let currentSessionId = null;
+        let geminiIntegration = null;
+        let useProMode = true; // Usar modo PRO (Gemini) por padrão
 
         // Inicializar chat no backendStorage
         async function initializeChat() {
@@ -185,6 +253,18 @@
                 if (!window.backendStorage) {
                     await new Promise(resolve => setTimeout(resolve, 500));
                 }
+
+                // Aguardar Gemini Integration estar pronto
+                if (!window.chatGeminiIntegration) {
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+
+                // Inicializar integração com Gemini
+                geminiIntegration = window.chatGeminiIntegration;
+                await geminiIntegration.initialize();
+
+                // Verificar se pode usar modo PRO
+                useProMode = geminiIntegration.canUseProChat();
 
                 // Obter informações do usuário logado
                 const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
@@ -199,13 +279,36 @@
                     const chat = window.backendStorage.createChat(
                         currentUserId, 
                         currentSessionId, 
-                        'Conversa com IA'
+                        'Conversa com IA PRO'
                     );
                     currentChatId = chat.id;
-                    console.log('✅ Chat inicializado no backend:', currentChatId);
+                    
+                    // Associar chat à integração
+                    geminiIntegration.startNewChat(currentChatId);
+                    
+                    console.log('✅ Chat PRO inicializado:', currentChatId);
+                    console.log('📊 Modo:', useProMode ? 'PRO (Gemini)' : 'GRATUITO (Flask)');
+                } else {
+                    console.log('⚠️ Usuário não logado - modo gratuito');
+                    useProMode = false;
+                }
+
+                // Mostrar mensagem adicional se não estiver no modo PRO
+                if (!useProMode) {
+                    setTimeout(async () => {
+                        await addMessage(
+                            '🔒 **Chat PRO - Acesso Restrito**\n\n' +
+                            'Você está usando a versão gratuita do chat. Para acessar o Chat PRO com IA personalizada:\n\n' +
+                            '• Faça login na sua conta\n' +
+                            '• Ou crie uma conta gratuita\n\n' +
+                            'Usuários cadastrados têm acesso completo ao Chat PRO!',
+                            'ai'
+                        );
+                    }, 500);
                 }
             } catch (error) {
                 console.error('Erro ao inicializar chat:', error);
+                useProMode = false;
             }
         }
 
@@ -247,7 +350,7 @@
             }
         }
 
-        function processUserMessage(message) {
+        async function processUserMessage(message) {
             try {
                 // Verificar se estamos no fluxo de escritório
                 if (isOfficeFlow) {
@@ -255,6 +358,13 @@
                     return;
                 }
 
+                // Se modo PRO estiver ativo, usar Gemini Integration
+                if (useProMode && geminiIntegration) {
+                    await processProMessage(message);
+                    return;
+                }
+
+                // Caso contrário, usar sistema de respostas padrão (Flask/Gratuito)
                 const response = chatAI.processMessage(message);
                 
                 // Verificar se é início do fluxo de escritório
@@ -341,6 +451,68 @@
             }
         }
 
+        // Processar mensagem no modo PRO (Gemini)
+        async function processProMessage(message) {
+            try {
+                // Mostrar indicador de digitação
+                const typingIndicator = addTypingIndicator();
+
+                // Enviar para Gemini
+                const response = await geminiIntegration.sendMessage(message);
+
+                // Remover indicador de digitação
+                removeTypingIndicator(typingIndicator);
+
+                if (response.success) {
+                    await addMessage(response.message, 'ai');
+                    
+                    // Adicionar opções rápidas para próximas ações
+                    setTimeout(() => {
+                        addQuickReply("📄 Gerar Relatório PDF");
+                        addQuickReply("📝 Exportar em TXT");
+                        addQuickReply("🔄 Nova Análise");
+                        addQuickReply("❓ Fazer outra pergunta");
+                    }, 1000);
+                } else {
+                    await addMessage(response.message, 'ai');
+                }
+            } catch (error) {
+                console.error('Erro ao processar mensagem PRO:', error);
+                await addMessage(
+                    '❌ Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.',
+                    'ai'
+                );
+            }
+        }
+
+        // Adicionar indicador de digitação
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai-message typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <i class="fas fa-robot"></i>
+                    <p>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </p>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return typingDiv;
+        }
+
+        // Remover indicador de digitação
+        function removeTypingIndicator(indicator) {
+            if (indicator && indicator.parentNode) {
+                indicator.parentNode.removeChild(indicator);
+            }
+        }
+
         async function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}-message`;
@@ -386,13 +558,80 @@
             const quickReplyDiv = document.createElement('div');
             quickReplyDiv.className = 'quick-reply';
             quickReplyDiv.textContent = text;
-            quickReplyDiv.onclick = () => {
-                document.getElementById('userInput').value = text;
-                sendMessage();
+            quickReplyDiv.onclick = async () => {
+                // Verificar se é comando especial
+                if (text.includes('Gerar Relatório PDF') || text.includes('PDF')) {
+                    await generatePDFReport();
+                } else if (text.includes('Exportar em TXT') || text.includes('TXT')) {
+                    await generateTextReport();
+                } else if (text.includes('Nova Análise')) {
+                    location.reload();
+                } else {
+                    // Comportamento padrão - enviar como mensagem
+                    document.getElementById('userInput').value = text;
+                    sendMessage();
+                }
             };
             
             messagesContainer.appendChild(quickReplyDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Gerar relatório em PDF
+        async function generatePDFReport() {
+            try {
+                await addMessage('📄 **Gerando seu relatório PDF...**\n\nPor favor, aguarde alguns instantes.', 'ai');
+                
+                // Obter dados da conversa
+                const conversationData = geminiIntegration.getConversationSummary();
+                const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                
+                // Gerar PDF
+                const result = await window.chatPDFReportGenerator.generatePDFReport(
+                    conversationData,
+                    userInfo
+                );
+                
+                if (result.success) {
+                    await addMessage(
+                        `✅ **${result.message}**\n\n` +
+                        `Arquivo: ${result.filename}\n\n` +
+                        `O relatório foi salvo no seu computador e contém toda a análise realizada durante nossa conversa.`,
+                        'ai'
+                    );
+                } else {
+                    await addMessage(result.message, 'ai');
+                }
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                await addMessage('❌ Erro ao gerar relatório PDF. Por favor, tente novamente.', 'ai');
+            }
+        }
+
+        // Gerar relatório em TXT
+        async function generateTextReport() {
+            try {
+                await addMessage('📝 **Gerando seu relatório em TXT...**', 'ai');
+                
+                // Obter dados da conversa
+                const conversationData = geminiIntegration.getConversationSummary();
+                const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                
+                // Gerar TXT
+                const result = window.chatPDFReportGenerator.generateTextReport(
+                    conversationData,
+                    userInfo
+                );
+                
+                if (result.success) {
+                    await addMessage(result.message, 'ai');
+                } else {
+                    await addMessage('❌ Erro ao gerar relatório TXT.', 'ai');
+                }
+            } catch (error) {
+                console.error('Erro ao gerar TXT:', error);
+                await addMessage('❌ Erro ao gerar relatório TXT. Por favor, tente novamente.', 'ai');
+            }
         }
 
         // Processar mensagens do fluxo de escritório

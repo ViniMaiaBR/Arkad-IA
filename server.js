@@ -27,6 +27,15 @@ app.get('/api/config', (req, res) => {
     });
 });
 
+// Rotas para páginas de termos e políticas
+app.get('/termos-de-uso', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'Index', 'termos-de-uso.html'));
+});
+
+app.get('/politica-cookies', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'Index', 'politica-cookies.html'));
+});
+
 // Middleware para servir arquivos HTML da pasta Index
 app.use((req, res, next) => {
     // Se a requisição é para um arquivo .html

@@ -1,0 +1,279 @@
+1. Termos de Uso da Plataforma Arkad AI
+Última atualização: outubro de 2025
+1. Objeto
+O presente instrumento estabelece os Termos de Uso da plataforma Arkad AI, 
+desenvolvida e mantida pela equipe responsável pelo projeto Arkad AI (doravante 
+denominada simplesmente “Arkad AI”), que tem como finalidade oferecer 
+serviços de consultoria automatizada com inteligência artificial, geração de 
+relatórios analíticos e processamento de dados corporativos.
+Ao acessar ou utilizar os serviços disponibilizados pela Arkad AI, o usuário declara 
+que leu, compreendeu e aceita integralmente estes Termos de Uso, 
+comprometendo-se a cumpri-los e respeitá-los.
+---
+2. Definições
+Para fins deste documento, entende-se por:
+Usuário: pessoa física ou jurídica que acessa e utiliza os serviços da Arkad AI.
+Plataforma: o ambiente digital da Arkad AI, acessível por navegador web ou 
+aplicativo, incluindo suas ferramentas, funcionalidades e interfaces.
+Conteúdo: todos os textos, dados, imagens, gráficos, algoritmos, relatórios, 
+códigos e demais elementos disponibilizados pela Arkad AI.
+Serviços: consultoria baseada em IA, relatórios automatizados, dashboards 
+interativos e demais soluções tecnológicas oferecidas.
+LGPD: Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018).
+---
+3. Aceitação dos Termos
+O uso da Arkad AI implica a aceitação integral e irrestrita destes Termos. Caso o 
+usuário não concorde com qualquer cláusula aqui descrita, deverá abster-se de 
+utilizar a plataforma.
+A Arkad AI reserva-se o direito de alterar estes Termos a qualquer momento, 
+mediante atualização publicada no próprio site. O uso continuado após tais 
+alterações constitui aceitação tácita das novas condições.
+---
+4. Acesso e Cadastro
+Para utilizar determinadas funcionalidades, o usuário poderá ser solicitado a 
+realizar um cadastro com informações pessoais e empresariais verdadeiras, 
+completas e atualizadas.
+O usuário é responsável por manter a confidencialidade de seu login e senha, bem 
+como por todas as atividades realizadas sob sua conta.
+A Arkad AI poderá suspender ou encerrar contas que apresentem indícios de uso 
+indevido, fraude, violação destes Termos ou da legislação vigente.
+---
+5. Uso da Plataforma
+O usuário compromete-se a utilizar a Arkad AI apenas para fins lícitos e legítimos, 
+sendo expressamente proibido:
+a) Utilizar a plataforma para fins ilícitos, fraudulentos, difamatórios, 
+discriminatórios ou contrários à moral e aos bons costumes;
+b) Tentar violar, desativar ou interferir em sistemas de segurança, servidores, 
+bancos de dados ou funcionalidades da Arkad AI;
+c) Reproduzir, copiar, modificar, distribuir ou explorar comercialmente qualquer 
+conteúdo sem autorização expressa;
+d) Utilizar bots, scripts ou qualquer meio automatizado para extrair dados, realizar 
+consultas em massa ou comprometer o desempenho da plataforma.
+---
+6. Direitos de Propriedade Intelectual
+Todos os direitos autorais, marcas, nomes comerciais, logotipos, algoritmos, 
+códigos e demais elementos da Arkad AI pertencem exclusivamente à Arkad AI 
+e/ou seus licenciantes.
+O uso da plataforma não concede ao usuário nenhum direito de propriedade ou 
+licença implícita sobre o conteúdo, exceto o estritamente necessário para 
+utilização dos serviços nos termos aqui estabelecidos.
+---
+7. Responsabilidades
+A Arkad AI não se responsabiliza por:
+a) Dados incorretos ou incompletos fornecidos pelo usuário;
+b) Decisões empresariais tomadas exclusivamente com base nas respostas ou 
+relatórios gerados pela IA;
+c) Interrupções temporárias de serviço decorrentes de manutenção, atualização 
+ou fatores fora de seu controle (como falhas de rede ou força maior);
+d) Conteúdos, links ou serviços de terceiros integrados à plataforma.
+O usuário é integralmente responsável por suas ações dentro da plataforma, 
+devendo responder civil e criminalmente em caso de uso indevido.
+---
+8. Limitação de Responsabilidade
+A Arkad AI emprega os melhores esforços técnicos para garantir a precisão, 
+segurança e disponibilidade de seus serviços, mas não garante que estes serão 
+ininterruptos, livres de erros ou imunes a falhas.
+Em nenhuma hipótese a Arkad AI será responsável por danos indiretos, lucros 
+cessantes, perda de dados ou prejuízos comerciais decorrentes do uso ou da 
+impossibilidade de uso da plataforma.
+---
+9. Rescisão e Suspensão
+A Arkad AI poderá, a seu exclusivo critério, suspender, limitar ou encerrar o acesso 
+de um usuário que descumpra estes Termos, viole a legislação ou comprometa a 
+integridade do sistema.
+O usuário poderá encerrar sua conta a qualquer momento, mediante solicitação 
+formal, respeitando eventuais obrigações contratuais pendentes.
+---
+10. Comunicações e Suporte
+Todas as comunicações oficiais entre o usuário e a Arkad AI deverão ocorrer por 
+meio dos canais disponibilizados na plataforma ou via e-mail institucional.
+O suporte técnico será prestado conforme a modalidade de plano contratada pelo 
+usuário.
+---
+11. Disposições Finais
+Estes Termos são regidos pelas leis da República Federativa do Brasil, 
+especialmente pela LGPD, Marco Civil da Internet (Lei nº 12.965/2014) e Código 
+Civil (Lei nº 10.406/2002).
+Fica eleito o foro da Comarca de Indaiatuba/SP para dirimir quaisquer 
+controvérsias decorrentes deste instrumento, com renúncia expressa a qualquer 
+outro, por mais privilegiado que seja.
+---
+📄 Declaração de Concordância Ao utilizar a Arkad AI, o usuário declara ter lido, 
+compreendido e aceitado integralmente os presentes Termos de Uso, 
+comprometendo-se a cumpri-los de boa-fé.
+
+1. DAS PARTES
+ARKAD.IA CONSULTORIA EMPRESARIAL, pessoa jurídica de direito privado, 
+doravante denominada “ARKAD.IA”, responsável pela disponibilização da 
+plataforma de consultoria empresarial baseada em inteligência artificial.
+E, de outro lado, o(a) USUÁRIO(A), pessoa física ou jurídica que adere a este Termo 
+no momento do cadastro ou utilização da plataforma.
+2. DO OBJETO
+2.1O presente termo regula o acesso e uso da plataforma ARKAD.IA, 
+que oferece análises de mercado, relatórios estratégicos e 
+direcionamento empresarial com base em tecnologia de inteligência 
+artificial.
+2.2A ARKAD.IA fornece relatórios e análises automatizadas de caráter 
+informativo e consultivo, não substituindo a avaliação de 
+profissionais especializados ou consultorias presenciais quando 
+necessário.
+3. DAS RESPONSABILIDADES DO USUÁRIO
+3.1O Usuário se compromete a:
+Fornecer informações verdadeiras, completas e atualizadas para utilização da 
+plataforma.
+Utilizar os serviços de acordo com a legislação vigente e com este Termo.
+Assumir total responsabilidade pelas decisões tomadas com base nos relatórios e 
+análises fornecidas.
+3.2O Usuário declara estar ciente de que os relatórios e análises têm caráter 
+auxiliar e não constituem garantia de resultados financeiros, estratégicos 
+ou comerciais.
+4. DAS RESPONSABILIDADES DA ARKAD.IA
+4.1A ARKAD.IA compromete-se a:
+Disponibilizar a plataforma em ambiente seguro, com boas práticas de proteção 
+de dados.
+Cumprir integralmente a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 –
+LGPD).
+Manter a plataforma em funcionamento, ressalvadas eventuais manutenções 
+programadas, falhas técnicas ou casos fortuitos/força maior.
+4.2A ARKAD.IA não se responsabiliza:
+Por prejuízos decorrentes de decisões exclusivas do Usuário com base nas 
+análises fornecidas.
+Por eventuais falhas técnicas de terceiros (provedores de internet, servidores, APIs 
+externas etc.).
+Pelo uso inadequado da plataforma por parte do Usuário.
+5 DA PRIVACIDADE E PROTEÇÃO DE DADOS
+ 5.1 A coleta, armazenamento e tratamento de dados seguirão 
+integralmente a legislação vigente (LGPD).
+ 5.2. Os dados fornecidos pelo Usuário serão utilizados exclusivamente 
+para a execução dos serviços e melhoria da plataforma, sendo vedado seu 
+compartilhamento indevido.
+6 DO ACEITE DIGITAL
+6.1O aceite eletrônico deste Termo, realizado no ato do cadastro ou uso 
+da plataforma, terá validade jurídica equivalente à assinatura física.
+6.2Ao clicar em “Li e Concordo”, o Usuário confirma ter lido, 
+compreendido e aceitado integralmente as condições aqui 
+descritas.
+7 DO FORO
+7.1Para dirimir quaisquer controvérsias oriundas deste Termo, as partes 
+elegem o foro da Comarca de Santo André – SP, com renúncia a 
+qualquer outro, por mais privilegiado que seja.
+Santo André – SP, ____ de __________ de 2025.
+
+
+2. Política de Privacidade e Proteção de Dados – Arkad AI
+Última atualização: outubro de 2025
+1. Introdução
+A Arkad AI reconhece a importância da privacidade e da proteção de dados 
+pessoais de seus usuários. Esta Política de Privacidade tem como objetivo 
+informar de forma clara, transparente e segura como são coletados, utilizados, 
+armazenados e protegidos os dados pessoais tratados pela plataforma, em 
+conformidade com a Lei Geral de Proteção de Dados Pessoais – LGPD (Lei nº 
+13.709/2018).
+Ao acessar ou utilizar a Arkad AI, o usuário declara estar ciente e de acordo com 
+as práticas aqui descritas.
+2. Controlador e Encarregado
+A Arkad AI atua como controladora dos dados pessoais, sendo responsável pelas 
+decisões referentes ao tratamento desses dados.
+Para assuntos relacionados à proteção de dados, o usuário poderá entrar em 
+contato com o Encarregado de Proteção de Dados (DPO) por meio do e-mail 
+institucional indicado na plataforma.
+3. Dados Coletados
+A Arkad AI poderá coletar as seguintes categorias de dados, conforme a interação 
+do usuário com a plataforma:
+a) Dados fornecidos pelo usuário:
+Nome completo ou razão social;
+CPF ou CNPJ;
+E-mail, telefone e endereço;
+Informações empresariais (setor, porte, metas e objetivos de negócio);
+Dados de pagamento (quando aplicável).
+b) Dados coletados automaticamente:
+Endereço IP, tipo e versão do navegador;
+Dados de localização aproximada;
+Cookies e identificadores de sessão;
+Registros de acesso e uso da plataforma.
+c) Dados de terceiros:
+Em alguns casos, a Arkad AI poderá utilizar APIs de mercado e bases públicas para 
+complementar informações, sempre respeitando os princípios da LGPD.
+4. Finalidades do Tratamento
+Os dados pessoais são tratados com as seguintes finalidades:
+1. Permitir o cadastro, autenticação e uso da plataforma;
+2. Gerar análises, relatórios e recomendações personalizadas;
+3. Cumprir obrigações legais e regulatórias;
+4. Enviar comunicações institucionais, notificações e informações sobre 
+serviços;
+5. Garantir a segurança da conta e prevenir fraudes;
+6. Melhorar a experiência do usuário e aprimorar funcionalidades;
+7. Viabilizar o atendimento e suporte técnico;
+8. Cumprir obrigações contratuais assumidas com o usuário.
+5. Bases Legais para o Tratamento
+O tratamento dos dados pela Arkad AI ocorre com fundamento nas hipóteses 
+legais previstas na LGPD, especialmente:
+Consentimento do titular (art. 7º, I);
+Execução de contrato ou procedimentos preliminares (art. 7º, V);
+Cumprimento de obrigação legal ou regulatória (art. 7º, II);
+Legítimo interesse do controlador (art. 7º, IX), observando sempre o equilíbrio 
+entre o interesse da Arkad AI e os direitos do titular.
+6. Compartilhamento de Dados
+A Arkad AI poderá compartilhar dados pessoais com:
+a) Prestadores de serviços que auxiliam na operação da plataforma (hospedagem, 
+processamento, segurança e suporte);
+b) Autoridades públicas quando exigido por lei, ordem judicial ou determinação 
+administrativa;
+c) Parceiros estratégicos mediante consentimento expresso do usuário;
+d) APIs de terceiros, exclusivamente para finalidades compatíveis com a execução 
+dos serviços contratados.
+Todos os terceiros que tiverem acesso aos dados estão sujeitos a obrigações 
+contratuais de confidencialidade e segurança.
+7. Armazenamento e Segurança dos Dados
+A Arkad AI adota medidas técnicas e administrativas rigorosas para garantir a 
+integridade, confidencialidade e disponibilidade das informações, incluindo:
+Criptografia de dados em repouso e em trânsito;
+Controle de acesso baseado em função e autenticação multifator (2FA);
+Monitoramento contínuo e registros de atividades;
+Armazenamento em servidores com certificação ISSO/IEC 27001;
+Backups regulares e redundância geográfica.
+Os dados são armazenados pelo período necessário ao cumprimento das 
+finalidades descritas, respeitando prazos legais e contratuais.
+8. Direitos do Titular dos Dados
+Nos termos da LGPD, o usuário, na condição de titular dos dados pessoais, possui 
+os seguintes direitos:
+1. Confirmar a existência de tratamento;
+2. Acessar seus dados;
+3. Corrigir dados incompletos, inexatos ou desatualizados;
+4. Solicitar anonimização, bloqueio ou eliminação de dados desnecessários;
+5. Revogar o consentimento a qualquer momento;
+6. Solicitar a portabilidade dos dados;
+7. Obter informações sobre compartilhamentos realizados;
+8. Peticionar à Autoridade Nacional de Proteção de Dados (ANPD).
+As solicitações deverão ser feitas por meio dos canais oficiais da Arkad AI, 
+respeitados os prazos e requisitos legais.
+9. Retenção e Eliminação dos Dados
+Os dados pessoais serão mantidos apenas pelo tempo necessário para atingir as 
+finalidades previstas nesta Política ou para cumprimento de obrigações legais.
+Após o término do tratamento, os dados serão eliminados ou anonimizados, salvo 
+quando o armazenamento for exigido por lei.
+10.Cookies e Tecnologias Semelhantes
+A Arkad AI utiliza cookies e tecnologias similares para reconhecer usuários, 
+melhorar a navegação e personalizar a experiência.
+O usuário poderá gerenciar as preferências de cookies diretamente no navegador, 
+ciente de que o bloqueio de determinados cookies poderá limitar funcionalidades 
+da plataforma.
+(Ver também o documento “Política de Cookies Arkad AI”.)
+11. Transferência Internacional de Dados
+Caso seja necessária a transferência internacional de dados, a Arkad AI garantirá 
+que o processo ocorra em conformidade com as normas da LGPD, utilizando 
+provedores com níveis adequados de proteção e contratos específicos de 
+garantia.
+12.Alterações desta Política
+A Arkad AI poderá atualizar esta Política a qualquer momento, visando aprimorar 
+suas práticas de privacidade ou atender a requisitos legais.
+As alterações terão efeito a partir da data de sua publicação na plataforma.
+13.Disposições Finais
+Esta Política é regida pelas leis da República Federativa do Brasil, em especial 
+pela Lei nº 13.709/2018 (LGPD) e pelo Marco Civil da Internet (Lei nº 12.965/2014).
+Fica eleito o foro da Comarca de Indaiatuba/SP para dirimir quaisquer 
+controvérsias, com renúncia expressa a outro foro, por mais privilegiado que seja.
+ Declaração de Ciência Ao utilizar a Arkad AI, o usuário declara estar ciente e de 
+acordo com esta Política de Privacidade e com o tratamento de seus dados 
+conforme descrito neste documento.
+

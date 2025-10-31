@@ -1,0 +1,68 @@
+Política de Cookies – Arkad.ia
+Última atualização: 10 de outubro de 2025
+A Arkad.ia Inteligência Artificial Ltda. Utiliza cookies e tecnologias semelhantes 
+para melhorar a experiência do usuário, otimizar o desempenho da plataforma e 
+oferecer conteúdos personalizados.
+Esta Política de Cookies explica o que são cookies, como os utilizamos e como o 
+usuário pode gerenciá-los.
+1. O que são Cookies
+Cookies são pequenos arquivos de texto armazenados no dispositivo do usuário 
+(computador, celular ou tablet) ao acessar um site ou aplicativo.
+Eles servem para lembrar preferências, reconhecer visitas recorrentes, coletar 
+dados de uso e personalizar a navegação.
+2. Tipos de Cookies Utilizados
+A Arkad.ia utiliza diferentes categorias de cookies, conforme descrito abaixo:
+2.1. Cookies Necessários
+Essenciais para o funcionamento do site e acesso a áreas seguras.
+Sem eles, alguns serviços não podem ser oferecidos.
+Exemplo: autenticação de login, segurança de sessão, verificação de identidade.
+2.2. Cookies de Desempenho
+Coletam informações sobre como os usuários interagem com a plataforma, 
+ajudando a melhorar velocidade, estabilidade e usabilidade.
+Exemplo: tempo de carregamento de página, relatórios de erro, métricas de 
+navegação.
+2.3. Cookies Funcionais
+Permitem que a plataforma memorize preferências e configurações do usuário, 
+proporcionando navegação mais personalizada.
+Exemplo: idioma selecionado, modo escuro/claro, configurações de layout.
+2.4. Cookies Analíticos e de Marketing
+Utilizados para compreender o comportamento do usuário, gerar estatísticas e 
+apresentar conteúdos e ofertas relevantes.
+Exemplo: Google Analytics, Meta Pixel (Facebook), LinkedIn Insight Tag.
+Todos os dados são tratados de forma anonimizada e segura, em conformidade 
+com a LGPD.
+3. Finalidade do Uso de Cookies
+A utilização de cookies pela Arkad.ia visa:
+Garantir o funcionamento adequado da plataforma;
+Lembrar preferências e personalizações do usuário;
+Analisar métricas de uso e desempenho;
+Oferecer comunicações e anúncios personalizados;
+Proteger a conta e prevenir fraudes.
+4. Gestão de Cookies
+O usuário pode, a qualquer momento:
+Aceitar ou recusar cookies não essenciais ao navegar pela plataforma;
+Gerenciar preferências diretamente no navegador, apagando ou bloqueando 
+cookies;
+Configurar alertas quando um cookie estiver sendo enviado.
+Atenção: a desativação de certos cookies pode afetar a funcionalidade da 
+plataforma e a qualidade da experiência.
+5. Ferramentas de Terceiros
+A Arkad.ia poderá utilizar ferramentas de terceiros (como Google, Meta, Microsoft, 
+entre outros) para fins de análise e marketing.
+Esses provedores possuem suas próprias políticas de privacidade, que devem ser 
+consultadas pelos usuários.
+6. Consentimento
+Ao acessar o site pela primeira vez, o usuário será informado sobre o uso de 
+cookies e poderá aceitar ou configurar suas preferências.
+O consentimento é armazenado por período determinado, podendo ser revogado 
+a qualquer momento.
+7. Alterações nesta Política
+A Arkad.ia poderá atualizar esta Política de Cookies periodicamente.
+As alterações entram em vigor na data de publicação, sendo responsabilidade do 
+usuário verificar a versão mais recente disponível no site.
+8. Contato
+Em caso de dúvidas sobre esta Política de Cookies, entre em contato:
+E-mail: [inserir e-mail oficial]
+Website: [inserir URL oficial]
+Razão Social: Arkad.ia Inteligência Artificial Ltda.
+CNPJ: [inserir número]

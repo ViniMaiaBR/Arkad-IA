@@ -33,14 +33,14 @@
     </div>
     <header>
         <nav class="navbar">
-            <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-                <img src="../images/logo.svg" alt="Logo ARKAD AI">
+            <div class="logo" onclick="window.location.href='/'" style="cursor: pointer;">
+                <img src="../images/logo.png" alt="Logo ARKAD AI">
                 <span>ARKAD AI</span>
             </div>
             <div class="nav-links">
-                <a href="sobre.html">SOBRE & SERVIÇOS</a>
-                <a href="planos.html">PLANOS</a>
-                <a href="contato.html">CONTATO</a>
+                <a href="/sobre">SOBRE & SERVIÇOS</a>
+                <a href="/planos">PLANOS</a>
+                <a href="/contato">CONTATO</a>
                 <button class="profile-btn" id="profileBtn" onclick="openProfileModal()" title="Perfil" style="display: none;">
                     👤
                 </button>
@@ -85,8 +85,8 @@
                     </div>
                     
                     <div class="hero-buttons">
-                        <button class="learn-more-btn" onclick="window.location.href='sobre.html'">SAIBA MAIS</button>
-                        <button class="get-started-btn" onclick="window.location.href='planos.html'">VER PLANOS</button>
+                        <button class="learn-more-btn" onclick="window.location.href='/sobre'">SAIBA MAIS</button>
+                        <button class="get-started-btn" onclick="window.location.href='/planos'">VER PLANOS</button>
                     </div>
                 </div>
                 
@@ -119,8 +119,8 @@
                     </div>
                     
                     <div class="chat-info">
-                        <p><i class="fas fa-info-circle"></i> Chat demo gratuito. Para recursos avançados, <a href="planos.html">conheça nossos planos</a>.</p>
-                        <p><i class="fas fa-lock"></i> Para salvar conversas e acessar recursos premium, <a href="login.html">faça login</a>.</p>
+                        <p><i class="fas fa-info-circle"></i> Chat demo gratuito. Para recursos avançados, <a href="/planos">conheça nossos planos</a>.</p>
+                        <p><i class="fas fa-lock"></i> Para salvar conversas e acessar recursos premium, <a href="/login">faça login</a>.</p>
                     </div>
                 </div>
             </div>
@@ -132,7 +132,7 @@
     <script>
         // Redirecionar para login
         function redirectToLogin() {
-            window.location.href = 'login.html';
+            window.location.href = '/login';
         }
 
         // Iniciar demo sem cadastro
@@ -239,26 +239,26 @@
                 const currentTime = Date.now();
                 const timeDiff = currentTime - parseInt(loginTime);
                 if (timeDiff < 24 * 60 * 60 * 1000) { // 24 horas
-                    window.location.href = 'chat.html';
+                    window.location.href = '/chat';
                     return;
                 }
             }
-            window.location.href = 'login.html';
+            window.location.href = '/login';
         }
 
         function redirectToChat() {
             const isLoggedIn = localStorage.getItem('isLoggedIn');
             if (isLoggedIn !== 'true') {
-                window.location.href = 'login.html';
+                window.location.href = '/login';
                 return;
             }
             
             const searchInput = document.getElementById('searchInput');
             const query = searchInput.value.trim();
             if (query) {
-                window.location.href = `chat.html?query=${encodeURIComponent(query)}`;
+                window.location.href = `/chat?query=${encodeURIComponent(query)}`;
             } else {
-                window.location.href = 'chat.html';
+                window.location.href = '/chat';
             }
         }
 
@@ -416,7 +416,7 @@
             const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
             
             if (!userInfo) {
-                window.location.href = 'login.html';
+                window.location.href = '/login';
                 return;
             }
             
@@ -574,7 +574,7 @@
             
             // Fechar modal e redirecionar
             closeProfileModal();
-            window.location.href = 'login.html';
+            window.location.href = '/login';
         }
 
         // Verificar login ao carregar página e atualizar botão de perfil
@@ -604,10 +604,10 @@
             <div class="footer-section">
                 <h3>LINKS ÚTEIS</h3>
                 <ul>
-                    <li><a href="nossa-equipe.html">Nossa Equipe</a></li>
-                    <li><a href="nossa-missao.html">Nossa Missão</a></li>
-                    <li><a href="planos.html">Planos</a></li>
-                    <li><a href="contato.html">Contato</a></li>
+                    <li><a href="/nossa-equipe">Nossa Equipe</a></li>
+                    <li><a href="/nossa-missao">Nossa Missão</a></li>
+                    <li><a href="/planos">Planos</a></li>
+                    <li><a href="/contato">Contato</a></li>
                 </ul>
             </div>
             

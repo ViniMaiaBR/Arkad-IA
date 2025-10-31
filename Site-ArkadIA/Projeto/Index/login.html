@@ -182,6 +182,29 @@
         .back-btn:hover {
             background: rgba(255, 255, 255, 0.2);
         }
+        
+        .terms-agreement {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(0, 181, 184, 0.1);
+            border-radius: 6px;
+            border-left: 3px solid #00B5B8;
+            font-size: 12px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+        
+        .terms-agreement a {
+            color: #00B5B8;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .terms-agreement a:hover {
+            color: #00d4d7;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -233,6 +256,12 @@
 
             <label for="confirm">Confirme a senha</label>
             <input id="confirm" type="password" placeholder="repita a senha" required />
+
+            <div class="terms-agreement">
+                <i class="fas fa-info-circle"></i> Ao criar sua conta, você concorda com nossos 
+                <a href="/termos-de-uso" target="_blank">Termos de Uso e Política de Privacidade</a> e 
+                <a href="/politica-cookies" target="_blank">Política de Cookies</a>.
+            </div>
 
             <div class="actions">
                 <button type="submit" id="register-submit">

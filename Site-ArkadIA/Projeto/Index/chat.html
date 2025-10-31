@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat IA - ARKAD AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .chat-layout {
@@ -148,12 +148,12 @@
     <canvas id="neural-bg"></canvas>
     <header>
         <nav class="navbar">
-            <div class="logo" onclick="window.location.href='index.html'">
-                <img src="../images/logo.svg" alt="Logo ARKAD AI">
+            <div class="logo" onclick="window.location.href = "/"">
+                <img src="/images/logo.svg" alt="Logo ARKAD AI">
                 <span>ARKAD AI</span>
             </div>
             <div class="nav-links">
-                <a href="index.html">VOLTAR</a>
+                <a href="/">VOLTAR</a>
             </div>
         </nav>
     </header>
@@ -196,7 +196,7 @@
                     <button type="button" id="togglePreviewBtn" class="toggle-preview-btn" title="Mostrar/Fechar preview">
                         <i class="fas fa-eye-slash"></i> Fechar preview
                     </button>
-                    <a href="processar-ia-pdf.html" class="open-processor-btn" title="Visualizar/Editar PDF">
+                    <a href="/processar-ia-pdf" class="open-processor-btn" title="Visualizar/Editar PDF">
                         <i class="fas fa-file-pdf"></i> Visualizar/Editar PDF
                     </a>
                 </div>
@@ -207,13 +207,13 @@
         </div>
     </main>
 
-    <script src="../js/backend-storage.js"></script>
-    <script src="../js/gemini-client.js"></script>
-    <script src="../js/chat-gemini-integration.js"></script>
-    <script src="../js/chat-pdf-report-generator.js"></script>
-    <script src="../js/chat-ai-responses.js"></script>
-    <script src="../js/escritorio-ti-flow.js"></script>
-    <script src="../js/header-scroll.js"></script>
+    <script src="/js/backend-storage.js"></script>
+    <script src="/js/gemini-client.js"></script>
+    <script src="/js/chat-gemini-integration.js"></script>
+    <script src="/js/chat-pdf-report-generator.js"></script>
+    <script src="/js/chat-ai-responses.js"></script>
+    <script src="/js/escritorio-ti-flow.js"></script>
+    <script src="/js/header-scroll.js"></script>
     <script>
         // Alternar visualização do preview (mostrar/fechar)
         (function(){
@@ -782,7 +782,7 @@
                     localStorage.setItem('chatReportData', JSON.stringify(reportData));
                     
                     // Redirecionar para a página de processamento
-                    window.location.href = 'processar-ia-pdf.html';
+                    window.location.href = "/processar-ia-pdf";
                 } catch (error) {
                     console.error('Erro ao abrir editor de PDF:', error);
                     addMessage("❌ **Erro ao abrir editor de PDF**\n\nPor favor, tente novamente.", 'ai');
@@ -848,7 +848,7 @@
             }
         }
     </script>
-    <script src="../js/neural-background.js"></script>
+    <script src="/js/neural-background.js"></script>
     <script>
         // Verificar autenticação ao carregar a página (sem alert, apenas redireciona)
         function checkAuth() {
@@ -857,7 +857,7 @@
             const userInfo = localStorage.getItem('userInfo');
             
             if (isLoggedIn !== 'true' || !loginTime || !userInfo) {
-                window.location.href = 'login.html';
+                window.location.href = "/login";
                 return false;
             }
             
@@ -869,7 +869,7 @@
                 localStorage.removeItem('loginTime');
                 localStorage.removeItem('userInfo');
                 localStorage.removeItem('currentSession');
-                window.location.href = 'login.html';
+                window.location.href = "/login";
                 return false;
             }
             
@@ -900,10 +900,10 @@
             <div class="footer-section">
                 <h3>LINKS ÚTEIS</h3>
                 <ul>
-                    <li><a href="nossa-equipe.html">Nossa Equipe</a></li>
-                    <li><a href="nossa-missao.html">Nossa Missão</a></li>
-                    <li><a href="planos.html">Planos</a></li>
-                    <li><a href="contato.html">Contato</a></li>
+                    <li><a href="/nossa-equipe">Nossa Equipe</a></li>
+                    <li><a href="/nossa-missao">Nossa Missão</a></li>
+                    <li><a href="/planos">Planos</a></li>
+                    <li><a href="/contato">Contato</a></li>
                 </ul>
             </div>
             
@@ -923,6 +923,6 @@
         </div>
     </footer>
 
-    <script src="../js/header-scroll.js"></script>
+    <script src="/js/header-scroll.js"></script>
 </body>
 </html> 

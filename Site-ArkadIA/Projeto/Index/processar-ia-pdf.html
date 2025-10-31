@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Processar IA e Gerar PDF - ARKAD AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -366,21 +366,21 @@
 
     <header>
         <nav class="navbar">
-            <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;">
-                <img src="../images/logo.svg" alt="Logo ARKAD AI">
+            <div class="logo" onclick='window.location.href = "/"' style="cursor: pointer;">
+                <img src="/images/logo.svg" alt="Logo ARKAD AI">
                 <span>ARKAD AI</span>
             </div>
             <div class="nav-links">
-                <a href="index.html">INÍCIO</a>
-                <a href="sobre.html">SOBRE & SERVIÇOS</a>
-                <a href="planos.html">PLANOS</a>
-                <a href="contato.html">CONTATO</a>
+                <a href="/">INÍCIO</a>
+                <a href="/sobre">SOBRE & SERVIÇOS</a>
+                <a href="/planos">PLANOS</a>
+                <a href="/contato">CONTATO</a>
             </div>
         </nav>
     </header>
  
     <div class="back-wrapper">
-        <a href="chat.html" class="btn-back"><i class="fas fa-comments"></i> Voltar ao Chat com IA</a>
+        <a href="/chat" class="btn-back"><i class="fas fa-comments"></i> Voltar ao Chat com IA</a>
     </div>
 
     <div class="processor-container">
@@ -564,10 +564,10 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
             <div class="footer-section">
                 <h3>LINKS ÚTEIS</h3>
                 <ul>
-                    <li><a href="nossa-equipe.html">Nossa Equipe</a></li>
-                    <li><a href="nossa-missao.html">Nossa Missão</a></li>
-                    <li><a href="planos.html">Planos</a></li>
-                    <li><a href="contato.html">Contato</a></li>
+                    <li><a href="/nossa-equipe">Nossa Equipe</a></li>
+                    <li><a href="/nossa-missao">Nossa Missão</a></li>
+                    <li><a href="/planos">Planos</a></li>
+                    <li><a href="/contato">Contato</a></li>
                 </ul>
             </div>
             
@@ -587,10 +587,10 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
         </div>
     </footer>
 
-    <script src="../js/neural-background.js"></script>
-    <script src="../js/pdf-generator.js"></script>
-    <script src="../js/ai-text-processor.js"></script>
-    <script src="../js/escritorio-ti-flow.js"></script>
+    <script src="/js/neural-background.js"></script>
+    <script src="/js/pdf-generator.js"></script>
+    <script src="/js/ai-text-processor.js"></script>
+    <script src="/js/escritorio-ti-flow.js"></script>
     <script>
         // Ativar modo embutido quando ?embed=1
         (function(){
@@ -675,7 +675,7 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
                 if (!content) return;
 
                 if (action === 'chat') {
-                    window.location.href = 'chat.html';
+                    window.location.href = "/chat";
                 }
             });
         }
@@ -771,6 +771,6 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
         updatePreview();
         loadPrompts();
     </script>
-    <script src="../js/header-scroll.js"></script>
+    <script src="/js/header-scroll.js"></script>
 </body>
 </html>

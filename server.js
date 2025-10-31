@@ -1,12 +1,17 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware para servir arquivos estáticos
-app.use(express.static(path.join(__dirname, 'Site-ArkadIA', 'Projeto')));
+// Middleware para servir arquivos estáticos (CSS, JS, imagens)
+app.use('/css', express.static(path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'js')));
+app.use('/images', express.static(path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'images')));
+app.use('/Prompts', express.static(path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'Prompts')));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -22,18 +27,29 @@ app.get('/api/config', (req, res) => {
     });
 });
 
-// Middleware para tratar rotas HTML sem extensão
+// Middleware para servir arquivos HTML da pasta Index
 app.use((req, res, next) => {
+    // Se a requisição é para um arquivo .html
+    if (req.path.endsWith('.html')) {
+        const htmlPath = path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'Index', path.basename(req.path));
+        
+        // Verifica se o arquivo existe
+        if (fs.existsSync(htmlPath)) {
+            return res.sendFile(htmlPath);
+        }
+    }
+    
+    // Se a requisição não tem extensão, tenta adicionar .html
     if (!req.path.includes('.') && req.path !== '/') {
         const htmlPath = path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'Index', req.path + '.html');
-        res.sendFile(htmlPath, (err) => {
-            if (err) {
-                next();
-            }
-        });
-    } else {
-        next();
+        
+        // Verifica se o arquivo existe
+        if (fs.existsSync(htmlPath)) {
+            return res.sendFile(htmlPath);
+        }
     }
+    
+    next();
 });
 
 // Tratamento de erro 404

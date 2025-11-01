@@ -1,4 +1,4 @@
-// Gerador de PDF para Relatórios de Análise - Baseado em ExemploRelatorio.txt
+// Gerador de PDF para Relatórios de Análise - Baseado em Documentacao/prompts_txt/ExemploRelatorio.txt
 // Gera relatórios profissionais em PDF a partir das conversas do chat
 
 class ChatPDFReportGenerator {
@@ -6,7 +6,7 @@ class ChatPDFReportGenerator {
         this.defaultTemplate = this.loadDefaultTemplate();
     }
 
-    // Template baseado em ExemploRelatorio.txt
+    // Template baseado em Documentacao/prompts_txt/ExemploRelatorio.txt
     loadDefaultTemplate() {
         return {
             title: 'Relatório Estratégico Arkad AI',

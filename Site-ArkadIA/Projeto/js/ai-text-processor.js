@@ -1,5 +1,5 @@
 // Processador de Texto da IA para Geração de PDF - ARKAD AI
-// Sistema que processa resultados de IA e gera PDFs baseados no template ExemploRelatorio
+// Sistema que processa resultados de IA e gera PDFs baseados no template Documentacao/prompts_txt/ExemploRelatorio.txt
 
 class AITextProcessor {
     constructor() {
@@ -301,7 +301,7 @@ class AITextProcessor {
             .trim();
     }
 
-    // Gerar PDF baseado no template ExemploRelatorio
+    // Gerar PDF baseado no template Documentacao/prompts_txt/ExemploRelatorio.txt
     async generateReportPDF(aiText, context = {}) {
         try {
             const processedData = this.processAIText(aiText, context);

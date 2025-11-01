@@ -1,5 +1,5 @@
 // Integração do Chat com API Gemini - Sistema PRO
-// Usa o prompt do PromptFrameworkI.txt como contexto base
+// Usa o prompt do Documentacao/prompts_txt/PromptFrameworkI.txt como contexto base
 
 class ChatGeminiIntegration {
     constructor() {
@@ -39,7 +39,7 @@ class ChatGeminiIntegration {
 
     // Carregar prompt do sistema (Framework)
     async loadSystemPrompt() {
-        // Prompt base do PromptFrameworkI.txt
+        // Prompt base do Documentacao/prompts_txt/PromptFrameworkI.txt
         this.systemPrompt = `
 # INSTRUÇÕES GERAIS PARA A IA - ARKAD AI
 

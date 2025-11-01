@@ -173,7 +173,7 @@ O sistema utiliza **armazenamento híbrido**:
 - **Relatórios Personalizados**: Criação de documentos customizados
 - **Integração Automática**: Geração automática após análises
 - **Processamento de Texto IA**: Conversão de texto da IA em PDF estruturado
-- **Template Profissional**: Baseado no ExemploRelatorio com formatação corporativa
+- **Template Profissional**: Baseado no Documentacao/prompts_txt/ExemploRelatorio.txt com formatação corporativa
 
 ### APIs Utilizadas
 - **File System Access API**: Para manipulação de arquivos

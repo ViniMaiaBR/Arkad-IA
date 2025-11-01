@@ -14,7 +14,7 @@
             padding: 20px;
         }
         
-        .cookies-container {
+        .terms-container {
             max-width: 900px;
             margin: 80px auto 40px;
             background: rgba(255, 255, 255, 0.95);
@@ -23,69 +23,55 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
         
-        .cookies-header {
+        .terms-header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 2px solid #00B5B8;
         }
         
-        .cookies-header h1 {
+        .terms-header h1 {
             color: #0A2647;
             font-size: 2rem;
             margin-bottom: 10px;
         }
         
-        .cookies-header p {
+        .terms-header p {
             color: #666;
             font-size: 0.9rem;
         }
         
-        .cookies-content {
+        .terms-content {
             color: #333;
             line-height: 1.8;
         }
         
-        .cookies-content h2 {
+        .terms-content h2 {
             color: #0A2647;
             margin-top: 30px;
             margin-bottom: 15px;
             font-size: 1.5rem;
         }
         
-        .cookies-content h3 {
+        .terms-content h3 {
             color: #144272;
             margin-top: 20px;
             margin-bottom: 10px;
             font-size: 1.2rem;
         }
         
-        .cookies-content p {
+        .terms-content p {
             margin-bottom: 15px;
             text-align: justify;
         }
         
-        .cookies-content ul {
+        .terms-content ul, .terms-content ol {
             margin-left: 20px;
             margin-bottom: 15px;
         }
         
-        .cookies-content li {
+        .terms-content li {
             margin-bottom: 8px;
-        }
-        
-        .cookie-type {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            border-left: 4px solid #00B5B8;
-        }
-        
-        .cookie-type h4 {
-            color: #0A2647;
-            margin-top: 0;
-            margin-bottom: 10px;
         }
         
         .back-btn {
@@ -107,72 +93,62 @@
             transform: translateY(-2px);
         }
         
-        .warning-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .warning-box p {
-            margin: 0;
-            color: #856404;
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 30px 0;
         }
     </style>
 </head>
 <body>
     <canvas id="neural-bg"></canvas>
     
-    <div class="cookies-container">
+    <div class="terms-container">
         <a href="/login" class="back-btn">
             <i class="fas fa-arrow-left"></i> Voltar
         </a>
         
-        <div class="cookies-header">
-            <h1><i class="fas fa-cookie-bite"></i> Política de Cookies</h1>
-            <p>Última atualização: 10 de Outubro de 2025</p>
+        <div class="terms-header">
+            <h1>Política de Cookies</h1>
+            <p>Última atualização: 10 de outubro de 2025</p>
         </div>
         
-        <div class="cookies-content">
-            <p>A <strong>Arkad AI Inteligência Artificial</strong> utiliza cookies e tecnologias semelhantes para melhorar a experiência do usuário, otimizar o desempenho da plataforma e oferecer conteúdos personalizados.</p>
+        <div class="terms-content">
+            <p>A Arkad.ia Inteligência Artificial Ltda. utiliza cookies e tecnologias semelhantes para melhorar a experiência do usuário, otimizar o desempenho da plataforma e oferecer conteúdos personalizados.</p>
             <p>Esta Política de Cookies explica o que são cookies, como os utilizamos e como o usuário pode gerenciá-los.</p>
+            
+            <hr>
             
             <h2>1. O que são Cookies</h2>
             <p>Cookies são pequenos arquivos de texto armazenados no dispositivo do usuário (computador, celular ou tablet) ao acessar um site ou aplicativo.</p>
             <p>Eles servem para lembrar preferências, reconhecer visitas recorrentes, coletar dados de uso e personalizar a navegação.</p>
             
+            <hr>
+            
             <h2>2. Tipos de Cookies Utilizados</h2>
-            <p>A Arkad AI utiliza diferentes categorias de cookies, conforme descrito abaixo:</p>
+            <p>A Arkad.ia utiliza diferentes categorias de cookies, conforme descrito abaixo:</p>
             
-            <div class="cookie-type">
-                <h4>🔐 Cookies Necessários</h4>
-                <p><strong>Finalidade:</strong> Essenciais para o funcionamento do site e acesso a áreas seguras.</p>
-                <p><strong>Exemplos:</strong> autenticação de login, segurança de sessão, verificação de identidade.</p>
-                <p><strong>Nota:</strong> Sem eles, alguns serviços não podem ser oferecidos.</p>
-            </div>
+            <h3>2.1. Cookies Necessários</h3>
+            <p>Essenciais para o funcionamento do site e acesso a áreas seguras. Sem eles, alguns serviços não podem ser oferecidos.</p>
+            <p><strong>Exemplo:</strong> autenticação de login, segurança de sessão, verificação de identidade.</p>
             
-            <div class="cookie-type">
-                <h4>⚡ Cookies de Desempenho</h4>
-                <p><strong>Finalidade:</strong> Coletam informações sobre como os usuários interagem com a plataforma, ajudando a melhorar velocidade, estabilidade e usabilidade.</p>
-                <p><strong>Exemplos:</strong> tempo de carregamento de página, relatórios de erro, métricas de navegação.</p>
-            </div>
+            <h3>2.2. Cookies de Desempenho</h3>
+            <p>Coletam informações sobre como os usuários interagem com a plataforma, ajudando a melhorar velocidade, estabilidade e usabilidade.</p>
+            <p><strong>Exemplo:</strong> tempo de carregamento de página, relatórios de erro, métricas de navegação.</p>
             
-            <div class="cookie-type">
-                <h4>🎨 Cookies Funcionais</h4>
-                <p><strong>Finalidade:</strong> Permitem que a plataforma memorize preferências e configurações do usuário, proporcionando navegação mais personalizada.</p>
-                <p><strong>Exemplos:</strong> idioma selecionado, modo escuro/claro, configurações de layout.</p>
-            </div>
+            <h3>2.3. Cookies Funcionais</h3>
+            <p>Permitem que a plataforma memorize preferências e configurações do usuário, proporcionando navegação mais personalizada.</p>
+            <p><strong>Exemplo:</strong> idioma selecionado, modo escuro/claro, configurações de layout.</p>
             
-            <div class="cookie-type">
-                <h4>📊 Cookies Analíticos e de Marketing</h4>
-                <p><strong>Finalidade:</strong> Utilizados para compreender o comportamento do usuário, gerar estatísticas e apresentar conteúdos e ofertas relevantes.</p>
-                <p><strong>Exemplos:</strong> Google Analytics, Meta Pixel (Facebook), LinkedIn Insight Tag.</p>
-                <p><strong>Nota:</strong> Todos os dados são tratados de forma anonimizada e segura, em conformidade com a LGPD.</p>
-            </div>
+            <h3>2.4. Cookies Analíticos e de Marketing</h3>
+            <p>Utilizados para compreender o comportamento do usuário, gerar estatísticas e apresentar conteúdos e ofertas relevantes.</p>
+            <p><strong>Exemplo:</strong> Google Analytics, Meta Pixel (Facebook), LinkedIn Insight Tag.</p>
+            <p>Todos os dados são tratados de forma anonimizada e segura, em conformidade com a LGPD.</p>
+            
+            <hr>
             
             <h2>3. Finalidade do Uso de Cookies</h2>
-            <p>A utilização de cookies pela Arkad AI visa:</p>
+            <p>A utilização de cookies pela Arkad.ia visa:</p>
             <ul>
                 <li>Garantir o funcionamento adequado da plataforma;</li>
                 <li>Lembrar preferências e personalizações do usuário;</li>
@@ -181,6 +157,8 @@
                 <li>Proteger a conta e prevenir fraudes.</li>
             </ul>
             
+            <hr>
+            
             <h2>4. Gestão de Cookies</h2>
             <p>O usuário pode, a qualquer momento:</p>
             <ul>
@@ -188,33 +166,41 @@
                 <li>Gerenciar preferências diretamente no navegador, apagando ou bloqueando cookies;</li>
                 <li>Configurar alertas quando um cookie estiver sendo enviado.</li>
             </ul>
+            <p><strong>Atenção:</strong> a desativação de certos cookies pode afetar a funcionalidade da plataforma e a qualidade da experiência.</p>
             
-            <div class="warning-box">
-                <p><strong>⚠️ Atenção:</strong> A desativação de certos cookies pode afetar a funcionalidade da plataforma e a qualidade da experiência.</p>
-            </div>
+            <hr>
             
             <h2>5. Ferramentas de Terceiros</h2>
-            <p>A Arkad AI poderá utilizar ferramentas de terceiros (como Google, Meta, Microsoft, entre outros) para fins de análise e marketing.</p>
+            <p>A Arkad.ia poderá utilizar ferramentas de terceiros (como Google, Meta, Microsoft, entre outros) para fins de análise e marketing.</p>
             <p>Esses provedores possuem suas próprias políticas de privacidade, que devem ser consultadas pelos usuários.</p>
+            
+            <hr>
             
             <h2>6. Consentimento</h2>
             <p>Ao acessar o site pela primeira vez, o usuário será informado sobre o uso de cookies e poderá aceitar ou configurar suas preferências.</p>
             <p>O consentimento é armazenado por período determinado, podendo ser revogado a qualquer momento.</p>
             
+            <hr>
+            
             <h2>7. Alterações nesta Política</h2>
-            <p>A Arkad AI poderá atualizar esta Política de Cookies periodicamente.</p>
+            <p>A Arkad.ia poderá atualizar esta Política de Cookies periodicamente.</p>
             <p>As alterações entram em vigor na data de publicação, sendo responsabilidade do usuário verificar a versão mais recente disponível no site.</p>
+            
+            <hr>
             
             <h2>8. Contato</h2>
             <p>Em caso de dúvidas sobre esta Política de Cookies, entre em contato:</p>
             <ul>
-                <li><strong>E-mail:</strong> arkadai.contact@gmail.com</li>
-                <li><strong>Website:</strong> Arkad AI</li>
-                <li><strong>Localização:</strong> Santo André - SP</li>
+                <li><strong>E-mail:</strong> [inserir e-mail oficial]</li>
+                <li><strong>Website:</strong> [inserir URL oficial]</li>
+                <li><strong>Razão Social:</strong> Arkad.ia Inteligência Artificial Ltda.</li>
+                <li><strong>CNPJ:</strong> [inserir número]</li>
             </ul>
             
-            <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; border-left: 4px solid #00B5B8; margin-top: 30px;">
-                <p style="margin: 0;"><strong>🍪 Ao utilizar a plataforma Arkad AI, você concorda com o uso de cookies conforme descrito nesta política.</strong></p>
+            <hr>
+            
+            <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; border-left: 4px solid #00B5B8; margin-top: 30px;">
+                <p style="margin: 0;"><strong>Declaração:</strong> Ao utilizar a Arkad.ia, o usuário declara ter compreendido esta Política de Cookies e aceita o uso de cookies conforme descrito acima.</p>
             </div>
         </div>
     </div>
@@ -222,4 +208,3 @@
     <script src="/js/neural-background.js"></script>
 </body>
 </html>
-

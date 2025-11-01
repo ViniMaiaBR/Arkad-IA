@@ -6,6 +6,12 @@
     --light-text: rgba(255, 255, 255, 0.85);
     --secondary-blue: #144272;
     --tertiary-blue: #205295;
+    
+    /* Novas cores para logo */
+    --neon-blue: #00A8FF;
+    --intermediate-blue: #007BFF;
+    --dark-bg-blue: #0A0F1F;
+    --ice-white: #E6F3FF;
 }
 
 * {
@@ -75,24 +81,62 @@ header.header-scrolled {
 .logo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 1.5rem;
-    font-weight: 600;
+    gap: 0.15rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.05em;
 }
 
 /* Animação global do logo */
-.logo {
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
 .logo:hover {
     transform: scale(1.05);
     filter: brightness(1.1);
 }
 
 .logo img {
-    height: 2rem;
+    height: 1.6em;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.08rem;
+    line-height: 1;
+    filter: drop-shadow(0 0 3px rgba(0, 168, 255, 0.6));
+    transition: filter 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.logo:hover img {
+    filter: drop-shadow(0 0 8px var(--neon-blue)) drop-shadow(0 0 15px rgba(0, 168, 255, 0.8));
+}
+
+.logo .logo-text {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ice-white);
+    text-transform: uppercase;
+    font-family: 'Poppins', 'Montserrat', 'Orbitron', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    text-shadow: 0 0 10px rgba(230, 243, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(135deg, var(--ice-white) 0%, var(--neon-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    transition: all 0.3s ease;
+}
+
+.logo:hover .logo-text {
+    text-shadow: 0 0 15px var(--neon-blue), 0 0 25px rgba(0, 168, 255, 0.6);
+    background: linear-gradient(135deg, #ffffff 0%, var(--ice-white) 50%, var(--neon-blue) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .nav-links {

@@ -1,74 +1,180 @@
 /* Esconder header/elementos quando embutido via ?embed=1 */
+html:has(body.embed) { 
+    overflow: hidden !important; 
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100vh !important;
+}
+body.embed { 
+    overflow: hidden !important; 
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100vh !important;
+}
 body.embed header { display: none !important; }
 body.embed .animated-background { display: none !important; }
+body.embed #neural-bg { display: none !important; }
+body.embed canvas { display: none !important; }
 body.embed .back-wrapper { display: none !important; }
 body.embed .prompts-wrapper { display: none !important; }
-body.embed .processor-container { padding-top: 20px; margin-top: 0; }
+body.embed .processor-container { 
+    padding: 0 !important; 
+    margin: 0 !important; 
+    max-width: none !important;
+    height: 100vh;
+    overflow: hidden;
+}
 body.embed .processor-section:first-child { display: none !important; } /* Esconde formulários */
 body.embed .processor-section:last-child { 
-    display: block !important; 
-    padding: 10px;
-    margin: 0;
-    background: transparent;
-    border: none;
+    display: flex !important;
+    flex-direction: column;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    height: 100vh;
+    overflow: hidden;
 } /* Mostra apenas preview */
-body.embed .processor-section h2 { display: none; } /* Esconde título "Pré-visualização do PDF" */
-body.embed .preview-section h3 { display: none; } /* Esconde subtítulo */
+body.embed .processor-section h2 { display: none !important; } /* Esconde título "Pré-visualização do PDF" */
+body.embed .preview-section h3 { display: none !important; } /* Esconde subtítulo */
 body.embed .preview-section { 
-    padding: 0;
-    margin: 0;
-    background: transparent;
-    border: none;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 body.embed .preview-content { 
-    padding: 15px; 
-    margin: 0;
-    min-height: calc(100vh - 40px);
-    background: rgba(0, 0, 0, 0.8) !important;
-    border-radius: 8px;
-    color: #ffffff !important;
-    backdrop-filter: blur(5px);
+    padding: 0 !important; 
+    margin: 0 !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    background: #ffffff !important;
+    border-radius: 0 !important;
+    color: #333333 !important;
+    scroll-behavior: smooth !important;
 }
-/* Forçar texto branco no modo embed */
-body.embed .preview-content * {
+/* Estilo do cabeçalho (primeiros elementos) */
+body.embed .preview-content > h1:first-child,
+body.embed .preview-content > p:nth-of-type(1),
+body.embed .preview-content > p:nth-of-type(2),
+body.embed .preview-content > p:nth-of-type(3),
+body.embed .preview-content > p:nth-of-type(4),
+body.embed .preview-content > p:nth-of-type(5),
+body.embed .preview-content > p:nth-of-type(6) {
+    background: linear-gradient(135deg, rgba(10, 25, 47, 0.95), rgba(0, 20, 40, 0.95));
     color: #ffffff !important;
+    padding: 15px 20px;
+    margin: 0 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+body.embed .preview-content > h1:first-child {
+    font-size: 24px;
+    color: #00d4d7 !important;
+    font-weight: bold;
+    padding-top: 20px;
+}
+/* Garantir que elementos dentro do cabeçalho mantenham cor branca */
+body.embed .preview-content > p:nth-of-type(1) *,
+body.embed .preview-content > p:nth-of-type(2) *,
+body.embed .preview-content > p:nth-of-type(3) *,
+body.embed .preview-content > p:nth-of-type(4) *,
+body.embed .preview-content > p:nth-of-type(5) *,
+body.embed .preview-content > p:nth-of-type(6) * {
+    color: #ffffff !important;
+}
+/* Espaçamento após o cabeçalho */
+body.embed .preview-content > p:nth-of-type(6) {
+    padding-bottom: 25px !important;
+    margin-bottom: 15px !important;
+}
+/* Restante do conteúdo com texto preto */
+body.embed .preview-content * {
+    color: #333333 !important;
+    text-shadow: none !important;
 }
 body.embed .preview-content h1,
 body.embed .preview-content h2,
 body.embed .preview-content h3,
 body.embed .preview-content h4 {
-    color: #00d4d7 !important;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+    color: #0a192f !important;
     font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
 }
 body.embed .preview-content strong {
-    color: #00e6e9 !important;
+    color: #00b5b8 !important;
     font-weight: 700;
 }
 body.embed .preview-content p,
 body.embed .preview-content li,
 body.embed .preview-content span,
 body.embed .preview-content div {
-    color: #ffffff !important;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    color: #333333 !important;
+}
+/* Adicionar padding ao conteúdo após o cabeçalho */
+body.embed .preview-content > h2,
+body.embed .preview-content > h3,
+body.embed .preview-content > h4,
+body.embed .preview-content > p:not(:nth-of-type(-n+6)),
+body.embed .preview-content > ul,
+body.embed .preview-content > ol,
+body.embed .preview-content > div:not(:first-child) {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+}
+body.embed .preview-content ul,
+body.embed .preview-content ol {
+    margin: 10px 0;
+}
+body.embed .preview-content li {
+    margin: 5px 0;
+    line-height: 1.6;
 }
 body.embed .preview-content table {
-    background: rgba(0, 0, 0, 0.6) !important;
+    background: #f8f9fa !important;
+    border-collapse: collapse;
+    width: calc(100% - 40px);
+    margin: 15px 20px;
 }
 body.embed .preview-content table td {
-    border-color: rgba(255, 255, 255, 0.3) !important;
-    color: #ffffff !important;
-    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #dee2e6 !important;
+    color: #333333 !important;
+    background: #ffffff;
+    padding: 8px 12px;
 }
 body.embed .preview-content table th {
-    background: rgba(0, 181, 184, 0.5) !important;
+    background: linear-gradient(135deg, #00b5b8, #008a8d) !important;
     color: #ffffff !important;
-    border-color: rgba(255, 255, 255, 0.3) !important;
+    border: 1px solid #00b5b8 !important;
     font-weight: bold;
+    padding: 10px 12px;
 }
 /* Esconder footer no modo embed */
 body.embed footer {
     display: none !important;
+}
+
+/* Scrollbar customizado para o preview no modo embed */
+body.embed .preview-content::-webkit-scrollbar {
+    width: 12px;
+}
+body.embed .preview-content::-webkit-scrollbar-track {
+    background: #e9ecef;
+    border-radius: 6px;
+}
+body.embed .preview-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #00b5b8, #008a8d);
+    border-radius: 6px;
+    transition: background 0.3s ease;
+}
+body.embed .preview-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #00d4d7, #00a8a8);
 }
 .processor-container {
     max-width: 1200px;

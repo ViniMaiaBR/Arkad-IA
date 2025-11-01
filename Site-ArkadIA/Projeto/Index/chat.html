@@ -82,6 +82,10 @@
                 </div>
             </div>
             <aside class="pdf-preview">
+                <div class="pdf-preview-header">
+                    <h3><i class="fas fa-file-pdf"></i> Preview do PDF</h3>
+                    <span class="pdf-status">Aguardando conteúdo...</span>
+                </div>
                 <iframe class="pdf-iframe" src="processar-ia-pdf.html?embed=1"></iframe>
             </aside>
         </div>
@@ -99,6 +103,10 @@
         (function(){
             const layout = document.querySelector('.chat-layout');
             const toggleBtn = document.getElementById('togglePreviewBtn');
+            const pdfPreview = document.querySelector('.pdf-preview');
+            const pdfIframe = document.querySelector('.pdf-iframe');
+            const pdfStatus = document.querySelector('.pdf-status');
+            
             if (layout && toggleBtn) {
                 toggleBtn.addEventListener('click', () => {
                     const hidden = layout.classList.toggle('preview-hidden');
@@ -109,7 +117,36 @@
                     }
                 });
             }
+            
+            // Detectar carregamento do iframe
+            if (pdfIframe && pdfStatus && pdfPreview) {
+                pdfPreview.classList.add('loading');
+                pdfStatus.textContent = 'Carregando preview...';
+                
+                pdfIframe.addEventListener('load', () => {
+                    pdfPreview.classList.remove('loading');
+                    pdfStatus.textContent = '';
+                    setTimeout(() => {
+                        pdfStatus.style.color = 'rgba(0, 181, 184, 0.8)';
+                    }, 100);
+                });
+                
+                pdfIframe.addEventListener('error', () => {
+                    pdfPreview.classList.remove('loading');
+                    pdfStatus.textContent = 'Erro ao carregar';
+                    pdfStatus.style.color = 'rgba(255, 82, 82, 0.8)';
+                });
+            }
         })();
+        
+        // Função global para atualizar status do PDF
+        window.updatePDFStatus = function(status) {
+            const pdfStatus = document.querySelector('.pdf-status');
+            if (pdfStatus) {
+                pdfStatus.textContent = status;
+                pdfStatus.style.color = 'rgba(0, 181, 184, 0.8)';
+            }
+        };
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>

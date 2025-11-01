@@ -1,0 +1,527 @@
+/* Estilos específicos para a página de métodos de pagamento */
+.payment-methods-section {
+    padding: 4rem 2rem;
+    min-height: calc(100vh - 200px);
+    position: relative;
+    z-index: 5;
+}
+
+.payment-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.payment-header h1 {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.payment-header p {
+    font-size: 1.2rem;
+    color: var(--light-text);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.selected-plan-banner {
+    background: linear-gradient(135deg, var(--primary-color), #009698);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 181, 184, 0.3);
+    display: none;
+}
+
+.selected-plan-banner.show {
+    display: block;
+    animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.selected-plan-banner h2 {
+    color: var(--text-color);
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.selected-plan-banner .plan-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+
+.selected-plan-banner .plan-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.selected-plan-banner .plan-info-item i {
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+.selected-plan-banner .plan-info-item .label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.selected-plan-banner .plan-info-item .value {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.change-plan-btn {
+    margin-top: 1.5rem;
+    padding: 0.8rem 2rem;
+    background: rgba(255, 255, 255, 0.2);
+    color: var(--text-color);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.change-plan-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.change-plan-btn i {
+    font-size: 1rem;
+}
+
+.payment-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 4rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 1024px) {
+    .payment-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.payment-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.payment-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-color);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.payment-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 181, 184, 0.2);
+    border-color: var(--primary-color);
+}
+
+.payment-card:hover::before {
+    transform: scaleX(1);
+}
+
+.payment-card.selected {
+    border: 2px solid var(--primary-color);
+    background: rgba(0, 181, 184, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 181, 184, 0.3);
+}
+
+.payment-card.selected::before {
+    transform: scaleX(1);
+}
+
+.payment-card.selected::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--primary-color);
+    color: var(--text-color);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    animation: checkmark 0.3s ease;
+}
+
+@keyframes checkmark {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Modal/Pop-up de Aviso */
+.payment-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.payment-modal.show {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.payment-modal-content {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border-radius: 16px;
+    padding: 3rem;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(0, 181, 184, 0.3);
+    position: relative;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.payment-modal-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.payment-modal-header i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.payment-modal-header h2 {
+    color: var(--text-color);
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.payment-modal-body {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.payment-modal-body p {
+    color: var(--light-text);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.payment-modal-footer {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.modal-btn {
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-btn-primary {
+    background: var(--primary-color);
+    color: var(--text-color);
+}
+
+.modal-btn-primary:hover {
+    background: #009698;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 181, 184, 0.3);
+}
+
+.modal-btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--text-color);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
+}
+
+.payment-icon {
+    font-size: 3.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
+.payment-card h3 {
+    font-size: 1.8rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.payment-card p {
+    color: var(--light-text);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.payment-features {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.payment-features li {
+    padding: 0.6rem 0;
+    color: var(--light-text);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 0.95rem;
+}
+
+.payment-features li i {
+    color: var(--primary-color);
+    font-size: 1rem;
+    width: 20px;
+}
+
+.payment-status {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+.payment-status.available {
+    background: rgba(0, 181, 184, 0.2);
+    color: var(--primary-color);
+}
+
+.payment-status.popular {
+    background: linear-gradient(135deg, var(--primary-color), #009698);
+    color: var(--text-color);
+}
+
+.security-section {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 3rem;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.security-section h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.security-section p {
+    color: var(--light-text);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+.security-badges {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+.security-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.security-badge i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+.security-badge span {
+    color: var(--light-text);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .payment-header h1 {
+        font-size: 2rem;
+    }
+
+    .payment-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem;
+    }
+
+    .payment-card {
+        padding: 2rem;
+    }
+
+    .selected-plan-banner {
+        padding: 1.5rem;
+    }
+
+    .selected-plan-banner h2 {
+        font-size: 1.5rem;
+    }
+
+    .selected-plan-banner .plan-info {
+        gap: 1rem;
+    }
+
+    .selected-plan-banner .plan-info-item .value {
+        font-size: 1rem;
+    }
+
+    .security-section {
+        padding: 2rem 1.5rem;
+    }
+
+    .security-badges {
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .payment-methods-section {
+        padding: 2rem 1rem;
+    }
+
+    .payment-header h1 {
+        font-size: 1.75rem;
+    }
+
+    .payment-icon {
+        font-size: 2.5rem;
+    }
+
+    .payment-card h3 {
+        font-size: 1.5rem;
+    }
+}
+

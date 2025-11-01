@@ -1,0 +1,75 @@
+.sobre-section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.sobre-section h1 {
+    color: #fff;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.sobre-section p {
+    color: #fff;
+    max-width: 800px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+}
+
+.sobre-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.sobre-button {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s, background 0.3s;
+    cursor: pointer;
+    text-decoration: none;
+    color: #fff;
+}
+
+.sobre-button:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.sobre-button i {
+    font-size: 2.5em;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.sobre-button h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+}
+
+.sobre-button p {
+    color: #ccc;
+    font-size: 0.95em;
+    margin-bottom: 20px;
+}
+
+.sobre-button .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.sobre-button .btn:hover {
+    background: #0056b3;
+}
+

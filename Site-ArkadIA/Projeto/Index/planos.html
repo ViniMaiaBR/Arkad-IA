@@ -242,16 +242,7 @@
     <script>
         // Função para seleção de planos
         function selectPlan(planType) {
-            const user = ARKAD_AUTH.getCurrentUser();
-            
-            if (!user) {
-                // Usuário não logado - redirecionar para login
-                alert('Você precisa fazer login para escolher um plano.');
-                window.location.href = "/login";
-                return;
-            }
-            
-            // Simular seleção de plano (em produção, integrar com sistema de pagamento)
+            // Definir dados dos planos
             const planNames = {
                 'basic': 'Básico',
                 'professional': 'Profissional', 
@@ -272,7 +263,8 @@
                 selectedAt: new Date().toISOString()
             }));
             
-            // Redirecionar para página de métodos de pagamento
+            // Redirecionar diretamente para página de métodos de pagamento
+            // A verificação de login será feita na hora do pagamento efetivo
             window.location.href = "/metodos-pagamento";
         }
     </script>

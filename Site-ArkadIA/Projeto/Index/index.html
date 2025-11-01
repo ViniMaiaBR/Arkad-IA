@@ -60,7 +60,7 @@
                     
                     <!-- OPÇÕES DE ACESSO -->
                     <div class="access-options" id="accessOptions">
-                        <div class="access-card">
+                        <div class="access-card" id="loginCard">
                             <div class="access-icon">
                                 <i class="fas fa-user-plus"></i>
                             </div>
@@ -72,11 +72,11 @@
                             </button>
                         </div>
                         
-                        <div class="access-card">
+                        <div class="access-card" id="demoCard">
                             <div class="access-icon">
                                 <i class="fas fa-rocket"></i>
                             </div>
-                            <h3>Testar sem Cadastro</h3>
+                            <h3>Teste nossa IA</h3>
                             <p>Experimente nossa IA gratuitamente e veja o potencial</p>
                             <button class="access-btn demo-btn" onclick="startDemo()">
                                 <i class="fas fa-play"></i>
@@ -121,7 +121,7 @@
                     
                     <div class="chat-info">
                         <p><i class="fas fa-info-circle"></i> Chat demo gratuito. Para recursos avançados, <a href="/planos">conheça nossos planos</a>.</p>
-                        <p><i class="fas fa-lock"></i> Para salvar conversas e acessar recursos premium, <a href="/login">faça login</a>.</p>
+                        <p><i class="fas fa-lock"></i> Para salvar conversas e acessar recursos, <a href="/login">faça login</a>.</p>
                     </div>
                 </div>
             </div>
@@ -142,23 +142,48 @@
             const accessOptions = document.getElementById('accessOptions');
             const heroButtons = document.querySelector('.hero-buttons');
             const heroContent = document.querySelector('.hero-content');
+            const loginCard = document.getElementById('loginCard');
+            const demoCard = document.getElementById('demoCard');
+            
+            // Verificar se usuário está logado
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const loginTime = localStorage.getItem('loginTime');
+            let userIsLoggedIn = false;
+            
+            if (isLoggedIn === 'true' && loginTime) {
+                const currentTime = Date.now();
+                const timeDiff = currentTime - parseInt(loginTime);
+                if (timeDiff < 24 * 60 * 60 * 1000) {
+                    userIsLoggedIn = true;
+                }
+            }
             
             // Adicionar classes para transições suaves
             heroButtons.classList.add('hidden');
             
             // Aguardar transição e mostrar chat
             setTimeout(() => {
-                // Ajustar layout: manter apenas o card de login sob o texto, à esquerda
+                // Ajustar layout: mover card visível para a esquerda
                 heroButtons.style.display = 'none';
+                // Remover classe centered se estiver presente para permitir animação demo-left
+                accessOptions.classList.remove('centered');
                 accessOptions.classList.add('demo-left');
                 accessOptions.classList.add('slide-left');
                 if (heroContent) heroContent.classList.add('with-chat');
 
-                // Esconder o segundo card (Testar sem Cadastro)
-                const cards = accessOptions.querySelectorAll('.access-card');
-                if (cards[1]) {
-                    cards[1].style.display = 'none';
+                // Se usuário estiver logado, o loginCard já está oculto
+                // Nesse caso, manter demoCard visível e apenas movê-lo para a esquerda
+                // Se não estiver logado, ocultar demoCard e deixar loginCard à esquerda
+                if (userIsLoggedIn) {
+                    // Usuário logado: loginCard já está oculto, manter demoCard visível
+                    // Ele será movido para a esquerda pela classe demo-left
+                } else {
+                    // Usuário não logado: ocultar demoCard e deixar loginCard à esquerda
+                    if (demoCard) {
+                        demoCard.style.display = 'none';
+                    }
                 }
+                
                 demoChat.style.display = 'block';
                 
                 // Adicionar classe show para animação
@@ -203,11 +228,17 @@
                 accessOptions.classList.remove('demo-left');
                 accessOptions.classList.remove('slide-left');
                 if (heroContent) heroContent.classList.remove('with-chat');
-                const cards = accessOptions.querySelectorAll('.access-card');
-                if (cards[1]) {
-                    cards[1].style.display = '';
+                
+                // Restaurar o card "Teste nossa IA"
+                const demoCard = document.getElementById('demoCard');
+                if (demoCard) {
+                    demoCard.style.display = '';
                 }
+                
                 heroButtons.style.display = 'flex';
+                
+                // Verificar se precisa centralizar novamente (se usuário estiver logado)
+                updateLoginCardVisibility();
                 
                 // Remover classes hidden
                 setTimeout(() => {
@@ -281,6 +312,48 @@
                 } catch (error) {
                     console.error('Erro ao parsear userInfo:', error);
                 }
+            }
+        }
+
+        // Função para verificar status de login e mostrar/ocultar card "Já tem conta?"
+        function updateLoginCardVisibility() {
+            const loginCard = document.getElementById('loginCard');
+            const accessOptions = document.getElementById('accessOptions');
+            if (!loginCard || !accessOptions) return;
+
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const loginTime = localStorage.getItem('loginTime');
+            
+            // Verificar se usuário está logado e sessão não expirou (24 horas)
+            let shouldHideCard = false;
+            
+            if (isLoggedIn === 'true' && loginTime) {
+                const currentTime = Date.now();
+                const timeDiff = currentTime - parseInt(loginTime);
+                // Verificar se sessão não expirou (24 horas)
+                if (timeDiff < 24 * 60 * 60 * 1000) {
+                    shouldHideCard = true;
+                } else {
+                    // Sessão expirada, limpar dados
+                    localStorage.removeItem('isLoggedIn');
+                    localStorage.removeItem('loginTime');
+                    localStorage.removeItem('userInfo');
+                    localStorage.removeItem('currentSession');
+                }
+            }
+
+            // Ocultar ou mostrar o card baseado no status de login
+            if (shouldHideCard) {
+                loginCard.style.display = 'none';
+                // Centralizar o card "Teste nossa IA" quando o card de login estiver oculto
+                // Mas apenas se não estiver em modo demo (para não interferir na animação)
+                if (!accessOptions.classList.contains('demo-left')) {
+                    accessOptions.classList.add('centered');
+                }
+            } else {
+                loginCard.style.display = '';
+                // Remover centralização quando o card de login estiver visível
+                accessOptions.classList.remove('centered');
             }
         }
 
@@ -362,10 +435,15 @@
         // Adicionar evento de Enter no input do chat gratuito quando o DOM carregar
         document.addEventListener('DOMContentLoaded', function() {
             setupChatEnterListener();
+            // Garantir que a visibilidade do card seja atualizada quando o DOM estiver pronto
+            updateLoginCardVisibility();
         });
 
         // Inicializar quando a página carregar
         initAuth();
+        
+        // Atualizar visibilidade do card de login (também chamado no DOMContentLoaded)
+        updateLoginCardVisibility();
 
         // Verificar se usuário está logado para mostrar botão de perfil
         function checkProfileButton() {
@@ -376,6 +454,14 @@
             }
         }
         checkProfileButton();
+        
+        // Listener para mudanças no localStorage (atualiza quando usuário faz login/logout em outra aba)
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'isLoggedIn' || e.key === 'loginTime' || e.key === 'userInfo') {
+                updateLoginCardVisibility();
+                checkProfileButton();
+            }
+        });
     </script>
 
     <!-- Modal de Perfil -->
@@ -573,6 +659,9 @@
             localStorage.removeItem('userInfo');
             localStorage.removeItem('currentSession');
             
+            // Atualizar visibilidade do card de login antes de redirecionar
+            updateLoginCardVisibility();
+            
             // Fechar modal e redirecionar
             closeProfileModal();
             window.location.href = '/login';
@@ -580,6 +669,13 @@
 
         // Verificar login ao carregar página e atualizar botão de perfil
         window.addEventListener('load', function() {
+            checkProfileButton();
+            updateLoginCardVisibility();
+        });
+        
+        // Atualizar visibilidade quando a página ganha foco (caso tenha feito login em outra aba)
+        window.addEventListener('focus', function() {
+            updateLoginCardVisibility();
             checkProfileButton();
         });
     </script>

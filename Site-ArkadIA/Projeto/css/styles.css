@@ -1932,6 +1932,15 @@ header.header-scrolled {
     justify-items: start; /* alinha card à esquerda */
 }
 
+/* Estado quando card de login está oculto: centralizar card "Teste nossa IA" */
+.access-options.centered {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    justify-items: center; /* centraliza o card */
+}
+
 .access-icon {
     width: 80px;
     height: 80px;

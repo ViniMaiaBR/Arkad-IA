@@ -1,0 +1,113 @@
+2. Política de Privacidade e Proteção de Dados – Arkad AI
+Última atualização: outubro de 2025
+1.
+Introdução
+A Arkad AI reconhece a importância da privacidade e da proteção de dados pessoais de seus usuários. Esta Política de Privacidade tem como objetivo informar de forma clara, transparente e segura como são coletados, utilizados, armazenados e protegidos os dados pessoais tratados pela plataforma, em conformidade com a Lei Geral de Proteção de Dados Pessoais – LGPD (Lei nº 13.709/2018).
+Ao acessar ou utilizar a Arkad AI, o usuário declara estar ciente e de acordo com as práticas aqui descritas.
+2.
+Controlador e Encarregado
+A Arkad AI atua como controladora dos dados pessoais, sendo responsável pelas decisões referentes ao tratamento desses dados.
+Para assuntos relacionados à proteção de dados, o usuário poderá entrar em contato com o Encarregado de Proteção de Dados (DPO) por meio do e-mail institucional indicado na plataforma.
+3.
+Dados Coletados
+A Arkad AI poderá coletar as seguintes categorias de dados, conforme a interação do usuário com a plataforma:
+a)
+Dados fornecidos pelo usuário:
+Nome completo ou razão social;
+CPF ou CNPJ;
+E-mail, telefone e endereço;
+Informações empresariais (setor, porte, metas e objetivos de negócio);
+Dados de pagamento (quando aplicável).
+b)
+Dados coletados automaticamente:
+Endereço IP, tipo e versão do navegador;
+Dados de localização aproximada;
+Cookies e identificadores de sessão;
+Registros de acesso e uso da plataforma.
+c)
+Dados de terceiros:
+Em alguns casos, a Arkad AI poderá utilizar APIs de mercado e bases públicas para complementar informações, sempre respeitando os princípios da LGPD.
+4.
+Finalidades do Tratamento
+Os dados pessoais são tratados com as seguintes finalidades:
+1.
+Permitir o cadastro, autenticação e uso da plataforma;
+2.
+Gerar análises, relatórios e recomendações personalizadas;
+3.
+Cumprir obrigações legais e regulatórias;
+4.
+Enviar comunicações institucionais, notificações e informações sobre serviços;
+5.
+Garantir a segurança da conta e prevenir fraudes;
+6.
+Melhorar a experiência do usuário e aprimorar funcionalidades;
+7.
+Viabilizar o atendimento e suporte técnico;
+8.
+Cumprir obrigações contratuais assumidas com o usuário.
+5.
+Bases Legais para o Tratamento
+O tratamento dos dados pela Arkad AI ocorre com fundamento nas hipóteses legais previstas na LGPD, especialmente:
+Consentimento do titular (art. 7º, I);
+Execução de contrato ou procedimentos preliminares (art. 7º, V);
+Cumprimento de obrigação legal ou regulatória (art. 7º, II);
+Legítimo interesse do controlador (art. 7º, IX), observando sempre o equilíbrio entre o interesse da Arkad AI e os direitos do titular.
+6.
+Compartilhamento de Dados
+A Arkad AI poderá compartilhar dados pessoais com:
+a) Prestadores de serviços que auxiliam na operação da plataforma (hospedagem, processamento, segurança e suporte);
+b) Autoridades públicas quando exigido por lei, ordem judicial ou determinação administrativa;
+c) Parceiros estratégicos mediante consentimento expresso do usuário;
+d) APIs de terceiros, exclusivamente para finalidades compatíveis com a execução dos serviços contratados.
+Todos os terceiros que tiverem acesso aos dados estão sujeitos a obrigações contratuais de confidencialidade e segurança.
+7.
+Armazenamento e Segurança dos Dados
+A Arkad AI adota medidas técnicas e administrativas rigorosas para garantir a integridade, confidencialidade e disponibilidade das informações, incluindo:
+Criptografia de dados em repouso e em trânsito;
+Controle de acesso baseado em função e autenticação multifator (2FA);
+Monitoramento contínuo e registros de atividades;
+Armazenamento em servidores com certificação ISSO/IEC 27001;
+Backups regulares e redundância geográfica.
+Os dados são armazenados pelo período necessário ao cumprimento das finalidades descritas, respeitando prazos legais e contratuais.
+8.
+Direitos do Titular dos Dados
+Nos termos da LGPD, o usuário, na condição de titular dos dados pessoais, possui os seguintes direitos:
+1.
+Confirmar a existência de tratamento;
+2.
+Acessar seus dados;
+3.
+Corrigir dados incompletos, inexatos ou desatualizados;
+4.
+Solicitar anonimização, bloqueio ou eliminação de dados desnecessários;
+5.
+Revogar o consentimento a qualquer momento;
+6.
+Solicitar a portabilidade dos dados;
+7.
+Obter informações sobre compartilhamentos realizados;
+8.
+Peticionar à Autoridade Nacional de Proteção de Dados (ANPD).
+As solicitações deverão ser feitas por meio dos canais oficiais da Arkad AI, respeitados os prazos e requisitos legais.
+9.
+Retenção e Eliminação dos Dados
+Os dados pessoais serão mantidos apenas pelo tempo necessário para atingir as finalidades previstas nesta Política ou para cumprimento de obrigações legais.
+Após o término do tratamento, os dados serão eliminados ou anonimizados, salvo quando o armazenamento for exigido por lei.
+10.
+Cookies e Tecnologias Semelhantes
+A Arkad AI utiliza cookies e tecnologias similares para reconhecer usuários, melhorar a navegação e personalizar a experiência.
+O usuário poderá gerenciar as preferências de cookies diretamente no navegador, ciente de que o bloqueio de determinados cookies poderá limitar funcionalidades da plataforma.
+(Ver também o documento “Política de Cookies Arkad AI”.)
+11.
+Transferência Internacional de Dados
+Caso seja necessária a transferência internacional de dados, a Arkad AI garantirá que o processo ocorra em conformidade com as normas da LGPD, utilizando provedores com níveis adequados de proteção e contratos específicos de garantia.
+12.
+Alterações desta Política
+A Arkad AI poderá atualizar esta Política a qualquer momento, visando aprimorar suas práticas de privacidade ou atender a requisitos legais.
+As alterações terão efeito a partir da data de sua publicação na plataforma.
+13.
+Disposições Finais
+Esta Política é regida pelas leis da República Federativa do Brasil, em especial pela Lei nº 13.709/2018 (LGPD) e pelo Marco Civil da Internet (Lei nº 12.965/2014).
+Fica eleito o foro da Comarca de Indaiatuba/SP para dirimir quaisquer controvérsias, com renúncia expressa a outro foro, por mais privilegiado que seja.
+Declaração de Ciência Ao utilizar a Arkad AI, o usuário declara estar ciente e de acordo com esta Política de Privacidade e com o tratamento de seus dados conforme descrito neste documento.

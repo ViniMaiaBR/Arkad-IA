@@ -261,6 +261,33 @@
             // Inicializar chat no backendStorage
             await initializeChat();
             
+            // Verificar se há prompt selecionado do processar-ia-pdf.html
+            const selectedPromptData = localStorage.getItem('selectedPrompt');
+            if (selectedPromptData) {
+                try {
+                    const promptData = JSON.parse(selectedPromptData);
+                    console.log('📝 Prompt selecionado detectado:', promptData.id);
+                    
+                    // Limpar localStorage
+                    localStorage.removeItem('selectedPrompt');
+                    
+                    // Enviar o prompt como mensagem do usuário
+                    const promptMessage = `Quero ajuda com: ${promptData.id === 'expansao' ? 'Expansão de Negócios' : promptData.id === 'automacao' ? 'Automação de Processos' : 'Estratégia de Marketing'}`;
+                    
+                    await addMessage(promptMessage, 'user');
+                    
+                    setTimeout(() => {
+                        // Enviar conteúdo do prompt para a IA
+                        processUserMessage(promptData.content);
+                    }, 1000);
+                    
+                    return; // Não processar query parameter
+                } catch (error) {
+                    console.error('Erro ao processar prompt selecionado:', error);
+                }
+            }
+            
+            // Verificar query parameter normal
             const urlParams = new URLSearchParams(window.location.search);
             const query = urlParams.get('query');
             if (query) {
@@ -878,5 +905,6 @@
 
     <script src="../js/header-scroll.js"></script>
     <script src="../js/neural-background.js"></script>
+    <script src="../js/mobile-menu.js"></script>
 </body>
 </html> 

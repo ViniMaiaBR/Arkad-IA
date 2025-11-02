@@ -50,10 +50,9 @@
     <div class="processor-container">
         <div class="processor-section">
             <h2><i class="fas fa-robot"></i> Processar Texto da IA e Gerar PDF</h2>
-            <p style="color: var(--light-text); margin-bottom: 30px;">
+            <p style="color: var(--light-text); margin-bottom: 15px;">
                 Cole o texto gerado pela IA e o sistema irá processar e gerar um PDF profissional baseado no template Documentacao/prompts_txt/ExemploRelatorio.txt.
             </p>
-
             <form id="aiProcessorForm">
                 <div class="form-grid">
                     <div class="form-group">
@@ -163,14 +162,38 @@ A projeção sugere retorno positivo em até 24 meses, com ganhos operacionais, 
 Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a automação de tarefas administrativas e integração total com o sistema de IA Arkad para maximizar o retorno sobre investimento.</textarea>
                 </div>
 
+                <div class="form-group full-width" style="margin-top: 20px;">
+                    <label style="display: block; margin-bottom: 12px; color: var(--text-color); font-weight: 600; font-size: 15px;">
+                        <i class="fas fa-file-contract"></i> Documentos Legais (opcionais)
+                    </label>
+                    <div class="legal-docs-container">
+                        <p style="color: var(--light-text); font-size: 13px; margin-bottom: 12px;">
+                            Selecione os documentos legais que deseja baixar junto com o relatório:
+                        </p>
+                        <div style="display: flex; flex-direction: column; gap: 5px;">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includePrivacy" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                <span><i class="fas fa-shield-alt" style="color: var(--primary-color); margin-right: 5px;"></i>Política de Privacidade e Proteção de Dados</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="includeDisclaimer" checked style="width: 18px; height: 18px; cursor: pointer;">
+                                <span><i class="fas fa-exclamation-triangle" style="color: var(--primary-color); margin-right: 5px;"></i>Aviso Legal (Disclaimer)</span>
+                            </label>
+                        </div>
+                        <p style="color: var(--light-text); font-size: 12px; margin-top: 12px; margin-bottom: 0; font-style: italic;">
+                            <i class="fas fa-info-circle"></i> Dica: Marque as opções para incluir os documentos legais junto com o relatório
+                        </p>
+                    </div>
+                </div>
+
                 <div class="processing-indicator" id="processingIndicator">
                     <i class="fas fa-spinner"></i>
-                    <p>Processando texto da IA e gerando PDF...</p>
+                    <p id="processingMessage">Processando texto da IA e gerando PDF...</p>
                 </div>
 
                 <button type="submit" class="btn-process" id="processBtn">
                     <i class="fas fa-file-pdf"></i>
-                    Processar IA e Gerar PDF
+                    Gerar Relatório em PDF
                 </button>
             </form>
 
@@ -289,27 +312,101 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
             }
         };
         
-        // Carregar prompts de arquivos .txt da pasta Prompts_Exemplos
+        // Prompts inline com fallback para arquivos
+        const promptsInline = {
+            expansao: `Vamos criar um plano estratégico completo para expansão do seu negócio com análise inteligente e relatório personalizado.
+
+🎯 PERGUNTAS INICIAIS:
+
+1️⃣ Qual é o objetivo principal da sua expansão?
+2️⃣ Qual seu setor de atuação atual?
+3️⃣ Qual o porte da sua empresa?
+4️⃣ Quantos funcionários você tem hoje?
+5️⃣ Qual sua estimativa de faturamento mensal?
+6️⃣ Você tem capital disponível para investimento?`,
+            
+            automacao: `Vamos criar um plano de automação de processos para otimizar suas operações e aumentar a eficiência.
+
+🎯 PERGUNTAS INICIAIS:
+
+1️⃣ Quais processos você deseja automatizar?
+2️⃣ Qual seu setor de atuação?
+3️⃣ Quantas pessoas trabalham nesses processos atualmente?
+4️⃣ Qual o tempo médio gasto nesses processos por dia?
+5️⃣ Você já utiliza alguma ferramenta de automação?
+6️⃣ Qual seu orçamento disponível?`,
+            
+            marketing: `Vamos criar uma estratégia de marketing completa para impulsionar seu negócio e atrair mais clientes.
+
+🎯 PERGUNTAS INICIAIS:
+
+1️⃣ Qual é seu público-alvo?
+2️⃣ Qual seu produto/serviço principal?
+3️⃣ Você já faz marketing digital?
+4️⃣ Qual seu orçamento mensal para marketing?
+5️⃣ Quais canais você já utiliza?
+6️⃣ Qual seu objetivo principal? (vendas, leads, branding)`
+        };
+
         const promptDefinitions = [
-            { id: 'expansao', title: 'Expansão de Negócios', file: '../Prompts_Exemplos/EXPANSÃO DE NEGÓCIOS.txt' },
-            { id: 'automacao', title: 'Automação de Processos', file: '../Prompts_Exemplos/AUTOMAÇÃO DE PROCESSOS.txt' },
-            { id: 'marketing', title: 'Estratégia de Marketing', file: '../Prompts_Exemplos/ESTRATÉGIA DE MARKETING.txt' }
+            { 
+                id: 'expansao', 
+                title: 'Expansão de Negócios', 
+                file: '../Prompts_Exemplos/EXPANSÃO DE NEGÓCIOS.txt',
+                fallback: promptsInline.expansao
+            },
+            { 
+                id: 'automacao', 
+                title: 'Automação de Processos', 
+                file: '../Prompts_Exemplos/AUTOMAÇÃO DE PROCESSOS.txt',
+                fallback: promptsInline.automacao
+            },
+            { 
+                id: 'marketing', 
+                title: 'Estratégia de Marketing', 
+                file: '../Prompts_Exemplos/ESTRATÉGIA DE MARKETING.txt',
+                fallback: promptsInline.marketing
+            }
         ];
 
         const promptsMap = {};
 
         async function loadPrompts() {
             const container = document.getElementById('promptsContainer');
-            if (!container) return;
+            if (!container) {
+                console.error('❌ Container promptsContainer não encontrado');
+                return;
+            }
+            
             container.innerHTML = '';
+            console.log('🔄 Carregando prompts...');
 
             for (const def of promptDefinitions) {
+                let promptText = '';
+                let loadMethod = '';
+                
                 try {
+                    // Tentar carregar do arquivo primeiro
                     const res = await fetch(def.file);
-                    if (!res.ok) throw new Error('Erro ao carregar ' + def.file);
-                    const text = await res.text();
-                    promptsMap[def.id] = text;
-                    const firstLine = (text.split(/\r?\n/)[0] || '').trim();
+                    if (res.ok) {
+                        promptText = await res.text();
+                        loadMethod = 'arquivo';
+                        console.log(`✅ Prompt "${def.title}" carregado do arquivo`);
+                    } else {
+                        throw new Error(`HTTP ${res.status}`);
+                    }
+                } catch (e) {
+                    // Usar fallback inline se o arquivo falhar
+                    console.warn(`⚠️ Não foi possível carregar arquivo ${def.file}: ${e.message}`);
+                    console.log(`📦 Usando fallback inline para "${def.title}"`);
+                    promptText = def.fallback;
+                    loadMethod = 'fallback';
+                }
+
+                // Se conseguiu carregar de alguma forma
+                if (promptText) {
+                    promptsMap[def.id] = promptText;
+                    const firstLine = (promptText.split(/\r?\n/)[0] || '').trim();
 
                     const card = document.createElement('div');
                     card.className = 'example-card';
@@ -322,23 +419,46 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
                         </div>
                     `;
                     container.appendChild(card);
-                } catch (e) {
+                } else {
+                    // Erro completo
+                    console.error(`❌ Falha ao carregar prompt "${def.title}"`);
                     const errorCard = document.createElement('div');
                     errorCard.className = 'example-card';
-                    errorCard.innerHTML = `<h4>${def.title}</h4><p style="color: var(--light-text);">Não foi possível carregar o prompt (${def.file}).</p>`;
+                    errorCard.innerHTML = `
+                        <h4>${def.title}</h4>
+                        <p style="color: #ff6b6b;">Não foi possível carregar este prompt.</p>
+                        <p style="color: var(--light-text); font-size: 12px;">Tente recarregar a página.</p>
+                    `;
                     container.appendChild(errorCard);
                 }
             }
 
+            console.log('✅ Prompts carregados:', Object.keys(promptsMap).length);
+
+            // Event listener para os botões
             container.addEventListener('click', async (ev) => {
                 const btn = ev.target.closest('button');
                 if (!btn) return;
+                
                 const id = btn.getAttribute('data-id');
                 const action = btn.getAttribute('data-action');
                 const content = promptsMap[id];
-                if (!content) return;
+                
+                console.log(`🔘 Botão clicado: ${id}, action: ${action}`);
+                
+                if (!content) {
+                    console.error('❌ Conteúdo do prompt não encontrado');
+                    return;
+                }
 
                 if (action === 'chat') {
+                    console.log('🔄 Redirecionando para chat...');
+                    // Salvar o prompt selecionado
+                    localStorage.setItem('selectedPrompt', JSON.stringify({
+                        id: id,
+                        content: content,
+                        timestamp: Date.now()
+                    }));
                     window.location.href = "/chat";
                 }
             });
@@ -380,6 +500,7 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
             
             const processBtn = document.getElementById('processBtn');
             const processingIndicator = document.getElementById('processingIndicator');
+            const processingMessage = document.getElementById('processingMessage');
             const statusMessage = document.getElementById('statusMessage');
             
             processBtn.disabled = true;
@@ -403,12 +524,52 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
                     company: company
                 };
 
-                // Gerar PDF
-                const result = await window.generateAIReportPDF(aiText, context);
+                // Verificar quais documentos legais foram selecionados
+                const includePrivacy = document.getElementById('includePrivacy').checked;
+                const includeDisclaimer = document.getElementById('includeDisclaimer').checked;
+                
+                // Gerar PDFs (relatório + documentos legais opcionais) com callback de progresso
+                const result = await window.aiTextProcessor.generateReportPDF(
+                    aiText, 
+                    context, 
+                    (message) => {
+                        processingMessage.textContent = message;
+                    },
+                    {
+                        includePrivacy: includePrivacy,
+                        includeDisclaimer: includeDisclaimer
+                    }
+                );
 
                 if (result.success) {
                     statusMessage.className = 'status-message status-success';
-                    statusMessage.innerHTML = `<i class="fas fa-check-circle"></i> ${result.message}`;
+                    let detailsHTML = '<div style="margin-top: 10px; font-size: 14px;">';
+                    
+                    if (result.details) {
+                        const totalGenerated = [
+                            result.details.report?.success,
+                            result.details.privacy?.success,
+                            result.details.disclaimer?.success
+                        ].filter(Boolean).length;
+                        
+                        detailsHTML += `<strong>PDF${totalGenerated > 1 ? 's' : ''} gerado${totalGenerated > 1 ? 's' : ''} com sucesso:</strong><br>`;
+                        if (result.details.report?.success) {
+                            detailsHTML += `✓ ${result.details.report.filename}<br>`;
+                        }
+                        if (result.details.privacy?.success) {
+                            detailsHTML += `✓ ${result.details.privacy.filename}<br>`;
+                        }
+                        if (result.details.disclaimer?.success) {
+                            detailsHTML += `✓ ${result.details.disclaimer.filename}<br>`;
+                        }
+                    }
+                    
+                    detailsHTML += '</div>';
+                    
+                    statusMessage.innerHTML = `
+                        <i class="fas fa-check-circle"></i> ${result.message}
+                        ${detailsHTML}
+                    `;
                 } else {
                     statusMessage.className = 'status-message status-error';
                     statusMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${result.message}`;
@@ -423,6 +584,7 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
             } finally {
                 processBtn.disabled = false;
                 processingIndicator.style.display = 'none';
+                processingMessage.textContent = 'Processando texto da IA e gerando PDFs...';
             }
         });
 
@@ -431,10 +593,36 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
             document.getElementById(id).addEventListener('input', updatePreview);
         });
 
+        // Atualizar contador de PDFs baseado nos checkboxes
+        function updatePdfCounter() {
+            const includePrivacy = document.getElementById('includePrivacy').checked;
+            const includeDisclaimer = document.getElementById('includeDisclaimer').checked;
+            const processBtn = document.getElementById('processBtn');
+            const processingMessage = document.getElementById('processingMessage');
+            
+            const totalPdfs = 1 + (includePrivacy ? 1 : 0) + (includeDisclaimer ? 1 : 0);
+            
+            if (totalPdfs === 1) {
+                processBtn.innerHTML = '<i class="fas fa-file-pdf"></i> Gerar Relatório em PDF';
+                processingMessage.textContent = 'Processando texto da IA e gerando PDF...';
+            } else {
+                processBtn.innerHTML = `<i class="fas fa-file-pdf"></i> Gerar PDFs (${totalPdfs} documento${totalPdfs > 1 ? 's' : ''})`;
+                processingMessage.textContent = `Processando texto da IA e gerando ${totalPdfs} PDFs...`;
+            }
+        }
+
+        // Adicionar listeners aos checkboxes
+        document.getElementById('includePrivacy').addEventListener('change', updatePdfCounter);
+        document.getElementById('includeDisclaimer').addEventListener('change', updatePdfCounter);
+        
+        // Inicializar contador
+        updatePdfCounter();
+
         // Pré-visualização inicial
         updatePreview();
         loadPrompts();
     </script>
     <script src="/js/header-scroll.js"></script>
+<script src="/js/mobile-menu.js"></script>
 </body>
 </html>

@@ -311,6 +311,13 @@ body.embed .preview-content::-webkit-scrollbar-thumb:hover {
     margin-top: 15px;
     font-weight: 600;
     display: none;
+    line-height: 1.6;
+}
+
+.status-message strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.05em;
 }
 
 .status-success {
@@ -395,6 +402,46 @@ body.embed .preview-content::-webkit-scrollbar-thumb:hover {
     to { transform: rotate(360deg); }
 }
 
+/* Estilo para checkboxes personalizados */
+input[type="checkbox"] {
+    accent-color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+input[type="checkbox"]:hover {
+    transform: scale(1.1);
+}
+
+/* Container dos documentos legais */
+.legal-docs-container {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.legal-docs-container:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 181, 184, 0.3);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: var(--text-color);
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.checkbox-label:hover {
+    background: rgba(0, 181, 184, 0.1);
+}
+
 /* Estilo para logo clicável */
 .logo {
     transition: all 0.3s ease;
@@ -439,5 +486,353 @@ body.embed .preview-content::-webkit-scrollbar-thumb:hover {
     max-width: 1200px;
     margin: 0 auto 0 auto;
     padding: 0 20px;
+}
+
+/* ================================================
+   RESPONSIVIDADE MOBILE - PROCESSAR PDF
+   ================================================ */
+
+@media (max-width: 992px) {
+    .processor-container {
+        margin-top: 80px;
+        padding: 20px 15px;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .examples-section {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .processor-container {
+        margin-top: 70px;
+        padding: 15px 10px;
+    }
+    
+    .processor-section {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+    }
+    
+    .processor-section h2 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        font-size: 0.9rem;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .form-group textarea {
+        min-height: 150px;
+    }
+    
+    .ai-text-area {
+        min-height: 350px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    .btn-process {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+        border-radius: 20px;
+    }
+    
+    .preview-content {
+        padding: 15px;
+        max-height: 400px;
+        font-size: 0.9rem;
+    }
+    
+    .back-wrapper {
+        padding: 0 10px;
+        margin: 80px 0 10px 0;
+    }
+    
+    .btn-back {
+        padding: 8px 14px;
+        font-size: 0.9rem;
+        border-radius: 18px;
+    }
+    
+    .prompts-wrapper {
+        padding: 0 10px;
+        margin: 15px 0 40px 0;
+    }
+    
+    .example-card {
+        padding: 15px;
+    }
+    
+    .example-card h4 {
+        font-size: 1rem;
+    }
+    
+    .example-card p {
+        font-size: 0.85rem;
+    }
+    
+    .preview-section h3 {
+        font-size: 1.1rem;
+    }
+    
+    .legal-docs-container {
+        padding: 12px;
+    }
+    
+    .checkbox-label {
+        font-size: 0.85rem;
+        padding: 6px;
+    }
+    
+    .checkbox-label span {
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 576px) {
+    .processor-container {
+        margin-top: 60px;
+        padding: 10px 8px;
+    }
+    
+    .processor-section {
+        padding: 15px 12px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+    }
+    
+    .processor-section h2 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+    
+    .form-group label {
+        font-size: 0.85rem;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 8px 10px;
+        font-size: 0.85rem;
+    }
+    
+    .form-group textarea {
+        min-height: 120px;
+    }
+    
+    .ai-text-area {
+        min-height: 300px;
+        padding: 12px;
+        margin-top: 12px;
+        border-radius: 8px;
+    }
+    
+    .btn-process {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 18px;
+        gap: 8px;
+    }
+    
+    .preview-content {
+        padding: 12px;
+        max-height: 350px;
+        font-size: 0.85rem;
+    }
+    
+    .back-wrapper {
+        padding: 0 8px;
+        margin: 70px 0 8px 0;
+    }
+    
+    .btn-back {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+        border-radius: 16px;
+        gap: 6px;
+    }
+    
+    .prompts-wrapper {
+        padding: 0 8px;
+        margin: 12px 0 30px 0;
+    }
+    
+    .prompts-container {
+        padding: 0 10px;
+    }
+    
+    .example-card {
+        padding: 12px;
+    }
+    
+    .example-card h4 {
+        font-size: 0.95rem;
+    }
+    
+    .example-card p {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+    }
+    
+    .example-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+    
+    .preview-section {
+        padding: 15px;
+        margin-top: 15px;
+    }
+    
+    .preview-section h3 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .status-message {
+        padding: 12px;
+        font-size: 0.85rem;
+    }
+    
+    .processing-indicator {
+        padding: 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .processor-container {
+        margin-top: 55px;
+        padding: 8px 5px;
+    }
+    
+    .processor-section {
+        padding: 12px 10px;
+    }
+    
+    .processor-section h2 {
+        font-size: 1.1rem;
+    }
+    
+    .form-group input,
+    .form-group textarea {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+    
+    .ai-text-area {
+        min-height: 250px;
+        padding: 10px;
+    }
+    
+    .btn-process {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .preview-content {
+        padding: 10px;
+        max-height: 300px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Ajustes para modo embed em mobile */
+@media (max-width: 768px) {
+    body.embed .preview-content > h1:first-child {
+        font-size: 18px;
+        padding-top: 15px;
+    }
+    
+    body.embed .preview-content > h1:first-child,
+    body.embed .preview-content > p:nth-of-type(1),
+    body.embed .preview-content > p:nth-of-type(2),
+    body.embed .preview-content > p:nth-of-type(3),
+    body.embed .preview-content > p:nth-of-type(4),
+    body.embed .preview-content > p:nth-of-type(5),
+    body.embed .preview-content > p:nth-of-type(6) {
+        padding: 12px 15px;
+        font-size: 0.9rem;
+    }
+    
+    body.embed .preview-content > h2,
+    body.embed .preview-content > h3,
+    body.embed .preview-content > h4,
+    body.embed .preview-content > p:not(:nth-of-type(-n+6)),
+    body.embed .preview-content > ul,
+    body.embed .preview-content > ol,
+    body.embed .preview-content > div:not(:first-child) {
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
+    
+    body.embed .preview-content table {
+        width: calc(100% - 30px);
+        margin: 12px 15px;
+        font-size: 0.85rem;
+    }
+    
+    body.embed .preview-content::-webkit-scrollbar {
+        width: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    body.embed .preview-content > h1:first-child {
+        font-size: 16px;
+        padding-top: 12px;
+    }
+    
+    body.embed .preview-content > h1:first-child,
+    body.embed .preview-content > p:nth-of-type(1),
+    body.embed .preview-content > p:nth-of-type(2),
+    body.embed .preview-content > p:nth-of-type(3),
+    body.embed .preview-content > p:nth-of-type(4),
+    body.embed .preview-content > p:nth-of-type(5),
+    body.embed .preview-content > p:nth-of-type(6) {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+    
+    body.embed .preview-content > h2,
+    body.embed .preview-content > h3,
+    body.embed .preview-content > h4,
+    body.embed .preview-content > p:not(:nth-of-type(-n+6)),
+    body.embed .preview-content > ul,
+    body.embed .preview-content > ol,
+    body.embed .preview-content > div:not(:first-child) {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        font-size: 0.85rem;
+    }
+    
+    body.embed .preview-content table {
+        width: calc(100% - 24px);
+        margin: 10px 12px;
+        font-size: 0.8rem;
+    }
+    
+    body.embed .preview-content table td,
+    body.embed .preview-content table th {
+        padding: 6px 8px;
+    }
 }
 

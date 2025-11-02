@@ -302,39 +302,127 @@ class AITextProcessor {
     }
 
     // Gerar PDF baseado no template Documentacao/prompts_txt/ExemploRelatorio.txt
-    async generateReportPDF(aiText, context = {}) {
+    async generateReportPDF(aiText, context = {}, progressCallback = null, options = {}) {
         try {
             const processedData = this.processAIText(aiText, context);
             const htmlContent = this.generateReportHTML(processedData);
             
+            const dateStr = new Date().toISOString().split('T')[0];
+            
+            // Opções padrão
+            const includePrivacy = options.includePrivacy !== undefined ? options.includePrivacy : false;
+            const includeDisclaimer = options.includeDisclaimer !== undefined ? options.includeDisclaimer : false;
+            
+            // Calcular total de PDFs a gerar
+            const totalPdfs = 1 + (includePrivacy ? 1 : 0) + (includeDisclaimer ? 1 : 0);
+            let currentPdf = 1;
+            
+            // 1. Gerar relatório principal (sempre)
+            if (progressCallback) progressCallback(`Gerando Relatório Principal... (${currentPdf}/${totalPdfs})`);
+            
             const result = await window.generateCustomPDF(htmlContent, {
-                filename: `Relatorio_Arkad_AI_${new Date().toISOString().split('T')[0]}.pdf`
+                filename: `Relatorio_Arkad_AI_${dateStr}.pdf`
             });
 
-            return result;
+            if (!result.success) {
+                throw new Error('Erro ao gerar relatório principal');
+            }
+
+            console.log('✓ Relatório principal gerado');
+            currentPdf++;
+
+            const details = {
+                report: result,
+                privacy: null,
+                disclaimer: null
+            };
+
+            // 2. Gerar PDF de Política de Privacidade (se selecionado)
+            if (includePrivacy) {
+                await this.delay(800);
+                
+                if (progressCallback) progressCallback(`Gerando Política de Privacidade... (${currentPdf}/${totalPdfs})`);
+                
+                console.log('Gerando PDF de Política de Privacidade...');
+                const privacyResult = await window.pdfGenerator.loadAndGenerateLegalPDF(
+                    '../../Documentacao/prompts_txt/PoliticaDePrivacidaEusodedados.txt',
+                    'Política de Privacidade e Proteção de Dados',
+                    `Politica_Privacidade_Arkad_AI_${dateStr}.pdf`
+                );
+
+                if (privacyResult.success) {
+                    console.log('✓ PDF de Política de Privacidade gerado');
+                }
+                
+                details.privacy = privacyResult;
+                currentPdf++;
+            }
+
+            // 3. Gerar PDF de Aviso Legal (se selecionado)
+            if (includeDisclaimer) {
+                await this.delay(800);
+                
+                if (progressCallback) progressCallback(`Gerando Aviso Legal... (${currentPdf}/${totalPdfs})`);
+                
+                console.log('Gerando PDF de Aviso Legal...');
+                const disclaimerResult = await window.pdfGenerator.loadAndGenerateLegalPDF(
+                    '../../Documentacao/prompts_txt/AvisoLegal.txt',
+                    'Aviso Legal (Disclaimer)',
+                    `Aviso_Legal_Arkad_AI_${dateStr}.pdf`
+                );
+
+                if (disclaimerResult.success) {
+                    console.log('✓ PDF de Aviso Legal gerado');
+                }
+                
+                details.disclaimer = disclaimerResult;
+            }
+
+            if (progressCallback) progressCallback('Finalizando...');
+
+            // Mensagem de sucesso dinâmica
+            let successMessage = 'Relatório gerado com sucesso!';
+            if (includePrivacy && includeDisclaimer) {
+                successMessage = 'Relatório e documentos legais gerados com sucesso!';
+            } else if (includePrivacy || includeDisclaimer) {
+                successMessage = 'Relatório e documento legal gerado com sucesso!';
+            }
+
+            // Retornar resultado consolidado
+            return {
+                success: true,
+                message: successMessage,
+                details: details
+            };
+
         } catch (error) {
             console.error('Erro ao gerar relatório PDF:', error);
             throw error;
         }
     }
 
+    // Função auxiliar para delay
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     // Gerar HTML do relatório baseado no template
     generateReportHTML(data) {
         return `
-            <div style="font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px;">
+            <div style="font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 10px;">
                 
                 <!-- Cabeçalho -->
-                <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px solid #00B5B8; padding-bottom: 20px;">
-                    <h1 style="color: #00B5B8; font-size: 28px; margin-bottom: 10px; font-weight: 700;">${data.header.title}</h1>
-                    <h2 style="color: #333; font-size: 20px; margin-bottom: 20px; font-weight: 600;">${data.header.subtitle}</h2>
+                <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #00B5B8; padding-bottom: 15px;">
+                    <h1 style="color: #00B5B8; font-size: 28px; margin-bottom: 8px; margin-top: 0; font-weight: 700;">${data.header.title}</h1>
+                    <h2 style="color: #333; font-size: 20px; margin-bottom: 15px; margin-top: 0; font-weight: 600;">${data.header.subtitle}</h2>
                     
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px;">
-                        <div><strong>Cliente:</strong> ${data.header.client}</div>
-                        <div><strong>Data:</strong> ${data.header.date}</div>
+                    <div style="margin-bottom: 8px; font-size: 14px; text-align: left;">
+                        <p style="margin: 4px 0;"><strong>Cliente:</strong> ${data.header.client}</p>
+                        <p style="margin: 4px 0;"><strong>Empresa:</strong> ${data.header.company}</p>
                     </div>
-                    <div style="display: flex; justify-content: space-between; font-size: 14px;">
-                        <div><strong>Empresa:</strong> ${data.header.company}</div>
-                        <div><strong>Consultora:</strong> ${data.header.consultant}</div>
+                    <div style="margin-top: 8px; font-size: 14px; text-align: left;">
+                        <p style="margin: 4px 0;"><strong>Data:</strong> ${data.header.date}</p>
+                        <p style="margin: 4px 0;"><strong>Consultora de IA:</strong> ${data.header.consultant}</p>
                     </div>
                 </div>
 

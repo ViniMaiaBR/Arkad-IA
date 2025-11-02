@@ -4,7 +4,7 @@
 class PDFGenerator {
     constructor() {
         this.defaultConfig = {
-            margin: [0.5, 0.5, 0.5, 0.5],
+            margin: [0.2, 0.3, 0.2, 0.3],
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
                 scale: 2,
@@ -333,6 +333,137 @@ class PDFGenerator {
                 </div>
             </div>
         `;
+    }
+
+    // Gerar PDF de documento legal (Política de Privacidade, Aviso Legal, etc)
+    async generateLegalDocumentPDF(title, content, filename) {
+        try {
+            const config = { ...this.defaultConfig };
+            config.filename = filename;
+
+            const element = document.createElement('div');
+            element.style.cssText = `
+                padding: 15px 20px;
+                font-family: 'Inter', Arial, sans-serif;
+                line-height: 1.7;
+                color: #333;
+                max-width: 800px;
+                margin: 0 auto;
+            `;
+
+            const currentDate = new Date().toLocaleDateString('pt-BR');
+            
+            element.innerHTML = `
+                <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #00B5B8; padding-bottom: 15px;">
+                    <h1 style="color: #00B5B8; font-size: 26px; margin: 0 0 8px 0; font-weight: 700;">ARKAD AI</h1>
+                    <h2 style="color: #333; font-size: 20px; margin: 0 0 8px 0; font-weight: 600;">${title}</h2>
+                    <p style="color: #666; font-size: 12px; margin: 0;">Documento gerado em ${currentDate}</p>
+                </div>
+
+                <div style="text-align: justify; font-size: 13px; line-height: 1.6;">
+                    ${this.formatLegalContent(content)}
+                </div>
+
+                <div style="margin-top: 30px; padding-top: 15px; border-top: 2px solid #e9ecef; text-align: center;">
+                    <p style="color: #666; font-size: 11px; margin: 5px 0;">Arkad.ia Inteligência Artificial</p>
+                    <p style="color: #666; font-size: 11px; margin: 5px 0;">contato@arkad.ai | Santo André – SP</p>
+                </div>
+            `;
+
+            return await html2pdf().set(config).from(element).save().then(() => {
+                return {
+                    success: true,
+                    message: `PDF gerado: ${filename}`,
+                    filename: filename
+                };
+            });
+
+        } catch (error) {
+            console.error('Erro ao gerar PDF legal:', error);
+            return {
+                success: false,
+                message: 'Erro ao gerar documento legal',
+                error: error
+            };
+        }
+    }
+
+    // Formatar conteúdo legal para HTML
+    formatLegalContent(content) {
+        // Converter quebras de linha em parágrafos
+        const lines = content.split('\n');
+        let html = '';
+        let inList = false;
+
+        for (let line of lines) {
+            line = line.trim();
+            
+            if (!line) {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+                continue;
+            }
+
+            // Identificar títulos (linhas que começam com números seguidos de ponto)
+            if (/^\d+\.\s/.test(line)) {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+                html += `<h3 style="color: #00B5B8; font-size: 15px; margin: 18px 0 10px 0; font-weight: 600;">${line}</h3>`;
+            }
+            // Identificar sub-items (a), b), c), etc)
+            else if (/^[a-z]\)\s/.test(line)) {
+                if (!inList) {
+                    html += '<ul style="margin: 8px 0; padding-left: 25px;">';
+                    inList = true;
+                }
+                html += `<li style="margin: 5px 0;">${line.substring(3)}</li>`;
+            }
+            // Identificar sub-numeração (1.1, 1.2, etc)
+            else if (/^\d+\.\d+\.?\s/.test(line)) {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+                html += `<h4 style="color: #333; font-size: 14px; margin: 12px 0 8px 0; font-weight: 600;">${line}</h4>`;
+            }
+            // Linha normal
+            else {
+                if (inList) {
+                    html += '</ul>';
+                    inList = false;
+                }
+                html += `<p style="margin: 8px 0; text-align: justify;">${line}</p>`;
+            }
+        }
+
+        if (inList) {
+            html += '</ul>';
+        }
+
+        return html;
+    }
+
+    // Carregar e gerar PDF de arquivo de texto
+    async loadAndGenerateLegalPDF(filepath, title, filename) {
+        try {
+            const response = await fetch(filepath);
+            if (!response.ok) {
+                throw new Error(`Não foi possível carregar ${filepath}`);
+            }
+            const content = await response.text();
+            return await this.generateLegalDocumentPDF(title, content, filename);
+        } catch (error) {
+            console.error(`Erro ao carregar documento ${filepath}:`, error);
+            return {
+                success: false,
+                message: `Erro ao carregar documento: ${title}`,
+                error: error
+            };
+        }
     }
 }
 

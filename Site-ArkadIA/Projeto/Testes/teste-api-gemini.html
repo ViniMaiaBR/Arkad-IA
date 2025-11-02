@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de API Gemini - ARKAD AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #00b5b8;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .status-box {
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .status-loading {
+            background: rgba(255, 193, 7, 0.2);
+            border: 2px solid #ffc107;
+            color: #ffc107;
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid #4caf50;
+            color: #4caf50;
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 2px solid #f44336;
+            color: #f44336;
+        }
+
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+        }
+
+        .test-section h2 {
+            color: #00b5b8;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .test-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid rgba(0, 181, 184, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .test-button {
+            background: linear-gradient(135deg, #00b5b8, #00a8a8);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 181, 184, 0.4);
+        }
+
+        .test-button:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .response-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 181, 184, 0.1);
+            border-left: 4px solid #00b5b8;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .info-box {
+            background: rgba(33, 150, 243, 0.2);
+            border: 2px solid #2196f3;
+            color: #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .steps {
+            list-style: none;
+            counter-reset: steps;
+        }
+
+        .steps li {
+            counter-increment: steps;
+            padding: 10px 0 10px 40px;
+            position: relative;
+        }
+
+        .steps li::before {
+            content: counter(steps);
+            position: absolute;
+            left: 0;
+            top: 10px;
+            background: #00b5b8;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #00b5b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 Teste de Configuração da API Gemini</h1>
+
+        <div id="statusBox" class="status-box status-loading">
+            ⏳ Verificando configuração...
+        </div>
+
+        <div class="info-box">
+            <strong>📋 Como configurar:</strong>
+            <ol class="steps">
+                <li>Obtenha sua API key em: <a href="https://makersuite.google.com/app/apikey" target="_blank" style="color: #00b5b8;">makersuite.google.com/app/apikey</a></li>
+                <li>Abra o arquivo <code>js/config.js</code></li>
+                <li>Substitua <code>SUA_API_KEY_AQUI</code> pela sua API key</li>
+                <li>Salve o arquivo e recarregue esta página</li>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 Teste Rápido</h2>
+            <input 
+                type="text" 
+                id="testInput" 
+                class="test-input" 
+                placeholder="Digite uma pergunta para testar..."
+                value="Olá! Você consegue me ouvir?"
+            >
+            <button id="testButton" class="test-button" onclick="testAPI()">
+                Enviar Teste
+            </button>
+            <div id="responseBox" style="display: none;"></div>
+        </div>
+
+        <div class="test-section">
+            <h2>📊 Informações do Sistema</h2>
+            <div id="systemInfo"></div>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/gemini-client.js"></script>
+
+    <script>
+        let statusBox = document.getElementById('statusBox');
+        let testButton = document.getElementById('testButton');
+        let responseBox = document.getElementById('responseBox');
+        let systemInfo = document.getElementById('systemInfo');
+
+        async function checkConfiguration() {
+            try {
+                // Verificar se config está carregado
+                if (!window.APP_CONFIG) {
+                    throw new Error('Arquivo config.js não carregado');
+                }
+
+                // Verificar se API key está configurada
+                const apiKey = window.APP_CONFIG.api?.geminiApiKey;
+                
+                if (!apiKey || apiKey === 'SUA_API_KEY_AQUI') {
+                    statusBox.className = 'status-box status-error';
+                    statusBox.innerHTML = '❌ <strong>API Key não configurada</strong><br><br>Configure sua API key em <code>js/config.js</code> seguindo as instruções acima.';
+                    testButton.disabled = true;
+                    return false;
+                }
+
+                // Inicializar cliente Gemini
+                const client = new GeminiClient();
+                const initialized = await client.initialize();
+
+                if (initialized) {
+                    statusBox.className = 'status-box status-success';
+                    statusBox.innerHTML = '✅ <strong>API configurada com sucesso!</strong><br><br>Você pode testar o chat agora.';
+                    testButton.disabled = false;
+                    
+                    // Mostrar informações do sistema
+                    systemInfo.innerHTML = `
+                        <p><strong>API Key:</strong> ${apiKey.substring(0, 20)}...${apiKey.substring(apiKey.length - 5)}</p>
+                        <p><strong>Modelo:</strong> ${window.APP_CONFIG.api.geminiModel}</p>
+                        <p><strong>Capacidades:</strong> Áudio, Imagens, Vídeo, Texto, PDF</p>
+                        <p><strong>Limite de entrada:</strong> 1.048.576 tokens</p>
+                        <p><strong>Limite de saída:</strong> 65.536 tokens</p>
+                        <p><strong>Status:</strong> <span style="color: #4caf50;">Conectado</span></p>
+                    `;
+                    
+                    return true;
+                } else {
+                    throw new Error('Falha ao inicializar cliente');
+                }
+            } catch (error) {
+                statusBox.className = 'status-box status-error';
+                statusBox.innerHTML = `❌ <strong>Erro na configuração</strong><br><br>${error.message}`;
+                testButton.disabled = true;
+                return false;
+            }
+        }
+
+        async function testAPI() {
+            const input = document.getElementById('testInput');
+            const message = input.value.trim();
+
+            if (!message) {
+                alert('Por favor, digite uma mensagem para testar');
+                return;
+            }
+
+            try {
+                testButton.disabled = true;
+                testButton.textContent = 'Enviando...';
+                responseBox.style.display = 'none';
+
+                const client = new GeminiClient();
+                await client.initialize();
+
+                const response = await client.generateContent(message);
+
+                if (response) {
+                    responseBox.className = 'response-box';
+                    responseBox.innerHTML = `<strong>🤖 Resposta da IA:</strong><br><br>${response}`;
+                    responseBox.style.display = 'block';
+                    
+                    statusBox.className = 'status-box status-success';
+                    statusBox.innerHTML = '✅ <strong>Teste concluído com sucesso!</strong><br><br>A API está funcionando perfeitamente.';
+                } else {
+                    throw new Error('Resposta vazia da API');
+                }
+            } catch (error) {
+                responseBox.className = 'response-box';
+                responseBox.style.background = 'rgba(244, 67, 54, 0.2)';
+                responseBox.style.borderColor = '#f44336';
+                responseBox.innerHTML = `<strong>❌ Erro:</strong><br><br>${error.message}`;
+                responseBox.style.display = 'block';
+                
+                statusBox.className = 'status-box status-error';
+                statusBox.innerHTML = '❌ <strong>Erro no teste</strong><br><br>Verifique o console do navegador (F12) para mais detalhes.';
+            } finally {
+                testButton.disabled = false;
+                testButton.textContent = 'Enviar Teste';
+            }
+        }
+
+        // Verificar configuração ao carregar página
+        window.onload = () => {
+            checkConfiguration();
+        };
+
+        // Permitir enviar com Enter
+        document.getElementById('testInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !testButton.disabled) {
+                testAPI();
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Simples - API Gemini</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        .container {
+            background: #16213e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        h1 {
+            color: #00b5b8;
+            text-align: center;
+        }
+        .test-box {
+            margin: 20px 0;
+            padding: 20px;
+            background: #0f3460;
+            border-radius: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #00b5b8;
+            border-radius: 8px;
+            background: #1a1a2e;
+            color: #fff;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #00b5b8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #00a8a8;
+            transform: translateY(-2px);
+        }
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0, 181, 184, 0.1);
+            border-left: 4px solid #00b5b8;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            border-color: #4caf50;
+            color: #4caf50;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: #f44336;
+            color: #f44336;
+        }
+        .info {
+            padding: 15px;
+            background: rgba(33, 150, 243, 0.2);
+            border-left: 4px solid #2196f3;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste Simples da API Gemini</h1>
+        
+        <div class="info">
+            <strong>📌 Configuração:</strong><br>
+            Modelo: gemini-2.5-pro<br>
+            Status: <span id="status">Verificando...</span>
+        </div>
+
+        <div class="test-box">
+            <h3>💬 Teste Rápido</h3>
+            <input 
+                type="text" 
+                id="question" 
+                placeholder="Digite sua pergunta..."
+                value="Olá! Você está funcionando?"
+            >
+            <button id="testBtn" onclick="testarAPI()">Testar Agora</button>
+        </div>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        // Configuração embutida para facilitar teste
+        const API_KEY = 'AIzaSyBQSSKogML5hGRhhs72q_uj9p0eVbytaEk';
+        const MODEL = 'gemini-2.5-pro';
+        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
+
+        // Verificar status ao carregar
+        window.onload = function() {
+            const statusEl = document.getElementById('status');
+            if (API_KEY && API_KEY !== 'SUA_API_KEY_AQUI') {
+                statusEl.innerHTML = '<span style="color: #4caf50;">✅ Configurado</span>';
+            } else {
+                statusEl.innerHTML = '<span style="color: #f44336;">❌ Não configurado</span>';
+                document.getElementById('testBtn').disabled = true;
+            }
+        };
+
+        async function testarAPI() {
+            const question = document.getElementById('question').value.trim();
+            const resultDiv = document.getElementById('result');
+            const btn = document.getElementById('testBtn');
+
+            if (!question) {
+                alert('Digite uma pergunta!');
+                return;
+            }
+
+            // Desabilitar botão e mostrar loading
+            btn.disabled = true;
+            btn.textContent = '⏳ Enviando...';
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultDiv.innerHTML = '⏳ Aguarde... Processando sua pergunta...';
+
+            try {
+                // Fazer requisição para API do Gemini
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: question
+                            }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || `Erro HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // Extrair resposta
+                if (data.candidates && data.candidates[0] && 
+                    data.candidates[0].content && 
+                    data.candidates[0].content.parts && 
+                    data.candidates[0].content.parts[0]) {
+                    
+                    const answer = data.candidates[0].content.parts[0].text;
+                    
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <strong>✅ Sucesso! A API está funcionando!</strong><br><br>
+                        <strong>Sua pergunta:</strong><br>
+                        ${question}<br><br>
+                        <strong>🤖 Resposta da IA:</strong><br>
+                        ${answer}
+                    `;
+                } else {
+                    throw new Error('Formato de resposta inesperado');
+                }
+
+            } catch (error) {
+                console.error('Erro:', error);
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <strong>❌ Erro ao testar a API</strong><br><br>
+                    <strong>Detalhes:</strong> ${error.message}<br><br>
+                    <strong>Possíveis causas:</strong><br>
+                    • API key inválida ou expirada<br>
+                    • Limite de requisições atingido<br>
+                    • Problema de conexão com a internet<br>
+                    • Modelo não disponível<br><br>
+                    <strong>Solução:</strong><br>
+                    • Verifique sua API key em: https://makersuite.google.com/app/apikey<br>
+                    • Aguarde alguns minutos se atingiu o limite<br>
+                    • Verifique o console (F12) para mais detalhes
+                `;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Testar Novamente';
+            }
+        }
+
+        // Permitir Enter para enviar
+        document.getElementById('question').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !document.getElementById('testBtn').disabled) {
+                testarAPI();
+            }
+        });
+    </script>
+</body>
+</html>
+

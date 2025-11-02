@@ -17,9 +17,26 @@ class ChatGeminiIntegration {
         if (this.initialized) return true;
 
         try {
+            console.log('🔄 Iniciando Chat Gemini Integration...');
+            
+            // Aguardar geminiClient estar disponível
+            let attempts = 0;
+            while (!window.geminiClient && attempts < 20) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+                attempts++;
+            }
+            
             // Inicializar cliente Gemini
             this.geminiClient = window.geminiClient || new GeminiClient();
-            await this.geminiClient.initialize();
+            console.log('🔄 Inicializando Gemini Client...');
+            
+            const clientInitialized = await this.geminiClient.initialize();
+            
+            if (!clientInitialized) {
+                console.error('❌ Gemini Client não pôde ser inicializado');
+                this.initialized = false;
+                return false;
+            }
 
             // Carregar prompt do sistema
             await this.loadSystemPrompt();
@@ -33,6 +50,7 @@ class ChatGeminiIntegration {
             return true;
         } catch (error) {
             console.error('❌ Erro ao inicializar Chat Gemini:', error);
+            this.initialized = false;
             return false;
         }
     }
@@ -216,6 +234,24 @@ Agora, responda ao usuário de forma profissional, seguindo todas estas diretriz
             };
         }
 
+        // Verificar se cliente Gemini está inicializado
+        if (!this.geminiClient || !this.geminiClient.initialized) {
+            console.error('❌ Gemini Client não inicializado');
+            return {
+                success: false,
+                message: '⚠️ **Configuração Necessária**\n\n' +
+                        'A API do Google Gemini não está configurada.\n\n' +
+                        '**Para configurar:**\n' +
+                        '1. Obtenha sua API key gratuita em: https://makersuite.google.com/app/apikey\n' +
+                        '2. Abra o arquivo `Site-ArkadIA/Projeto/js/config.js`\n' +
+                        '3. Substitua `SUA_API_KEY_AQUI` pela sua API key\n' +
+                        '4. Recarregue a página\n\n' +
+                        '**Importante:** A API do Google Gemini é gratuita e oferece 15 requisições por minuto.',
+                error: 'API key não configurada',
+                isPro: true
+            };
+        }
+
         try {
             // Adicionar mensagem do usuário ao histórico
             this.conversationHistory.push({
@@ -261,9 +297,28 @@ Agora, responda ao usuário de forma profissional, seguindo todas estas diretriz
 
         } catch (error) {
             console.error('❌ Erro ao enviar mensagem:', error);
+            
+            // Mensagem de erro mais detalhada
+            let errorMessage = '❌ Desculpe, ocorreu um erro ao processar sua mensagem.\n\n';
+            
+            if (error.message.includes('API key')) {
+                errorMessage += '**Problema:** API key inválida ou não configurada.\n\n' +
+                               '**Solução:** Verifique se a API key está correta em `js/config.js`\n' +
+                               'Obtenha uma nova em: https://makersuite.google.com/app/apikey';
+            } else if (error.message.includes('quota') || error.message.includes('limit')) {
+                errorMessage += '**Problema:** Limite de requisições atingido.\n\n' +
+                               '**Solução:** Aguarde alguns minutos antes de tentar novamente.';
+            } else if (error.message.includes('network') || error.message.includes('fetch')) {
+                errorMessage += '**Problema:** Erro de conexão.\n\n' +
+                               '**Solução:** Verifique sua conexão com a internet.';
+            } else {
+                errorMessage += `**Detalhes:** ${error.message}\n\n` +
+                               'Por favor, tente novamente ou entre em contato com o suporte.';
+            }
+            
             return {
                 success: false,
-                message: '❌ Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente.',
+                message: errorMessage,
                 error: error.message,
                 isPro: true
             };

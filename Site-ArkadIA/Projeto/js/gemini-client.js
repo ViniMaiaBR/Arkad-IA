@@ -8,24 +8,58 @@ class GeminiClient {
         this.initialized = false;
     }
 
-    // Inicializa o cliente buscando a API key do servidor
+    // Inicializa o cliente buscando a API key do config local
     async initialize() {
         if (this.initialized) return true;
         
         try {
-            const response = await fetch('/api/config');
-            const config = await response.json();
-            this.apiKey = config.geminiApiKey;
-            this.initialized = true;
-            return true;
+            // Aguardar APP_CONFIG estar disponível (mais tempo de espera)
+            let attempts = 0;
+            while (!window.APP_CONFIG && attempts < 30) {
+                await new Promise(resolve => setTimeout(resolve, 200));
+                attempts++;
+            }
+            
+            if (!window.APP_CONFIG) {
+                console.error('❌ Configuração APP_CONFIG não carregada após 6 segundos');
+                console.error('❌ Verifique se o arquivo config.js está sendo carregado corretamente');
+                this.initialized = false;
+                return false;
+            }
+            
+            if (window.APP_CONFIG.api && window.APP_CONFIG.api.geminiApiKey) {
+                this.apiKey = window.APP_CONFIG.api.geminiApiKey;
+                
+                console.log('🔍 API Key encontrada:', this.apiKey.substring(0, 20) + '...');
+                
+                // Verificar se API key foi configurada
+                if (this.apiKey === 'SUA_API_KEY_AQUI' || !this.apiKey || this.apiKey.length < 20) {
+                    console.warn('⚠️ API Key do Gemini não configurada ou inválida');
+                    console.warn('📖 Configure em js/config.js');
+                    console.warn('📖 Obtenha sua API key em: https://makersuite.google.com/app/apikey');
+                    this.initialized = false;
+                    return false;
+                }
+                
+                this.initialized = true;
+                console.log('✅ Gemini Client inicializado com sucesso');
+                console.log('📊 Modelo:', window.APP_CONFIG.api.geminiModel || 'gemini-2.5-pro');
+                return true;
+            } else {
+                console.error('❌ APP_CONFIG.api.geminiApiKey não encontrado');
+                console.error('❌ Estrutura do APP_CONFIG:', window.APP_CONFIG);
+                this.initialized = false;
+                return false;
+            }
         } catch (error) {
-            console.error('Erro ao inicializar GeminiClient:', error);
+            console.error('❌ Erro ao inicializar GeminiClient:', error);
+            this.initialized = false;
             return false;
         }
     }
 
     // Gera conteúdo usando o modelo Gemini
-    async generateContent(prompt, model = 'gemini-1.5-flash') {
+    async generateContent(prompt, model = 'gemini-2.5-pro') {
         if (!this.initialized) {
             await this.initialize();
         }
@@ -65,7 +99,7 @@ class GeminiClient {
     }
 
     // Gera conteúdo com streaming (para respostas longas)
-    async *generateContentStream(prompt, model = 'gemini-1.5-flash') {
+    async *generateContentStream(prompt, model = 'gemini-2.5-pro') {
         if (!this.initialized) {
             await this.initialize();
         }
@@ -141,7 +175,7 @@ class GeminiClient {
     }
 
     // Chat com histórico de conversas
-    async chat(messages, model = 'gemini-1.5-flash') {
+    async chat(messages, model = 'gemini-2.5-pro') {
         if (!this.initialized) {
             await this.initialize();
         }

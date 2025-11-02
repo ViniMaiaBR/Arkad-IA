@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico - Sistema ARKAD AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #0f0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #00ff00;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        .section {
+            background: #111;
+            border: 1px solid #00ff00;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .section h2 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .test {
+            padding: 10px;
+            margin: 10px 0;
+            background: #0a0a0a;
+            border-left: 3px solid #666;
+        }
+        .test.success {
+            border-left-color: #00ff00;
+            color: #00ff00;
+        }
+        .test.error {
+            border-left-color: #ff0000;
+            color: #ff0000;
+        }
+        .test.warning {
+            border-left-color: #ffff00;
+            color: #ffff00;
+        }
+        .info {
+            color: #888;
+            font-size: 12px;
+            margin-left: 20px;
+        }
+        code {
+            background: #222;
+            padding: 2px 6px;
+            color: #ff00ff;
+        }
+        .button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        .button:hover {
+            background: #00cc00;
+        }
+        pre {
+            background: #000;
+            padding: 10px;
+            overflow-x: auto;
+            color: #0f0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 DIAGNÓSTICO DO SISTEMA ARKAD AI</h1>
+
+        <div class="section">
+            <h2>📋 Informações do Navegador</h2>
+            <div id="browserInfo"></div>
+        </div>
+
+        <div class="section">
+            <h2>📦 Verificação de Arquivos</h2>
+            <div id="filesCheck"></div>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ Configuração</h2>
+            <div id="configCheck"></div>
+        </div>
+
+        <div class="section">
+            <h2>🔌 API Gemini</h2>
+            <div id="apiCheck"></div>
+        </div>
+
+        <div class="section">
+            <h2>🧪 Teste Rápido</h2>
+            <button class="button" onclick="runQuickTest()">Executar Teste</button>
+            <button class="button" onclick="location.reload()">Recarregar Diagnóstico</button>
+            <button class="button" onclick="window.open('../Index/chat.html')">Abrir Chat</button>
+            <div id="quickTest"></div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Console Logs</h2>
+            <pre id="consoleLogs">Aguardando logs...</pre>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/gemini-client.js"></script>
+
+    <script>
+        let logs = [];
+
+        // Capturar console.log
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        console.log = function(...args) {
+            logs.push('[LOG] ' + args.join(' '));
+            updateConsoleLogs();
+            originalLog.apply(console, args);
+        };
+
+        console.error = function(...args) {
+            logs.push('[ERROR] ' + args.join(' '));
+            updateConsoleLogs();
+            originalError.apply(console, args);
+        };
+
+        console.warn = function(...args) {
+            logs.push('[WARN] ' + args.join(' '));
+            updateConsoleLogs();
+            originalWarn.apply(console, args);
+        };
+
+        function updateConsoleLogs() {
+            document.getElementById('consoleLogs').textContent = logs.join('\n');
+        }
+
+        function addTest(containerId, text, status, info = '') {
+            const container = document.getElementById(containerId);
+            const test = document.createElement('div');
+            test.className = `test ${status}`;
+            test.innerHTML = `
+                <div>${status === 'success' ? '✅' : status === 'error' ? '❌' : '⚠️'} ${text}</div>
+                ${info ? `<div class="info">${info}</div>` : ''}
+            `;
+            container.appendChild(test);
+        }
+
+        // 1. Informações do Navegador
+        function checkBrowser() {
+            addTest('browserInfo', 'Navegador: ' + navigator.userAgent, 'success');
+            addTest('browserInfo', 'URL: ' + window.location.href, 'success');
+            addTest('browserInfo', 'Protocolo: ' + window.location.protocol, 
+                window.location.protocol === 'file:' ? 'warning' : 'success',
+                window.location.protocol === 'file:' ? 'Abrindo direto do sistema de arquivos' : 'Servidor web'
+            );
+        }
+
+        // 2. Verificação de Arquivos
+        function checkFiles() {
+            // config.js
+            if (typeof APP_CONFIG !== 'undefined') {
+                addTest('filesCheck', 'config.js carregado', 'success');
+            } else {
+                addTest('filesCheck', 'config.js NÃO carregado', 'error', 'Arquivo não encontrado ou erro no carregamento');
+            }
+
+            // gemini-client.js
+            if (typeof GeminiClient !== 'undefined') {
+                addTest('filesCheck', 'gemini-client.js carregado', 'success');
+            } else {
+                addTest('filesCheck', 'gemini-client.js NÃO carregado', 'error');
+            }
+
+            // Verificar window.geminiClient
+            if (typeof window.geminiClient !== 'undefined') {
+                addTest('filesCheck', 'geminiClient instance criada', 'success');
+            } else {
+                addTest('filesCheck', 'geminiClient instance NÃO criada', 'warning', 'Será criada quando necessário');
+            }
+        }
+
+        // 3. Verificação de Configuração
+        function checkConfig() {
+            if (typeof APP_CONFIG === 'undefined') {
+                addTest('configCheck', 'APP_CONFIG não encontrado', 'error', 'config.js não carregou corretamente');
+                return;
+            }
+
+            addTest('configCheck', 'APP_CONFIG encontrado', 'success');
+
+            if (APP_CONFIG.api) {
+                addTest('configCheck', 'APP_CONFIG.api existe', 'success');
+                
+                if (APP_CONFIG.api.geminiApiKey) {
+                    const key = APP_CONFIG.api.geminiApiKey;
+                    if (key === 'SUA_API_KEY_AQUI') {
+                        addTest('configCheck', 'API Key NÃO configurada', 'error', 'Substitua SUA_API_KEY_AQUI pela sua chave real');
+                    } else if (key.length < 20) {
+                        addTest('configCheck', 'API Key inválida (muito curta)', 'error', 'Chave: ' + key);
+                    } else {
+                        addTest('configCheck', 'API Key configurada: ' + key.substring(0, 20) + '...', 'success');
+                    }
+                } else {
+                    addTest('configCheck', 'geminiApiKey não encontrado', 'error');
+                }
+
+                if (APP_CONFIG.api.geminiModel) {
+                    addTest('configCheck', 'Modelo: ' + APP_CONFIG.api.geminiModel, 'success');
+                } else {
+                    addTest('configCheck', 'Modelo não configurado', 'warning');
+                }
+            } else {
+                addTest('configCheck', 'APP_CONFIG.api NÃO existe', 'error');
+            }
+        }
+
+        // 4. Teste da API
+        async function checkAPI() {
+            if (typeof APP_CONFIG === 'undefined' || !APP_CONFIG.api || !APP_CONFIG.api.geminiApiKey) {
+                addTest('apiCheck', 'Pulando teste - configuração incompleta', 'warning');
+                return;
+            }
+
+            addTest('apiCheck', 'Inicializando cliente...', 'success');
+
+            try {
+                const client = new GeminiClient();
+                const initialized = await client.initialize();
+
+                if (initialized) {
+                    addTest('apiCheck', 'Cliente inicializado com sucesso', 'success');
+                    addTest('apiCheck', 'Pronto para testar API', 'success', 'Clique em "Executar Teste" abaixo');
+                } else {
+                    addTest('apiCheck', 'Falha ao inicializar cliente', 'error', 'Verifique o console para detalhes');
+                }
+            } catch (error) {
+                addTest('apiCheck', 'Erro ao inicializar: ' + error.message, 'error');
+            }
+        }
+
+        // 5. Teste Rápido
+        async function runQuickTest() {
+            const container = document.getElementById('quickTest');
+            container.innerHTML = '<div class="test">⏳ Executando teste...</div>';
+
+            try {
+                const client = new GeminiClient();
+                await client.initialize();
+
+                const response = await client.generateContent('Responda apenas: OK');
+
+                if (response) {
+                    container.innerHTML = `
+                        <div class="test success">✅ TESTE BEM-SUCEDIDO!</div>
+                        <div class="test success">Resposta: ${response.substring(0, 100)}...</div>
+                        <div class="test success">A API está funcionando perfeitamente!</div>
+                    `;
+                } else {
+                    container.innerHTML = '<div class="test error">❌ Resposta vazia da API</div>';
+                }
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="test error">❌ Erro no teste: ${error.message}</div>
+                    <div class="info">Verifique o console (F12) para mais detalhes</div>
+                `;
+            }
+        }
+
+        // Executar diagnóstico ao carregar
+        window.onload = async function() {
+            console.log('=== INICIANDO DIAGNÓSTICO ===');
+            
+            checkBrowser();
+            
+            // Aguardar um pouco para garantir que scripts carregaram
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            checkFiles();
+            checkConfig();
+            await checkAPI();
+            
+            console.log('=== DIAGNÓSTICO CONCLUÍDO ===');
+        };
+    </script>
+</body>
+</html>
+

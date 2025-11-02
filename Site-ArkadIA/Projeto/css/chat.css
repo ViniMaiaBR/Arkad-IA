@@ -11,13 +11,15 @@
 .chat-messages { flex: 1 1 auto; max-height: none; }
 .chat-column { display: flex; flex-direction: column; gap: 0.75rem; }
 .pdf-preview {
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(10, 38, 71, 0.25);
+    border: 1px solid rgba(0, 181, 184, 0.2);
     padding: 1rem;
     display: flex;
     flex-direction: column;
     min-height: calc(100vh - 200px);
+    overflow: hidden;
 }
 .pdf-preview-header {
     display: flex;
@@ -31,13 +33,43 @@
     margin: 0;
     font-size: 1.1rem;
     color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.pdf-status {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
 }
 .pdf-iframe {
     width: 100%;
     flex: 1 1 auto;
     border: none;
     border-radius: 8px;
-    background: rgba(255,255,255,0.05);
+    background: transparent;
+    transition: opacity 0.3s ease;
+    overflow: hidden;
+}
+.pdf-preview.loading .pdf-iframe {
+    opacity: 0.5;
+}
+.pdf-preview {
+    transition: all 0.3s ease;
+}
+.pdf-preview.loading .pdf-status::after {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 8px;
+    border: 2px solid rgba(0, 181, 184, 0.3);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: pdf-loading-spin 0.8s linear infinite;
+}
+@keyframes pdf-loading-spin {
+    to { transform: rotate(360deg); }
 }
 .pdf-actions { display: flex; justify-content: center; margin-top: 0.75rem; }
 .open-processor-btn {

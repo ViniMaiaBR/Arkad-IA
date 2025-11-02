@@ -1,11 +1,171 @@
-Vamos descobrir como tornar seus processos mais rápidos e inteligentes.
+Vamos transformar seus processos manuais em fluxos automatizados e inteligentes, economizando tempo e reduzindo custos com análise por IA.
 
-1️⃣ Qual área você deseja automatizar? (ex: atendimento ao cliente, financeiro, RH, vendas, marketing)
-2️⃣ Descreva como o processo funciona hoje (ex: manual, planilhas, e-mails, etc.)
-3️⃣ Quais são os principais problemas que você enfrenta? (ex: retrabalho, lentidão, erros humanos)
-4️⃣ Você já utiliza alguma ferramenta digital atualmente?
-5️⃣ Deseja que eu proponha integrações com sistemas existentes (ex: ERP, CRM, WhatsApp, e-mail)?
-6️⃣ Você quer que a automação seja total ou parcial (mantendo supervisão humana)?
-7️⃣ Qual é o orçamento estimado disponível para essa automação?
+🎯 ÁREA E PROCESSOS:
 
- No final, posso gerar um mapa de automação mostrando ganhos de tempo, custo e produtividade — pronto para implementação.
+1️⃣ Qual departamento ou área você deseja automatizar?
+   • Atendimento ao Cliente (SAC, suporte, relacionamento)
+   • Vendas e Comercial (prospecção, follow-up, propostas)
+   • Marketing (campanhas, nutrição de leads, social media)
+   • Financeiro (contas a pagar/receber, conciliação, cobranças)
+   • Recursos Humanos (recrutamento, onboarding, folha de pagamento)
+   • Logística e Operações (estoque, pedidos, expedição)
+   • Jurídico e Compliance (contratos, aprovações, documentos)
+   • TI e Suporte Técnico (chamados, manutenção, backups)
+   • Administrativo (agendamentos, aprovações, documentação)
+
+2️⃣ Descreva o processo atual em detalhes:
+   • Passo a passo de como funciona hoje
+   • Quem são os responsáveis e envolvidos
+   • Tempo médio de execução de ponta a ponta
+   • Volume (quantas vezes por dia/semana/mês)
+   • Ferramentas utilizadas atualmente:
+     □ Totalmente manual (papel e caneta)
+     □ Planilhas (Excel, Google Sheets)
+     □ E-mails para comunicação e aprovações
+     □ Sistemas legados sem integração
+     □ Softwares isolados sem conversa entre si
+     □ Aplicativos de mensagem (WhatsApp, Telegram)
+
+📊 DIAGNÓSTICO DOS PROBLEMAS:
+
+3️⃣ Principais dores e gargalos identificados:
+   • Retrabalho excessivo (refazer tarefas por erros)
+   • Lentidão operacional (processos demorados)
+   • Erros humanos frequentes (digitação, cálculos, esquecimentos)
+   • Falta de padronização (cada um faz de um jeito)
+   • Perda de informações importantes
+   • Dificuldade de rastreabilidade e auditoria
+   • Dependência de pessoas-chave
+   • Comunicação ineficiente entre setores
+   • Custos operacionais elevados
+   • Falta de visibilidade e controle gerencial
+
+4️⃣ Impacto no negócio:
+   • Quanto tempo sua equipe gasta nesse processo por dia?
+   • Quantos funcionários estão envolvidos?
+   • Qual o custo estimado mensal deste processo manual?
+   • Quais oportunidades você perde por causa da lentidão?
+   • Impacto na satisfação do cliente (NPS, reclamações)
+
+🛠️ INFRAESTRUTURA TECNOLÓGICA ATUAL:
+
+5️⃣ Sistemas e ferramentas já utilizados:
+   • ERP (SAP, TOTVS, Omie, Bling, outro): __________
+   • CRM (Salesforce, HubSpot, Pipedrive, RD Station): __________
+   • Plataforma de e-commerce (Shopify, WooCommerce, VTEX): __________
+   • Software de gestão financeira (Conta Azul, QuickBooks): __________
+   • Ferramenta de suporte (Zendesk, Freshdesk): __________
+   • E-mail marketing (Mailchimp, SendGrid): __________
+   • Mensageria (WhatsApp Business API, Telegram): __________
+   • Armazenamento (Google Drive, Dropbox, OneDrive): __________
+   • Outros sistemas específicos: __________
+
+6️⃣ Nível de maturidade digital:
+   □ Nível 1: Processos 100% manuais e em papel
+   □ Nível 2: Uso básico de planilhas e e-mails
+   □ Nível 3: Alguns softwares mas sem integração
+   □ Nível 4: Sistemas integrados parcialmente
+   □ Nível 5: Alta digitalização com automações básicas
+
+🔗 INTEGRAÇÕES E AUTOMAÇÕES:
+
+7️⃣ Integrações desejadas:
+   • Conectar ERP ↔ CRM (sincronização de dados)
+   • Integrar WhatsApp Business API ao sistema de atendimento
+   • Conectar e-commerce ao estoque em tempo real
+   • Automatizar envio de e-mails de cobrança
+   • Integrar Google Sheets com sistema de gestão
+   • Conectar formulários do site ao CRM automaticamente
+   • Sincronizar pedidos com sistema de logística
+   • API entre sistemas legados e modernos
+
+8️⃣ Tipo de automação desejada:
+   • Automação total (sem intervenção humana)
+   • Automação parcial com aprovação humana em pontos críticos
+   • Automação com supervisão contínua
+   • Automação gradual (começar simples e evoluir)
+
+9️⃣ Gatilhos para automação (exemplos):
+   • Quando um formulário é preenchido → criar lead no CRM
+   • Quando venda é aprovada → enviar para estoque automaticamente
+   • Quando boleto vence → disparar e-mail/WhatsApp de cobrança
+   • Quando chamado é aberto → atribuir ao técnico disponível
+   • Quando contrato precisa renovar → alertar time comercial
+
+💰 ORÇAMENTO E INVESTIMENTO:
+
+🔟 Recursos disponíveis para automação:
+   • Orçamento inicial estimado:
+     □ Até R$ 5.000 (automações básicas)
+     □ R$ 5.000 - R$ 20.000 (automações intermediárias)
+     □ R$ 20.000 - R$ 50.000 (automações robustas)
+     □ R$ 50.000+ (transformação digital completa)
+   
+   • Preferência de investimento:
+     □ Software pronto (SaaS mensal)
+     □ Desenvolvimento customizado
+     □ Mix de ferramentas no-code/low-code (Zapier, Make, n8n)
+     □ RPA (Robotic Process Automation)
+
+1️⃣1️⃣ Prazo esperado para implementação:
+   □ Urgente (30 dias)
+   □ Normal (2-3 meses)
+   □ Planejado (6 meses+)
+
+📈 RESULTADOS ESPERADOS:
+
+1️⃣2️⃣ Objetivos e benefícios desejados:
+   • Redução de X% no tempo de execução
+   • Economia de R$ X por mês
+   • Eliminar X horas de trabalho manual
+   • Reduzir erros em X%
+   • Aumentar capacidade produtiva em X%
+   • Melhorar satisfação do cliente
+   • Ganhar visibilidade gerencial em tempo real
+   • Escalar operação sem aumentar equipe proporcionalmente
+
+1️⃣3️⃣ Indicadores de sucesso (KPIs):
+   • Tempo médio de processamento
+   • Taxa de erros/retrabalho
+   • Custo operacional por transação
+   • Volume processado por período
+   • Satisfação da equipe (NPS interno)
+   • ROI da automação (retorno sobre investimento)
+
+🤖 TECNOLOGIAS E IA:
+
+1️⃣4️⃣ Recursos de inteligência artificial:
+   • Chatbot com IA para atendimento 24/7
+   • Análise preditiva e machine learning
+   • Reconhecimento de documentos (OCR)
+   • Processamento de linguagem natural (NLP)
+   • Classificação automática de demandas
+   • Detecção de anomalias e fraudes
+   • Recomendações inteligentes
+
+1️⃣5️⃣ Automações no-code/low-code:
+   • Zapier, Make (Integromat), n8n
+   • Power Automate (Microsoft)
+   • Google Apps Script
+   • Automações nativas das ferramentas
+
+📄 RELATÓRIO FINAL EM PDF:
+Após processar suas respostas com IA por 10 segundos, você receberá automaticamente:
+
+✅ Mapa completo do processo AS-IS (como está hoje)
+✅ Mapa do processo TO-BE (como ficará automatizado)
+✅ Análise de ganhos: tempo economizado, redução de custos, aumento de produtividade
+✅ Recomendações de ferramentas e tecnologias ideais
+✅ Arquitetura de integração entre sistemas
+✅ Fluxograma visual da automação proposta
+✅ Estimativa de investimento detalhada (setup + mensal)
+✅ Cronograma de implementação em fases
+✅ ROI projetado (retorno sobre investimento)
+✅ Plano de treinamento da equipe
+✅ Matriz de riscos e mitigação
+✅ KPIs de acompanhamento pós-implantação
+
+💎 Escolha seu plano de automação:
+🥉 Básico: Automação de 1 processo + integrações simples (até R$ 15.000)
+🥈 Intermediário: Automação de 2-3 processos + integrações avançadas (R$ 15.000 - R$ 40.000)
+🥇 Premium: Transformação digital completa + IA + RPA + consultoria especializada (R$ 40.000+)

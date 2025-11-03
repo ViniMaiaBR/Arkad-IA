@@ -122,7 +122,7 @@ class AITextProcessor {
             }
         }
 
-        return "O cliente solicitou à Arkad AI a elaboração de um plano estratégico e financeiro, com base em análise de viabilidade, estimativa de custos, previsão de ROI e diretrizes operacionais.";
+        return "Este relatório apresenta um plano estratégico e financeiro, com base em análise de viabilidade, estimativa de custos, previsão de ROI e diretrizes operacionais.";
     }
 
     // Extrair diagnóstico e contexto
@@ -301,6 +301,20 @@ class AITextProcessor {
             .trim();
     }
 
+    // Limpar texto do objetivo removendo linguagem informal
+    cleanObjectiveText(text) {
+        if (!text) return text;
+        
+        return text
+            .replace(/o cliente (pediu|solicitou|selecionou|escolheu|preferiu)/gi, '')
+            .replace(/o usuário (pediu|solicitou|selecionou|escolheu|preferiu)/gi, '')
+            .replace(/foi (pedido|solicitado|selecionado|escolhido)/gi, '')
+            .replace(/com base (na|no) (solicitação|pedido|escolha)/gi, 'com base')
+            .replace(/^[\.\s]*/, '') // Remover pontos e espaços no início
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
     // Gerar PDF baseado no template Documentacao/prompts_txt/ExemploRelatorio.txt
     async generateReportPDF(aiText, context = {}, progressCallback = null, options = {}) {
         try {
@@ -432,7 +446,7 @@ class AITextProcessor {
                         Objetivo do Projeto
                     </h3>
                     <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #00B5B8;">
-                        <p style="margin: 0; font-size: 16px; line-height: 1.6;">${data.objective}</p>
+                        <p style="margin: 0; font-size: 16px; line-height: 1.6;">${this.cleanObjectiveText(data.objective)}</p>
                     </div>
                 </div>
 

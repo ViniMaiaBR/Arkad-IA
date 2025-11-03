@@ -4,6 +4,13 @@
 class ChatPDFReportGenerator {
     constructor() {
         this.defaultTemplate = this.loadDefaultTemplate();
+        this.businessInfo = {
+            businessName: '',
+            businessType: '',
+            companyName: ''
+        };
+        this.collectingInfo = false;
+        this.collectionStep = 0;
     }
 
     // Template baseado em Documentacao/prompts_txt/ExemploRelatorio.txt
@@ -24,10 +31,64 @@ class ChatPDFReportGenerator {
         };
     }
 
+    // Coletar informações do negócio antes de gerar relatório
+    async collectBusinessInfo() {
+        return new Promise((resolve) => {
+            this.collectingInfo = true;
+            this.collectionStep = 0;
+            
+            const questions = [
+                {
+                    question: '**Qual é o tipo do seu negócio?**\n\nPor exemplo: Tecnologia, Varejo, Consultoria, Marketing Digital, Indústria, etc.',
+                    field: 'businessType'
+                },
+                {
+                    question: '**Qual é o nome do seu negócio?**\n\nEste será o nome usado no relatório.',
+                    field: 'businessName'
+                },
+                {
+                    question: '**Como deseja nomear a empresa no relatório?**\n\nEste será o nome oficial da empresa que aparecerá no documento.',
+                    field: 'companyName'
+                }
+            ];
+
+            // Função recursiva para fazer as perguntas
+            const askQuestion = (index) => {
+                if (index >= questions.length) {
+                    this.collectingInfo = false;
+                    resolve(this.businessInfo);
+                    return;
+                }
+
+                const currentQuestion = questions[index];
+                const questionText = `📋 **Coleta de Informações para o Relatório**\n\n${currentQuestion.question}\n\nPor favor, responda com a informação solicitada.`;
+                
+                // Retornar a pergunta através de um callback
+                if (window.askBusinessInfoQuestion) {
+                    window.askBusinessInfoQuestion(questionText, (answer) => {
+                        this.businessInfo[currentQuestion.field] = answer.trim();
+                        askQuestion(index + 1);
+                    });
+                } else {
+                    // Fallback: usar valores padrão
+                    this.businessInfo[currentQuestion.field] = '';
+                    askQuestion(index + 1);
+                }
+            };
+
+            askQuestion(0);
+        });
+    }
+
     // Gerar relatório em PDF
-    async generatePDFReport(conversationData, userData) {
+    async generatePDFReport(conversationData, userData, businessInfo = null) {
         try {
             console.log('📄 Gerando relatório PDF...');
+
+            // Usar informações coletadas ou valores padrão
+            if (businessInfo) {
+                this.businessInfo = { ...this.businessInfo, ...businessInfo };
+            }
 
             // Extrair informações da conversa
             const reportData = this.extractReportData(conversationData, userData);
@@ -37,17 +98,27 @@ class ChatPDFReportGenerator {
 
             // Configurações do PDF
             const opt = {
-                margin: [15, 15, 15, 15],
+                margin: [10, 10, 10, 10],
                 filename: `Relatorio_Arkad_${this.getFormattedDate()}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    logging: false,
+                    removeContainer: true
+                },
                 jsPDF: { 
                     unit: 'mm', 
                     format: 'a4', 
                     orientation: 'portrait',
-                    compress: true
+                    compress: true,
+                    precision: 16
                 },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                pagebreak: { 
+                    mode: ['css', 'legacy'],
+                    avoid: ['.section', 'table', 'tr', 'td', 'th', '.header', '.footer'],
+                    before: '.page-break'
+                }
             };
 
             // Gerar PDF usando html2pdf
@@ -105,13 +176,18 @@ class ChatPDFReportGenerator {
             });
         }
 
+        // Usar informações coletadas do negócio
+        const companyName = this.businessInfo.companyName || 'Arkad AI Consultoria';
+        const businessName = this.businessInfo.businessName || '';
+        const businessType = this.businessInfo.businessType || sector;
+
         return {
             client: userInfo.nome || 'Cliente Arkad',
-            company: 'Arkad AI Consultoria',
+            company: companyName,
             date: this.getFormattedDate(),
             consultant: 'Arkad AI – Unidade Estratégica de Negócios',
-            businessGoal: businessGoal,
-            sector: sector,
+            businessGoal: businessName || businessGoal,
+            sector: businessType || sector,
             analysisText: analysisText,
             recommendations: recommendations,
             budget: budget,
@@ -143,17 +219,23 @@ class ChatPDFReportGenerator {
     <title>Relatório Arkad AI</title>
     <style>
         @page {
-            margin: 20mm;
+            margin: 10mm;
+            size: A4;
         }
         
         body {
             font-family: 'Arial', 'Helvetica', sans-serif;
-            line-height: 1.6;
+            line-height: 1.5;
             color: #333;
-            max-width: 210mm;
+            max-width: 190mm;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10mm;
             background: white;
+            box-sizing: border-box;
+        }
+        
+        * {
+            box-sizing: border-box;
         }
         
         .header {
@@ -195,8 +277,9 @@ class ChatPDFReportGenerator {
         }
         
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             page-break-inside: avoid;
+            break-inside: avoid;
         }
         
         .section h3 {
@@ -319,7 +402,7 @@ class ChatPDFReportGenerator {
     <div class="section">
         <h3>📋 Objetivo do Projeto</h3>
         <p>
-            O cliente solicitou à Arkad AI a elaboração de um plano estratégico e financeiro com base em análise de viabilidade, 
+            Este relatório apresenta um plano estratégico e financeiro com base em análise de viabilidade, 
             estimativa de custos, previsão de ROI e diretrizes operacionais.
         </p>
         <div class="content-box">
@@ -537,8 +620,17 @@ class ChatPDFReportGenerator {
     formatAnalysisText(text) {
         if (!text) return '<p>Análise em andamento...</p>';
 
+        // Remover linguagem informal como "O cliente pediu/solicitou/selecionou"
+        let cleaned = text
+            .replace(/o cliente (pediu|solicitou|selecionou|escolheu|preferiu)/gi, '')
+            .replace(/o usuário (pediu|solicitou|selecionou|escolheu|preferiu)/gi, '')
+            .replace(/foi (pedido|solicitado|selecionado|escolhido)/gi, '')
+            .replace(/com base (na|no) (solicitação|pedido|escolha)/gi, 'com base')
+            .replace(/\s+/g, ' ')
+            .trim();
+
         // Converter markdown básico para HTML
-        let formatted = text
+        let formatted = cleaned
             .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
             .replace(/\*(.*?)\*/g, '<em>$1</em>')
             .replace(/^### (.*$)/gim, '<h4>$1</h4>')

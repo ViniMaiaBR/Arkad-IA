@@ -4,18 +4,26 @@
 class PDFGenerator {
     constructor() {
         this.defaultConfig = {
-            margin: [0.2, 0.3, 0.2, 0.3],
+            margin: [0.4, 0.4, 0.4, 0.4],
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
                 scale: 2,
                 useCORS: true,
-                letterRendering: true
+                letterRendering: true,
+                logging: false,
+                removeContainer: true
             },
             jsPDF: { 
                 unit: 'in', 
                 format: 'a4', 
                 orientation: 'portrait',
-                compress: true
+                compress: true,
+                precision: 16
+            },
+            pagebreak: { 
+                mode: ['css', 'legacy'],
+                avoid: ['.section', 'table', 'tr', 'td', 'th', '.header', '.footer'],
+                before: '.page-break'
             }
         };
     }

@@ -57,109 +57,22 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="clientName">Nome do Cliente</label>
-                        <input type="text" id="clientName" placeholder="Ex: João Silva" value="Vinicius Silva">
+                        <input type="text" id="clientName" placeholder="Ex: João Silva" value="">
                     </div>
                     <div class="form-group">
                         <label for="companyName">Nome da Empresa</label>
-                        <input type="text" id="companyName" placeholder="Ex: Empresa ABC" value="Arkad Consultoria Empresarial">
+                        <input type="text" id="companyName" placeholder="Ex: Empresa ABC" value="">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="reportTitle">Título do Relatório</label>
-                    <input type="text" id="reportTitle" placeholder="Ex: Proposta de Expansão" value="Proposta de Expansão – Escritório Adicional">
+                    <input type="text" id="reportTitle" placeholder="Ex: Proposta de Expansão" value="">
                 </div>
 
                 <div class="form-group full-width">
                     <label for="aiText">Texto da IA (Cole aqui o resultado da análise)</label>
-                    <textarea id="aiText" class="ai-text-area" placeholder="Cole aqui o texto completo gerado pela IA...">Relatório Estratégico Arkad AI
-
-Proposta de Expansão – Escritório Adicional
-
-Cliente: Vinicius Silva
-Empresa: Arkad Consultoria Empresarial
-Data: 23/10/2025
-Consultora de IA: Arkad AI – Unidade Estratégica de Negócios
-
-Objetivo do Projeto
-
-O cliente solicitou à Arkad AI a elaboração de um plano estratégico e financeiro para abertura de um escritório adicional, com base em análise de viabilidade, estimativa de custos, previsão de ROI e diretrizes operacionais.
-
-A meta principal é expandir as operações para uma nova localidade com foco em:
-- Aumentar a capacidade de atendimento em 40%;
-- Reduzir prazos médios de entrega de serviços em até 25%;
-- Estabelecer uma presença física estratégica para impulsionar a captação de novos clientes corporativos.
-
-1. Diagnóstico e Contexto Atual
-
-Situação Atual:
-A Arkad AI opera atualmente em Santo André (SP), com estrutura física e equipe enxuta, focada em consultoria tecnológica e estratégica.
-
-Motivos para Expansão:
-- Crescimento constante da demanda em outras regiões do estado;
-- Necessidade de equipe híbrida (presencial + remota) para projetos empresariais;
-- Maior proximidade com clientes de médio e grande porte.
-
-2. Estratégia de Implementação
-
-Desenvolvimento de estratégia em 3 fases principais:
-- Fase 1: Planejamento e Instalação (0–3 meses)
-- Fase 2: Operação Piloto (4–12 meses)  
-- Fase 3: Consolidação e Escala (13–24 meses)
-
-3. Plano Estratégico – Fases de Execução
-
-Fase 1: Planejamento e Instalação (0–3 meses)
-- Pesquisa e locação de espaço comercial (80–120 m²);
-- Contratação de equipe-base (2 analistas, 1 coordenador, 1 assistente);
-- Implantação de infraestrutura digital e mobiliário.
-Custo Estimado: R$ 110.000
-
-Fase 2: Operação Piloto (4–12 meses)
-- Início das atividades comerciais e parcerias locais;
-- Testes de novos canais de atendimento híbrido;
-- Avaliação mensal de fluxo de caixa e KPIs de aquisição de clientes.
-Custo Operacional: R$ 85.000
-
-Fase 3: Consolidação e Escala (13–24 meses)
-- Ampliação da equipe conforme aumento de contratos;
-- Implantação de automações com IA (atendimento, análise de dados e orçamentos);
-- Consolidação da marca Arkad AI na nova região.
-Investimento Adicional: R$ 55.000
-
-4. Stack Operacional Recomendado
-
-Tecnologias e ferramentas recomendadas:
-- CRM: HubSpot Starter / Bitrix24
-- Contabilidade: Conta Azul / Omie
-- Comunicação: Google Workspace + Zoom
-- IA Interna: Arkad AI + ChatGPT API
-- Infraestrutura: AWS ou Hostinger Cloud
-
-5. Análise de Riscos e Mitigações
-
-Principais riscos identificados:
-- Atraso na entrega do imóvel (Médio impacto)
-- Falta de mão de obra qualificada (Alto impacto)
-- Subutilização do espaço (Médio impacto)
-- Desalinhamento de metas (Alto impacto)
-
-Estratégias de mitigação incluem cláusulas contratuais, treinamentos internos, aluguel compartilhado e revisões trimestrais.
-
-6. Projeção Financeira Simplificada
-
-Investimento Total: R$ 250.000
-Receita Projetada: R$ 320.000
-ROI Estimado: 28% ao ano
-Prazo de Retorno: 24 meses
-
-Conclusão
-
-A análise conduzida pela Arkad AI indica que a abertura do novo escritório em Campinas é financeiramente viável e estrategicamente alinhada com os objetivos de expansão da empresa.
-
-A projeção sugere retorno positivo em até 24 meses, com ganhos operacionais, fortalecimento da marca e ampliação da base de clientes regionais.
-
-Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a automação de tarefas administrativas e integração total com o sistema de IA Arkad para maximizar o retorno sobre investimento.</textarea>
+                    <textarea id="aiText" class="ai-text-area" placeholder="Cole aqui o texto completo gerado pela IA..."></textarea>
                 </div>
 
                 <div class="form-group full-width" style="margin-top: 20px;">
@@ -309,6 +222,11 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
                 } catch (error) {
                     console.error('Erro ao carregar dados do chat:', error);
                 }
+            } else {
+                // Se não houver dados do chat, atualizar preview com dados padrão
+                setTimeout(() => {
+                    updatePreview();
+                }, 500);
             }
         };
         
@@ -466,14 +384,17 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
 
         // Atualizar pré-visualização
         function updatePreview() {
-            const title = document.getElementById('reportTitle').value;
-            const client = document.getElementById('clientName').value;
-            const company = document.getElementById('companyName').value;
-            const aiText = document.getElementById('aiText').value;
+            const title = document.getElementById('reportTitle')?.value || 'Relatório Estratégico';
+            const client = document.getElementById('clientName')?.value || 'Cliente';
+            const company = document.getElementById('companyName')?.value || 'Empresa';
+            const aiText = document.getElementById('aiText')?.value || '';
+
+            const previewContent = document.getElementById('previewContent');
+            if (!previewContent) return;
 
             if (!aiText.trim()) {
-                document.getElementById('previewContent').innerHTML = `
-                    <p style="text-align: center; color: #666; font-style: italic;">
+                previewContent.innerHTML = `
+                    <p style="text-align: center; color: #666; font-style: italic; padding: 40px 20px;">
                         Cole o texto da IA para ver a pré-visualização
                     </p>
                 `;
@@ -488,11 +409,39 @@ Recomendação final: Prosseguir com o plano piloto de 12 meses, priorizando a a
                 company: company
             };
 
-            const processedData = window.aiTextProcessor.processAIText(aiText, context);
-            const htmlContent = window.aiTextProcessor.generateReportHTML(processedData);
-            
-            document.getElementById('previewContent').innerHTML = htmlContent;
+            try {
+                const processedData = window.aiTextProcessor.processAIText(aiText, context);
+                const htmlContent = window.aiTextProcessor.generateReportHTML(processedData);
+                
+                previewContent.innerHTML = htmlContent;
+            } catch (error) {
+                console.error('Erro ao processar texto:', error);
+                // Fallback: mostrar texto formatado simples
+                const simpleHTML = `
+                    <div style="padding: 20px; font-family: Arial, sans-serif;">
+                        <h1 style="color: #00B5B8; text-align: center;">${title}</h1>
+                        <p style="margin: 10px 0;"><strong>Cliente:</strong> ${client}</p>
+                        <p style="margin: 10px 0;"><strong>Empresa:</strong> ${company}</p>
+                        <hr style="margin: 20px 0; border: 1px solid #e0e0e0;">
+                        <div style="white-space: pre-wrap; line-height: 1.6;">${aiText}</div>
+                    </div>
+                `;
+                previewContent.innerHTML = simpleHTML;
+            }
         }
+        
+        // Adicionar event listeners para atualizar preview em tempo real
+        document.addEventListener('DOMContentLoaded', function() {
+            const reportTitle = document.getElementById('reportTitle');
+            const clientName = document.getElementById('clientName');
+            const companyName = document.getElementById('companyName');
+            const aiTextArea = document.getElementById('aiText');
+            
+            if (reportTitle) reportTitle.addEventListener('input', updatePreview);
+            if (clientName) clientName.addEventListener('input', updatePreview);
+            if (companyName) companyName.addEventListener('input', updatePreview);
+            if (aiTextArea) aiTextArea.addEventListener('input', updatePreview);
+        });
 
         // Processar formulário
         document.getElementById('aiProcessorForm').addEventListener('submit', async function(e) {

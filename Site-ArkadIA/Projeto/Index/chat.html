@@ -200,15 +200,14 @@
                     throw new Error('Gemini Integration não inicializado');
                 }
 
-                // Verificar se pode usar modo PRO
-                useProMode = geminiIntegration.canUseProChat();
-                console.log('📊 Modo PRO ativo:', useProMode);
-
-                // Obter informações do usuário logado
+                // Obter informações do usuário logado ANTES de verificar modo PRO
                 const userInfo = JSON.parse(localStorage.getItem('userInfo') || 'null');
+                console.log('🔍 UserInfo recuperado:', userInfo);
+                
                 if (userInfo && userInfo.id) {
                     currentUserId = userInfo.id;
                     console.log('👤 Usuário logado:', userInfo.name || userInfo.email);
+                    console.log('📊 ID do usuário:', currentUserId);
                     
                     // Obter ou criar sessão
                     const sessionInfo = JSON.parse(localStorage.getItem('currentSession') || 'null');
@@ -225,9 +224,15 @@
                     // Associar chat à integração
                     geminiIntegration.startNewChat(currentChatId);
                     
+                    // FORÇAR modo PRO
+                    useProMode = true;
+                    
                     console.log('✅ Chat PRO inicializado:', currentChatId);
-                    console.log('📊 Modo:', useProMode ? 'PRO (Gemini)' : 'GRATUITO (Flask)');
+                    console.log('✅ MODO PRO ATIVADO');
+                    console.log('📊 useProMode:', useProMode);
+                    console.log('📊 geminiIntegration:', !!geminiIntegration);
                 } else {
+                    console.error('❌ UserInfo não encontrado após checkAuth!');
                     console.log('⚠️ Usuário não logado - modo gratuito');
                     useProMode = false;
                 }
@@ -254,11 +259,57 @@
             }
         }
 
+        // Verificar autenticação ANTES de inicializar chat
+        function checkAuth() {
+            console.log('🔐 Verificando autenticação...');
+            
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            const loginTime = localStorage.getItem('loginTime');
+            const userInfo = localStorage.getItem('userInfo');
+            
+            console.log('📋 Estado atual:', { isLoggedIn, loginTime, userInfo: !!userInfo });
+            
+            // MODO TESTE: Se não estiver logado, criar sessão temporária
+            if (isLoggedIn !== 'true' || !loginTime || !userInfo) {
+                console.warn('⚠️ Usuário não logado - criando sessão temporária para teste');
+                
+                // Criar sessão temporária
+                const tempUser = {
+                    id: 'temp-' + Date.now(),
+                    name: 'Usuário Teste',
+                    email: 'teste@arkad.ai',
+                    plan: 'pro'
+                };
+                
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('loginTime', Date.now().toString());
+                localStorage.setItem('userInfo', JSON.stringify(tempUser));
+                
+                console.log('✅ Sessão temporária criada:', tempUser);
+                console.log('✅ UserInfo salvo no localStorage');
+                return true;
+            }
+            
+            // Verificar se sessão expirou (24 horas)
+            const currentTime = Date.now();
+            const timeDiff = currentTime - parseInt(loginTime);
+            if (timeDiff >= 24 * 60 * 60 * 1000) {
+                console.warn('⚠️ Sessão expirada - renovando...');
+                localStorage.setItem('loginTime', Date.now().toString());
+            }
+            
+            console.log('✅ Autenticação OK - usuário já estava logado');
+            return true;
+        }
+
         // Mostra a consulta inicial do usuário
         window.onload = async function() {
             messagesContainer = document.getElementById('chatMessages');
             
-            // Inicializar chat no backendStorage
+            // IMPORTANTE: Verificar autenticação PRIMEIRO
+            checkAuth();
+            
+            // Depois inicializar chat no backendStorage
             await initializeChat();
             
             // Verificar se há prompt selecionado do processar-ia-pdf.html
@@ -313,6 +364,46 @@
                 await addMessage(message, 'user');
                 input.value = '';
                 
+                // Verificar se estamos coletando informações do negócio
+                if (businessInfoCollection.collecting && businessInfoCollection.step < businessInfoCollection.questions.length) {
+                    const currentQuestion = businessInfoCollection.questions[businessInfoCollection.step];
+                    if (currentQuestion) {
+                        businessInfoCollection.data[currentQuestion.field] = message.trim();
+                        businessInfoCollection.step++;
+                        
+                        // Fazer próxima pergunta ou finalizar
+                        if (businessInfoCollection.step < businessInfoCollection.questions.length) {
+                            const nextQuestion = businessInfoCollection.questions[businessInfoCollection.step];
+                            await addMessage(`📋 **Informações para o Relatório**\n\n${nextQuestion.question}`, 'ai');
+                        } else {
+                            businessInfoCollection.collecting = false;
+                            // Continuar com geração do PDF
+                            await addMessage('📄 **Gerando seu relatório PDF...**\n\nPor favor, aguarde alguns instantes.', 'ai');
+                            
+                            const conversationData = geminiIntegration.getConversationSummary();
+                            const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                            
+                            const result = await window.chatPDFReportGenerator.generatePDFReport(
+                                conversationData,
+                                userInfo,
+                                businessInfoCollection.data
+                            );
+                            
+                            if (result.success) {
+                                await addMessage(
+                                    `✅ **${result.message}**\n\n` +
+                                    `Arquivo: ${result.filename}\n\n` +
+                                    `O relatório foi salvo no seu computador e contém toda a análise realizada durante nossa conversa.`,
+                                    'ai'
+                                );
+                            } else {
+                                await addMessage(result.message, 'ai');
+                            }
+                        }
+                    }
+                    return;
+                }
+                
                 setTimeout(() => {
                     processUserMessage(message);
                 }, 1000);
@@ -321,19 +412,26 @@
 
         async function processUserMessage(message) {
             try {
+                console.log('📨 Processando mensagem:', message);
+                console.log('🔍 Estado:', { useProMode, hasGemini: !!geminiIntegration, isOfficeFlow });
+                
                 // Verificar se estamos no fluxo de escritório
                 if (isOfficeFlow) {
+                    console.log('📋 Usando fluxo de escritório');
                     processOfficeFlowMessage(message);
                     return;
                 }
 
                 // Se modo PRO estiver ativo, usar Gemini Integration
                 if (useProMode && geminiIntegration) {
+                    console.log('🚀 MODO PRO ATIVO - Usando Gemini API');
                     await processProMessage(message);
                     return;
                 }
 
                 // Caso contrário, usar sistema de respostas padrão (Flask/Gratuito)
+                console.warn('⚠️ USANDO MODO GRATUITO - Verificar configuração!');
+                console.warn('⚠️ useProMode:', useProMode, '| geminiIntegration:', !!geminiIntegration);
                 const response = chatAI.processMessage(message);
                 
                 // Verificar se é início do fluxo de escritório
@@ -546,34 +644,59 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
+        // Variáveis para coleta de informações do negócio
+        let businessInfoCollection = {
+            collecting: false,
+            step: 0,
+            data: {
+                businessType: '',
+                businessName: '',
+                companyName: ''
+            },
+            questions: [
+                {
+                    question: '**Qual é o tipo do seu negócio?**\n\nPor exemplo: Tecnologia, Varejo, Consultoria, Marketing Digital, Indústria, etc.',
+                    field: 'businessType'
+                },
+                {
+                    question: '**Qual é o nome do seu negócio?**\n\nEste será o nome usado no relatório.',
+                    field: 'businessName'
+                },
+                {
+                    question: '**Como deseja nomear a empresa no relatório?**\n\nEste será o nome oficial da empresa que aparecerá no documento.',
+                    field: 'companyName'
+                }
+            ]
+        };
+
+        // Função para coletar informações do negócio
+        async function collectBusinessInfo() {
+            businessInfoCollection.collecting = true;
+            businessInfoCollection.step = 0;
+            businessInfoCollection.data = {
+                businessType: '',
+                businessName: '',
+                companyName: ''
+            };
+
+            // Fazer primeira pergunta
+            const firstQuestion = businessInfoCollection.questions[0];
+            await addMessage(`📋 **Informações para o Relatório**\n\n${firstQuestion.question}`, 'ai');
+            
+            // A função sendMessage agora cuida do resto do fluxo
+        }
+
         // Gerar relatório em PDF
         async function generatePDFReport() {
             try {
-                await addMessage('📄 **Gerando seu relatório PDF...**\n\nPor favor, aguarde alguns instantes.', 'ai');
+                // Coletar informações do negócio primeiro
+                await addMessage('📋 **Preparando o Relatório**\n\nAntes de gerar o PDF, preciso de algumas informações sobre o seu negócio.', 'ai');
                 
-                // Obter dados da conversa
-                const conversationData = geminiIntegration.getConversationSummary();
-                const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
-                
-                // Gerar PDF
-                const result = await window.chatPDFReportGenerator.generatePDFReport(
-                    conversationData,
-                    userInfo
-                );
-                
-                if (result.success) {
-                    await addMessage(
-                        `✅ **${result.message}**\n\n` +
-                        `Arquivo: ${result.filename}\n\n` +
-                        `O relatório foi salvo no seu computador e contém toda a análise realizada durante nossa conversa.`,
-                        'ai'
-                    );
-                } else {
-                    await addMessage(result.message, 'ai');
-                }
+                // Iniciar coleta de informações (a função sendMessage cuida do resto)
+                await collectBusinessInfo();
             } catch (error) {
-                console.error('Erro ao gerar PDF:', error);
-                await addMessage('❌ Erro ao gerar relatório PDF. Por favor, tente novamente.', 'ai');
+                console.error('Erro ao iniciar coleta de informações:', error);
+                await addMessage('❌ Erro ao iniciar coleta de informações. Por favor, tente novamente.', 'ai');
             }
         }
 
@@ -818,47 +941,6 @@
         }
     </script>
     <script src="../js/neural-background.js"></script>
-    <script>
-        // Verificar autenticação ao carregar a página (DESABILITADO PARA TESTE)
-        function checkAuth() {
-            const isLoggedIn = localStorage.getItem('isLoggedIn');
-            const loginTime = localStorage.getItem('loginTime');
-            const userInfo = localStorage.getItem('userInfo');
-            
-            // MODO TESTE: Se não estiver logado, criar sessão temporária
-            if (isLoggedIn !== 'true' || !loginTime || !userInfo) {
-                console.warn('⚠️ Usuário não logado - criando sessão temporária para teste');
-                
-                // Criar sessão temporária
-                const tempUser = {
-                    id: 'temp-' + Date.now(),
-                    name: 'Usuário Teste',
-                    email: 'teste@arkad.ai',
-                    plan: 'pro'
-                };
-                
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('loginTime', Date.now().toString());
-                localStorage.setItem('userInfo', JSON.stringify(tempUser));
-                
-                console.log('✅ Sessão temporária criada para teste');
-                return true;
-            }
-            
-            // Verificar se sessão expirou (24 horas)
-            const currentTime = Date.now();
-            const timeDiff = currentTime - parseInt(loginTime);
-            if (timeDiff >= 24 * 60 * 60 * 1000) {
-                console.warn('⚠️ Sessão expirada - renovando...');
-                localStorage.setItem('loginTime', Date.now().toString());
-            }
-            
-            return true;
-        }
-
-        // Inicializar verificação de autenticação
-        checkAuth();
-    </script>
 
     <footer class="footer">
         <div class="footer-content">

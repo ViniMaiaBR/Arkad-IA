@@ -207,14 +207,25 @@
         </div>
     </div>
 
+    <!-- Importar mesmos scripts do chat.html -->
     <script src="../js/config.js"></script>
+    <script src="../js/backend-storage.js"></script>
     <script src="../js/gemini-client.js"></script>
+    <script src="../js/chat-gemini-integration.js"></script>
 
     <script>
         let statusBox = document.getElementById('statusBox');
         let testButton = document.getElementById('testButton');
         let responseBox = document.getElementById('responseBox');
         let systemInfo = document.getElementById('systemInfo');
+        let geminiIntegration = null;
+
+        // Log de inicialização (igual ao chat.html)
+        console.log('=== TESTE INICIANDO ===');
+        console.log('✅ Scripts carregados');
+        console.log('🔧 APP_CONFIG disponível:', typeof APP_CONFIG !== 'undefined');
+        console.log('🔧 GeminiClient disponível:', typeof GeminiClient !== 'undefined');
+        console.log('🔧 chatGeminiIntegration disponível:', typeof window.chatGeminiIntegration !== 'undefined');
 
         async function checkConfiguration() {
             try {
@@ -233,33 +244,55 @@
                     return false;
                 }
 
-                // Inicializar cliente Gemini
-                const client = new GeminiClient();
-                const initialized = await client.initialize();
-
-                if (initialized) {
-                    statusBox.className = 'status-box status-success';
-                    statusBox.innerHTML = '✅ <strong>API configurada com sucesso!</strong><br><br>Você pode testar o chat agora.';
-                    testButton.disabled = false;
-                    
-                    // Mostrar informações do sistema
-                    systemInfo.innerHTML = `
-                        <p><strong>API Key:</strong> ${apiKey.substring(0, 20)}...${apiKey.substring(apiKey.length - 5)}</p>
-                        <p><strong>Modelo:</strong> ${window.APP_CONFIG.api.geminiModel}</p>
-                        <p><strong>Capacidades:</strong> Áudio, Imagens, Vídeo, Texto, PDF</p>
-                        <p><strong>Limite de entrada:</strong> 1.048.576 tokens</p>
-                        <p><strong>Limite de saída:</strong> 65.536 tokens</p>
-                        <p><strong>Status:</strong> <span style="color: #4caf50;">Conectado</span></p>
-                    `;
-                    
-                    return true;
-                } else {
-                    throw new Error('Falha ao inicializar cliente');
+                // Aguardar chatGeminiIntegration estar disponível (igual ao chat.html)
+                if (!window.chatGeminiIntegration) {
+                    console.log('⏳ Aguardando chatGeminiIntegration...');
+                    await new Promise(resolve => setTimeout(resolve, 500));
                 }
+
+                // Usar a mesma integração do chat.html
+                geminiIntegration = window.chatGeminiIntegration;
+                console.log('🔄 Inicializando Gemini Integration (mesma do chat.html)...');
+                
+                const initialized = await geminiIntegration.initialize();
+
+                if (!initialized) {
+                    throw new Error('Falha ao inicializar Gemini Integration');
+                }
+
+                // Criar sessão temporária de teste (igual ao chat.html)
+                const tempUser = {
+                    id: 'test-' + Date.now(),
+                    name: 'Usuário Teste',
+                    email: 'teste@arkad.ai',
+                    plan: 'pro'
+                };
+                
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('loginTime', Date.now().toString());
+                localStorage.setItem('userInfo', JSON.stringify(tempUser));
+
+                statusBox.className = 'status-box status-success';
+                statusBox.innerHTML = '✅ <strong>API configurada com sucesso!</strong><br><br>Usando mesma configuração do chat.html. Você pode testar agora.';
+                testButton.disabled = false;
+                
+                // Mostrar informações do sistema
+                systemInfo.innerHTML = `
+                    <p><strong>API Key:</strong> ${apiKey.substring(0, 20)}...${apiKey.substring(apiKey.length - 5)}</p>
+                    <p><strong>Modelo:</strong> ${window.APP_CONFIG.api.geminiModel}</p>
+                    <p><strong>Integração:</strong> ChatGeminiIntegration (mesma do chat.html)</p>
+                    <p><strong>Capacidades:</strong> Áudio, Imagens, Vídeo, Texto, PDF</p>
+                    <p><strong>Limite de entrada:</strong> 1.048.576 tokens</p>
+                    <p><strong>Limite de saída:</strong> 65.536 tokens</p>
+                    <p><strong>Status:</strong> <span style="color: #4caf50;">Conectado</span></p>
+                `;
+                
+                return true;
             } catch (error) {
                 statusBox.className = 'status-box status-error';
                 statusBox.innerHTML = `❌ <strong>Erro na configuração</strong><br><br>${error.message}`;
                 testButton.disabled = true;
+                console.error('Erro:', error);
                 return false;
             }
         }
@@ -278,22 +311,26 @@
                 testButton.textContent = 'Enviando...';
                 responseBox.style.display = 'none';
 
-                const client = new GeminiClient();
-                await client.initialize();
+                console.log('📤 Enviando mensagem:', message);
 
-                const response = await client.generateContent(message);
+                // Usar a mesma integração que o chat.html usa
+                const response = await geminiIntegration.sendMessage(message);
 
-                if (response) {
+                console.log('📥 Resposta recebida:', response);
+
+                if (response.success) {
                     responseBox.className = 'response-box';
-                    responseBox.innerHTML = `<strong>🤖 Resposta da IA:</strong><br><br>${response}`;
+                    responseBox.innerHTML = `<strong>🤖 Resposta da IA:</strong><br><br>${response.message.replace(/\n/g, '<br>')}`;
                     responseBox.style.display = 'block';
                     
                     statusBox.className = 'status-box status-success';
-                    statusBox.innerHTML = '✅ <strong>Teste concluído com sucesso!</strong><br><br>A API está funcionando perfeitamente.';
+                    statusBox.innerHTML = '✅ <strong>Teste concluído com sucesso!</strong><br><br>A API está funcionando perfeitamente com a mesma configuração do chat.html.';
                 } else {
-                    throw new Error('Resposta vazia da API');
+                    throw new Error(response.message || 'Resposta sem sucesso');
                 }
             } catch (error) {
+                console.error('❌ Erro no teste:', error);
+                
                 responseBox.className = 'response-box';
                 responseBox.style.background = 'rgba(244, 67, 54, 0.2)';
                 responseBox.style.borderColor = '#f44336';
@@ -309,8 +346,9 @@
         }
 
         // Verificar configuração ao carregar página
-        window.onload = () => {
-            checkConfiguration();
+        window.onload = async () => {
+            console.log('🔄 Página carregada, iniciando verificação...');
+            await checkConfiguration();
         };
 
         // Permitir enviar com Enter

@@ -71,18 +71,30 @@ class GeminiClient {
         try {
             const url = `${this.baseUrl}/models/${model}:generateContent?key=${this.apiKey}`;
             
+            // Obter configurações de geração
+            const generationConfig = window.APP_CONFIG?.api?.generationConfig || {};
+            
+            const requestBody = {
+                contents: [{
+                    parts: [{
+                        text: prompt
+                    }]
+                }]
+            };
+            
+            // Adicionar maxOutputTokens se configurado
+            if (generationConfig.maxOutputTokens) {
+                requestBody.generationConfig = {
+                    maxOutputTokens: generationConfig.maxOutputTokens
+                };
+            }
+            
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: prompt
-                        }]
-                    }]
-                })
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {
@@ -111,18 +123,30 @@ class GeminiClient {
         try {
             const url = `${this.baseUrl}/models/${model}:streamGenerateContent?key=${this.apiKey}&alt=sse`;
             
+            // Obter configurações de geração
+            const generationConfig = window.APP_CONFIG?.api?.generationConfig || {};
+            
+            const requestBody = {
+                contents: [{
+                    parts: [{
+                        text: prompt
+                    }]
+                }]
+            };
+            
+            // Adicionar maxOutputTokens se configurado
+            if (generationConfig.maxOutputTokens) {
+                requestBody.generationConfig = {
+                    maxOutputTokens: generationConfig.maxOutputTokens
+                };
+            }
+            
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    contents: [{
-                        parts: [{
-                            text: prompt
-                        }]
-                    }]
-                })
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {
@@ -194,12 +218,24 @@ class GeminiClient {
                 }]
             }));
 
+            // Obter configurações de geração
+            const generationConfig = window.APP_CONFIG?.api?.generationConfig || {};
+            
+            const requestBody = { contents };
+            
+            // Adicionar maxOutputTokens se configurado
+            if (generationConfig.maxOutputTokens) {
+                requestBody.generationConfig = {
+                    maxOutputTokens: generationConfig.maxOutputTokens
+                };
+            }
+
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ contents })
+                body: JSON.stringify(requestBody)
             });
 
             if (!response.ok) {

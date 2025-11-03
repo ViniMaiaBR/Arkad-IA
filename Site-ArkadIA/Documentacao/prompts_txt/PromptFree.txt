@@ -1,0 +1,54 @@
+O Framework de Prompt Direto (Para IAs Gratuitas)
+O objetivo é pegar os pilares (Persona, Contexto, Tarefa, Formato) e simplificá-los ao máximo. Em vez de um documento de design, pense em um "briefing" de 4 linhas.
+
+Aqui está a estrutura simplificada:
+
+QUEM É VOCÊ? (Persona)
+
+Defina rapidamente quem a IA deve ser.
+
+Exemplo simples: "Você é um especialista em marketing digital focado em pequenas empresas."
+
+O QUE PRECISA SABER? (Contexto)
+
+Dê apenas o mínimo de informação necessária para a IA entender o cenário.
+
+Exemplo simples: "Eu tenho uma pequena cafeteria local e quero atrair mais clientes no período da manhã."
+
+O QUE EU QUERO? (Tarefa)
+
+Seja muito específico e peça uma coisa de cada vez. Evite pedir relatórios complexos.
+
+Exemplo simples: "Crie 5 ideias de posts curtos para o Instagram."
+
+COMO EU QUERO? (Formato e Regras)
+
+Diga exatamente como a resposta deve parecer.
+
+Exemplo simples: "Formate como uma lista. Use um tom casual e amigável. Não use hashtags."
+
+Exemplo de Aplicação: Antes vs. Depois
+Vamos aplicar isso a um cenário comum, mostrando a evolução de um prompt vago para o "Prompt Direto".
+
+1. Prompt Vago (Resultado Ruim)
+"Me dê ideias de marketing para minha cafeteria."
+
+Problema: A IA não sabe nada sobre sua cafeteria, seu público ou que tipo de marketing você quer. O resultado será genérico (ex: "Faça um site", "Use SEO").
+
+2. Prompt Estratégico (Complexo Demais para IA Gratuita)
+(Baseado no seu texto)
+
+"Persona: Consultor Sênior de Estratégia de Marketing B2C. Contexto: Cafeteria "Grão Raro", 2 anos de operação, baixo fluxo matinal, público local (escritórios). Dados: 150 clientes/dia. Tarefa: Gerar plano de 3 fases para aumentar fluxo matinal em 25% em 3 meses. Formato: Relatório Markdown com KPIs, análise de ROI e cronograma."
+
+Problema: Uma IA gratuita provavelmente irá falhar, escrever um relatório falso, ignorar os KPIs ou dar uma resposta superficial que apenas imita o formato solicitado.
+
+3. Prompt Direto (Ideal para IA Gratuita)
+(Usando o framework simplificado)
+
+Quem é você: Você é um especialista em marketing para pequenos negócios locais.
+
+Contexto: Eu tenho uma cafeteria pequena perto de prédios comerciais. O movimento de manhã (7h-9h) está fraco.
+
+O que eu quero: Liste 3 promoções simples para atrair as pessoas que estão indo para o trabalho.
+
+Como eu quero: A resposta deve ser em tópicos (bullet points). Foque em ideias de baixo custo e fáceis de implementar.

@@ -5,7 +5,13 @@ const APP_CONFIG = {
         // INSTRUÇÕES: Substitua 'SUA_API_KEY_AQUI' pela sua chave API do Google Gemini
         // Obtenha sua API key em: https://makersuite.google.com/app/apikey
         geminiApiKey: 'AIzaSyBQSSKogML5hGRhhs72q_uj9p0eVbytaEk',
-        geminiModel: 'gemini-2.5-pro'  // Modelo mais avançado com suporte a áudio, imagens, vídeo, texto e PDF
+        geminiModel: 'gemini-2.5-pro',  // Modelo mais avançado com suporte a áudio, imagens, vídeo, texto e PDF
+        
+        // Configurações de geração para otimizar velocidade de resposta
+        generationConfig: {
+            maxOutputTokens: 4096,      // Limite máximo de tokens de saída
+            inputLimit: 2048            // Limite de tokens de entrada
+        }
     },
     
     // Configurações de segurança

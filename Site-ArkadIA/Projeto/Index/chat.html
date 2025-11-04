@@ -272,7 +272,6 @@
             }
         }
 
-<<<<<<< Updated upstream
         // Verificar autenticação ANTES de inicializar chat
         function checkAuth() {
             console.log('🔐 Verificando autenticação...');
@@ -314,7 +313,8 @@
             
             console.log('✅ Autenticação OK - usuário já estava logado');
             return true;
-=======
+        }
+
         // Restaurar chat do localStorage (por usuário)
         function restoreChatFromStorage() {
             try {
@@ -476,24 +476,19 @@
                 
                 console.log('🗑️ Chat limpo com sucesso');
             }
->>>>>>> Stashed changes
         }
 
         // Mostra a consulta inicial do usuário
         window.onload = async function() {
             messagesContainer = document.getElementById('chatMessages');
             
-<<<<<<< Updated upstream
             // IMPORTANTE: Verificar autenticação PRIMEIRO
             checkAuth();
             
-            // Depois inicializar chat no backendStorage
-=======
             // Restaurar chat anterior
             restoreChatFromStorage();
             
-            // Inicializar chat no backendStorage
->>>>>>> Stashed changes
+            // Depois inicializar chat no backendStorage
             await initializeChat();
             
             // Verificar se há prompt selecionado do processar-ia-pdf.html

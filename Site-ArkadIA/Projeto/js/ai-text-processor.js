@@ -303,20 +303,6 @@ class AITextProcessor {
             .replace(/ \n/g, '\n'); // Remover espaços no final de linhas
     }
 
-    // Limpar texto do objetivo removendo linguagem informal
-    cleanObjectiveText(text) {
-        if (!text) return text;
-        
-        return text
-            .replace(/o cliente (pediu|solicitou|selecionou|escolheu|preferiu)/gi, '')
-            .replace(/o usuário (pediu|solicitou|selecionou|escolheu|preferiu)/gi, '')
-            .replace(/foi (pedido|solicitado|selecionado|escolhido)/gi, '')
-            .replace(/com base (na|no) (solicitação|pedido|escolha)/gi, 'com base')
-            .replace(/^[\.\s]*/, '') // Remover pontos e espaços no início
-            .replace(/\s+/g, ' ')
-            .trim();
-    }
-
     // Gerar PDF baseado no template Documentacao/prompts_txt/ExemploRelatorio.txt
     async generateReportPDF(aiText, context = {}, progressCallback = null, options = {}) {
         try {
@@ -474,13 +460,8 @@ class AITextProcessor {
                     <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
                         📋 Objetivo do Projeto
                     </h3>
-<<<<<<< Updated upstream
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #00B5B8;">
-                        <p style="margin: 0; font-size: 16px; line-height: 1.6;">${this.cleanObjectiveText(data.objective)}</p>
-=======
                     <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #00B5B8; box-shadow: 0 1px 3px rgba(0,181,184,0.1);">
                         <div style="font-size: 14px; line-height: 1.6; color: #444;">${this.formatTextToHTML(data.objective)}</div>
->>>>>>> Stashed changes
                     </div>
                 </div>
 

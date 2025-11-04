@@ -70,13 +70,8 @@
                 </div>
 
                 <div class="form-group full-width">
-<<<<<<< Updated upstream
-                    <label for="aiText">Texto da IA (Cole aqui o resultado da análise)</label>
-                    <textarea id="aiText" class="ai-text-area" placeholder="Cole aqui o texto completo gerado pela IA..."></textarea>
-=======
                     <label for="aiText">Texto da IA (Atualizado da conversa do Chat)</label>
                     <textarea id="aiText" class="ai-text-area" placeholder="Clique em 'Atualizar do Chat' abaixo do preview para adicionar o conteúdo da sua conversa com a IA..."></textarea>
->>>>>>> Stashed changes
                 </div>
 
                 <div class="form-group full-width" style="margin-top: 20px;">
@@ -391,27 +386,11 @@
 
         // Atualizar pré-visualização
         function updatePreview() {
-<<<<<<< Updated upstream
-            const title = document.getElementById('reportTitle')?.value || 'Relatório Estratégico';
-            const client = document.getElementById('clientName')?.value || 'Cliente';
-            const company = document.getElementById('companyName')?.value || 'Empresa';
-            const aiText = document.getElementById('aiText')?.value || '';
-
-            const previewContent = document.getElementById('previewContent');
-            if (!previewContent) return;
-
-            if (!aiText.trim()) {
-                previewContent.innerHTML = `
-                    <p style="text-align: center; color: #666; font-style: italic; padding: 40px 20px;">
-                        Cole o texto da IA para ver a pré-visualização
-                    </p>
-=======
             try {
                 const title = document.getElementById('reportTitle').value;
                 const client = document.getElementById('clientName').value;
                 const company = document.getElementById('companyName').value;
                 const aiText = document.getElementById('aiText').value;
-
                 console.log('🔍 updatePreview chamado');
                 console.log('📝 Título:', title || '(vazio)');
                 console.log('👤 Cliente:', client || '(vazio)');
@@ -476,40 +455,8 @@
                         <p style="font-size: 18px; font-weight: 600; margin: 0;">Erro ao gerar preview</p>
                         <p style="font-size: 14px; margin-top: 10px;">${error.message}</p>
                     </div>
->>>>>>> Stashed changes
                 `;
             }
-<<<<<<< Updated upstream
-
-            // Processar texto da IA
-            const context = {
-                title: title,
-                subtitle: title,
-                client: client,
-                company: company
-            };
-
-            try {
-                const processedData = window.aiTextProcessor.processAIText(aiText, context);
-                const htmlContent = window.aiTextProcessor.generateReportHTML(processedData);
-                
-                previewContent.innerHTML = htmlContent;
-            } catch (error) {
-                console.error('Erro ao processar texto:', error);
-                // Fallback: mostrar texto formatado simples
-                const simpleHTML = `
-                    <div style="padding: 20px; font-family: Arial, sans-serif;">
-                        <h1 style="color: #00B5B8; text-align: center;">${title}</h1>
-                        <p style="margin: 10px 0;"><strong>Cliente:</strong> ${client}</p>
-                        <p style="margin: 10px 0;"><strong>Empresa:</strong> ${company}</p>
-                        <hr style="margin: 20px 0; border: 1px solid #e0e0e0;">
-                        <div style="white-space: pre-wrap; line-height: 1.6;">${aiText}</div>
-                    </div>
-                `;
-                previewContent.innerHTML = simpleHTML;
-            }
-=======
->>>>>>> Stashed changes
         }
         
         // Adicionar event listeners para atualizar preview em tempo real

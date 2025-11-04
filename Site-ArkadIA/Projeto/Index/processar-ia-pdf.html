@@ -71,13 +71,8 @@
 
                 <div class="form-group full-width">
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
                     <label for="aiText">Texto da IA (Cole aqui o resultado da análise)</label>
                     <textarea id="aiText" class="ai-text-area" placeholder="Cole aqui o texto completo gerado pela IA..."></textarea>
-=======
-                    <label for="aiText">Texto da IA (Atualizado da conversa do Chat)</label>
-                    <textarea id="aiText" class="ai-text-area" placeholder="Clique em 'Atualizar do Chat' abaixo do preview para adicionar o conteúdo da sua conversa com a IA..."></textarea>
->>>>>>> Stashed changes
 =======
                     <label for="aiText">Texto da IA (Atualizado da conversa do Chat)</label>
                     <textarea id="aiText" class="ai-text-area" placeholder="Clique em 'Atualizar do Chat' abaixo do preview para adicionar o conteúdo da sua conversa com a IA..."></textarea>
@@ -397,7 +392,6 @@
         // Atualizar pré-visualização
         function updatePreview() {
 <<<<<<< Updated upstream
-<<<<<<< Updated upstream
             const title = document.getElementById('reportTitle')?.value || 'Relatório Estratégico';
             const client = document.getElementById('clientName')?.value || 'Cliente';
             const company = document.getElementById('companyName')?.value || 'Empresa';
@@ -418,14 +412,6 @@
                 const company = document.getElementById('companyName').value;
                 const aiText = document.getElementById('aiText').value;
 
-=======
-            try {
-                const title = document.getElementById('reportTitle').value;
-                const client = document.getElementById('clientName').value;
-                const company = document.getElementById('companyName').value;
-                const aiText = document.getElementById('aiText').value;
-
->>>>>>> Stashed changes
                 console.log('🔍 updatePreview chamado');
                 console.log('📝 Título:', title || '(vazio)');
                 console.log('👤 Cliente:', client || '(vazio)');
@@ -490,7 +476,6 @@
                         <p style="font-size: 18px; font-weight: 600; margin: 0;">Erro ao gerar preview</p>
                         <p style="font-size: 14px; margin-top: 10px;">${error.message}</p>
                     </div>
-<<<<<<< Updated upstream
 >>>>>>> Stashed changes
                 `;
             }
@@ -524,10 +509,6 @@
                 previewContent.innerHTML = simpleHTML;
             }
 =======
->>>>>>> Stashed changes
-=======
-                `;
-            }
 >>>>>>> Stashed changes
         }
         

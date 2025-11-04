@@ -42,6 +42,7 @@
             <div class="nav-links">
                 <a href="/sobre">SOBRE & SERVIÇOS</a>
                 <a href="/planos">PLANOS</a>
+                <a href="/documentos">DOCUMENTOS</a>
                 <a href="/contato">CONTATO</a>
                 <button class="profile-btn" id="profileBtn" onclick="openProfileModal()" title="Perfil" style="display: none;">
                     👤
@@ -131,6 +132,8 @@
 
     <script src="../js/neural-background.js"></script>
     <script src="../js/backend-storage.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/gemini-client.js"></script>
     <script>
         // Redirecionar para login
         function redirectToLogin() {
@@ -359,7 +362,7 @@
         }
 
         // Função para enviar mensagem no chat gratuito
-        function sendFreeMessage() {
+        async function sendFreeMessage() {
             const input = document.getElementById('freeChatInput');
             const message = input.value.trim();
             
@@ -371,11 +374,19 @@
             // Limpar input
             input.value = '';
             
-            // Simular resposta da IA (respostas básicas)
-            setTimeout(() => {
-                const response = getFreeAIResponse(message);
+            // Mostrar indicador de digitação
+            const typingId = addTypingIndicator();
+            
+            try {
+                // Usar a API do Gemini para resposta
+                const response = await getAIResponse(message);
+                removeTypingIndicator(typingId);
                 addFreeMessage(response, 'ai');
-            }, 1000);
+            } catch (error) {
+                console.error('Erro ao obter resposta da IA:', error);
+                removeTypingIndicator(typingId);
+                addFreeMessage('Desculpe, houve um erro ao processar sua mensagem. Por favor, tente novamente.', 'ai');
+            }
         }
 
         // Função para adicionar mensagem ao chat gratuito
@@ -396,22 +407,66 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // Função para gerar respostas básicas da IA gratuita
-        function getFreeAIResponse(userMessage) {
-            const message = userMessage.toLowerCase();
-            
-            if (message.includes('vendas') || message.includes('vender')) {
-                return 'Para aumentar vendas, foque em: 1) Conhecer seu cliente, 2) Melhorar seu produto/serviço, 3) Marketing digital, 4) Atendimento ao cliente. Precisa de mais detalhes?';
-            } else if (message.includes('marketing') || message.includes('promover')) {
-                return 'Marketing eficaz inclui: redes sociais, SEO, conteúdo de qualidade, email marketing e parcerias. Qual área você gostaria de explorar?';
-            } else if (message.includes('negócio') || message.includes('empresa')) {
-                return 'Para ter sucesso no negócio: planejamento, análise financeira, equipe qualificada, inovação e foco no cliente são essenciais. Em que posso ajudar?';
-            } else if (message.includes('financeiro') || message.includes('dinheiro')) {
-                return 'Gestão financeira básica: controle de receitas/despesas, fluxo de caixa, reserva de emergência e investimentos. Precisa de orientação específica?';
-            } else if (message.includes('tecnologia') || message.includes('digital')) {
-                return 'Digitalização pode otimizar processos, reduzir custos e melhorar atendimento. Considere automação, CRM e ferramentas online.';
-            } else {
-                return 'Interessante pergunta! Para uma resposta mais detalhada e personalizada, considere nossos planos premium com IA avançada. Posso ajudar com algo específico?';
+        // Função para obter resposta da IA usando Gemini
+        async function getAIResponse(userMessage) {
+            try {
+                // Inicializar o cliente Gemini se ainda não estiver inicializado
+                if (!geminiClient.initialized) {
+                    const success = await geminiClient.initialize();
+                    if (!success) {
+                        throw new Error('Não foi possível inicializar o cliente Gemini. Verifique a configuração da API key.');
+                    }
+                }
+                
+                // Criar contexto para o chat demo
+                const systemPrompt = `Você é um assistente de IA da ARKAD AI, uma plataforma de consultoria empresarial.
+Seu objetivo é ajudar empresários e empreendedores com dúvidas sobre negócios, marketing, vendas, gestão financeira e tecnologia.
+Seja profissional, objetivo e forneça respostas práticas e úteis.
+Mantenha suas respostas concisas (máximo 3-4 parágrafos).`;
+                
+                const fullPrompt = `${systemPrompt}\n\nUsuário: ${userMessage}\n\nAssistente:`;
+                
+                // Fazer a chamada à API do Gemini
+                const response = await geminiClient.generateContent(fullPrompt);
+                
+                if (!response) {
+                    throw new Error('Resposta vazia da API');
+                }
+                
+                return response;
+            } catch (error) {
+                console.error('Erro ao obter resposta da IA:', error);
+                throw error;
+            }
+        }
+        
+        // Adicionar indicador de digitação
+        function addTypingIndicator() {
+            const messagesContainer = document.getElementById('freeChatMessages');
+            const typingDiv = document.createElement('div');
+            const typingId = 'typing-' + Date.now();
+            typingDiv.id = typingId;
+            typingDiv.className = 'message ai-message typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <i class="fas fa-robot"></i>
+                    <p>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </p>
+                </div>
+            `;
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            return typingId;
+        }
+        
+        // Remover indicador de digitação
+        function removeTypingIndicator(typingId) {
+            const typingDiv = document.getElementById(typingId);
+            if (typingDiv) {
+                typingDiv.remove();
             }
         }
 

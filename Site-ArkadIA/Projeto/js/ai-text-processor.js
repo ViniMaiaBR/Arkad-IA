@@ -293,12 +293,14 @@ class AITextProcessor {
         };
     }
 
-    // Limpar texto extraído
+    // Limpar texto extraído - preservando estrutura
     cleanText(text) {
         return text
-            .replace(/\n\s*\n/g, '\n')
-            .replace(/\s+/g, ' ')
-            .trim();
+            .trim()
+            .replace(/\n{3,}/g, '\n\n') // Máximo 2 quebras de linha seguidas
+            .replace(/[ \t]+/g, ' ') // Remover espaços múltiplos, mas manter quebras de linha
+            .replace(/\n /g, '\n') // Remover espaços no início de linhas
+            .replace(/ \n/g, '\n'); // Remover espaços no final de linhas
     }
 
     // Limpar texto do objetivo removendo linguagem informal
@@ -420,116 +422,148 @@ class AITextProcessor {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    // Formatar texto para HTML preservando estrutura
+    formatTextToHTML(text) {
+        if (!text) return '';
+        
+        // Converter quebras de linha em <br>
+        let formatted = text.replace(/\n/g, '<br>');
+        
+        // Detectar e formatar listas (linhas começando com -, •, *, ou números)
+        formatted = formatted.replace(/(?:^|<br>)([-•*]\s+)(.+?)(?=<br>|$)/g, (match, bullet, content) => {
+            return `<li style="margin: 5px 0; margin-left: 20px;">${content}</li>`;
+        });
+        
+        // Detectar listas numeradas
+        formatted = formatted.replace(/(?:^|<br>)(\d+[\.)]\s+)(.+?)(?=<br>|$)/g, (match, number, content) => {
+            return `<li style="margin: 5px 0; margin-left: 20px;">${content}</li>`;
+        });
+        
+        // Envolver listas em <ul>
+        if (formatted.includes('<li')) {
+            formatted = formatted.replace(/(<li[^>]*>.*?<\/li>)+/g, (match) => {
+                return `<ul style="margin: 10px 0; padding-left: 20px;">${match}</ul>`;
+            });
+        }
+        
+        return formatted;
+    }
+
     // Gerar HTML do relatório baseado no template
     generateReportHTML(data) {
         return `
-            <div style="font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 10px;">
+            <div style="font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 0;">
                 
                 <!-- Cabeçalho -->
-                <div style="text-align: center; margin-bottom: 30px; border-bottom: 3px solid #00B5B8; padding-bottom: 15px;">
-                    <h1 style="color: #00B5B8; font-size: 28px; margin-bottom: 8px; margin-top: 0; font-weight: 700;">${data.header.title}</h1>
-                    <h2 style="color: #333; font-size: 20px; margin-bottom: 15px; margin-top: 0; font-weight: 600;">${data.header.subtitle}</h2>
+                <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #00B5B8; padding: 15px 20px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px;">
+                    <h1 style="color: #00B5B8; font-size: 24px; margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">${data.header.title}</h1>
+                    <h2 style="color: #555; font-size: 18px; margin: 0 0 15px 0; font-weight: 600;">${data.header.subtitle}</h2>
                     
-                    <div style="margin-bottom: 8px; font-size: 14px; text-align: left;">
-                        <p style="margin: 4px 0;"><strong>Cliente:</strong> ${data.header.client}</p>
-                        <p style="margin: 4px 0;"><strong>Empresa:</strong> ${data.header.company}</p>
+                    <div style="margin: 10px 0; font-size: 14px; text-align: left; background: white; padding: 12px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                        <p style="margin: 6px 0; padding: 4px 0; border-bottom: 1px solid #eee;"><strong style="color: #00B5B8;">Cliente:</strong> <span style="color: #333;">${data.header.client}</span></p>
+                        <p style="margin: 6px 0; padding: 4px 0;"><strong style="color: #00B5B8;">Empresa:</strong> <span style="color: #333;">${data.header.company}</span></p>
                     </div>
-                    <div style="margin-top: 8px; font-size: 14px; text-align: left;">
-                        <p style="margin: 4px 0;"><strong>Data:</strong> ${data.header.date}</p>
-                        <p style="margin: 4px 0;"><strong>Consultora de IA:</strong> ${data.header.consultant}</p>
+                    <div style="margin-top: 8px; font-size: 12px; text-align: left; color: #666;">
+                        <p style="margin: 3px 0;"><strong>Data:</strong> ${data.header.date}</p>
+                        <p style="margin: 3px 0;"><strong>Consultora de IA:</strong> ${data.header.consultant}</p>
                     </div>
                 </div>
 
                 <!-- Objetivo do Projeto -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00B5B8; font-size: 18px; margin-bottom: 15px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 600;">
-                        Objetivo do Projeto
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        📋 Objetivo do Projeto
                     </h3>
+<<<<<<< Updated upstream
                     <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #00B5B8;">
                         <p style="margin: 0; font-size: 16px; line-height: 1.6;">${this.cleanObjectiveText(data.objective)}</p>
+=======
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #00B5B8; box-shadow: 0 1px 3px rgba(0,181,184,0.1);">
+                        <div style="font-size: 14px; line-height: 1.6; color: #444;">${this.formatTextToHTML(data.objective)}</div>
+>>>>>>> Stashed changes
                     </div>
                 </div>
 
                 <!-- Diagnóstico -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00B5B8; font-size: 18px; margin-bottom: 15px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 600;">
-                        1. Diagnóstico e Contexto Atual
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        1. 🔍 Diagnóstico e Contexto Atual
                     </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px;">
-                        <p style="margin: 0; font-size: 14px; line-height: 1.6;">${data.diagnosis}</p>
+                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.diagnosis)}</div>
                     </div>
                 </div>
 
                 <!-- Estratégia -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00B5B8; font-size: 18px; margin-bottom: 15px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 600;">
-                        2. Estratégia de Implementação
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        2. 🎯 Estratégia de Implementação
                     </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px;">
-                        <p style="margin: 0; font-size: 14px; line-height: 1.6;">${data.strategy}</p>
+                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.strategy)}</div>
                     </div>
                 </div>
 
                 <!-- Fases de Execução -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00B5B8; font-size: 18px; margin-bottom: 15px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 600;">
-                        3. Plano Estratégico – Fases de Execução
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        3. 📅 Plano Estratégico – Fases de Execução
                     </h3>
                     ${data.phases.map((phase, index) => `
-                        <div style="margin-bottom: 20px; background: #f8f9fa; border-radius: 8px; padding: 15px; border-left: 4px solid #00B5B8;">
-                            <h4 style="color: #333; font-size: 16px; margin-bottom: 10px; font-weight: 600;">${phase.title}</h4>
-                            <p style="margin: 0; font-size: 14px; line-height: 1.6;">${phase.content}</p>
+                        <div style="margin-bottom: 15px; background: linear-gradient(to right, #f8f9fa, #ffffff); border-radius: 6px; padding: 15px; border-left: 4px solid #00B5B8; box-shadow: 0 1px 3px rgba(0,181,184,0.1); page-break-inside: avoid;">
+                            <h4 style="color: #00B5B8; font-size: 15px; margin: 0 0 10px 0; font-weight: 700;">${phase.title}</h4>
+                            <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(phase.content)}</div>
                         </div>
                     `).join('')}
                 </div>
 
                 <!-- Tecnologia -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00B5B8; font-size: 18px; margin-bottom: 15px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 600;">
-                        4. Stack Operacional Recomendado
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        4. 💻 Stack Operacional Recomendado
                     </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px;">
-                        <p style="margin: 0; font-size: 14px; line-height: 1.6;">${data.technology}</p>
+                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.technology)}</div>
                     </div>
                 </div>
 
                 <!-- Riscos -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00B5B8; font-size: 18px; margin-bottom: 15px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 600;">
-                        5. Análise de Riscos e Mitigações
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        5. ⚠️ Análise de Riscos e Mitigações
                     </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px;">
-                        <p style="margin: 0; font-size: 14px; line-height: 1.6;">${data.risks}</p>
+                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.risks)}</div>
                     </div>
                 </div>
 
                 <!-- Financeiro -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00B5B8; font-size: 18px; margin-bottom: 15px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 600;">
-                        6. Projeção Financeira
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        6. 💰 Projeção Financeira
                     </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 8px; padding: 20px;">
-                        <p style="margin: 0; font-size: 14px; line-height: 1.6;">${data.financial}</p>
+                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.financial)}</div>
                     </div>
                 </div>
 
                 <!-- Conclusão -->
-                <div style="margin-bottom: 30px;">
-                    <h3 style="color: #00B5B8; font-size: 18px; margin-bottom: 15px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 600;">
-                        Conclusão
+                <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                        ✅ Conclusão
                     </h3>
-                    <div style="background: #e8f5e8; border-left: 4px solid #28a745; border-radius: 0 8px 8px 0; padding: 20px;">
-                        <p style="margin: 0; font-size: 16px; line-height: 1.6; font-weight: 500;">${data.conclusion}</p>
+                    <div style="background: linear-gradient(135deg, #e8f5e8, #d4edda); border-left: 4px solid #28a745; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(40,167,69,0.2);">
+                        <div style="font-size: 14px; line-height: 1.6; font-weight: 500; color: #155724;">${this.formatTextToHTML(data.conclusion)}</div>
                     </div>
                 </div>
 
                 <!-- Contato -->
-                <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e9ecef; text-align: center;">
-                    <div style="color: #666; font-size: 12px;">
-                        <p style="margin: 5px 0;"><strong>Contato Arkad AI</strong></p>
-                        <p style="margin: 5px 0;">E-mail: contato@arkad.ai</p>
-                        <p style="margin: 5px 0;">Local: Santo André – SP</p>
-                        <p style="margin: 5px 0;">Versão do Relatório: 1.0 (Gerado automaticamente por IA)</p>
+                <div style="margin-top: 50px; padding-top: 25px; border-top: 3px solid #e9ecef; text-align: center; background: #f8f9fa; padding: 25px; border-radius: 8px;">
+                    <div style="color: #666; font-size: 13px;">
+                        <p style="margin: 8px 0; font-weight: 700; color: #00B5B8; font-size: 15px;">Contato Arkad AI</p>
+                        <p style="margin: 6px 0;">📧 E-mail: contato@arkad.ai</p>
+                        <p style="margin: 6px 0;">📍 Local: Santo André – SP</p>
+                        <p style="margin: 6px 0; font-style: italic; color: #888;">Versão do Relatório: 1.0 (Gerado automaticamente por IA)</p>
                     </div>
                 </div>
 

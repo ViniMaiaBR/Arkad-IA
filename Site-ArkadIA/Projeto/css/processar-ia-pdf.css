@@ -219,6 +219,43 @@ body.embed .preview-content::-webkit-scrollbar-thumb:hover {
     font-size: 14px;
 }
 
+.btn-update-chat-below {
+    background: linear-gradient(135deg, var(--primary-color), #00a8a8);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.btn-update-chat-below:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 181, 184, 0.4);
+}
+
+.btn-update-chat-below:active {
+    transform: translateY(0);
+}
+
+.btn-update-chat-below:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-update-chat-below i {
+    font-size: 14px;
+}
+
 .form-group input,
 .form-group textarea {
     padding: 12px 15px;
@@ -300,9 +337,29 @@ body.embed .preview-content::-webkit-scrollbar-thumb:hover {
     color: #333;
     padding: 20px;
     border-radius: 8px;
-    max-height: 500px;
+    max-height: 600px;
     overflow-y: auto;
     font-family: 'Inter', sans-serif;
+    border: 1px solid #ddd;
+}
+
+/* Scrollbar customizada para preview */
+.preview-content::-webkit-scrollbar {
+    width: 10px;
+}
+
+.preview-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px;
+}
+
+.preview-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #00b5b8, #008a8d);
+    border-radius: 5px;
+}
+
+.preview-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #00d4d7, #00a8a8);
 }
 
 .status-message {
@@ -436,6 +493,18 @@ input[type="checkbox"]:hover {
     padding: 8px;
     border-radius: 6px;
     transition: all 0.2s ease;
+}
+
+.checkbox-label input[type="checkbox"] {
+    flex-shrink: 0;
+    order: -1;
+}
+
+.checkbox-label span {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .checkbox-label:hover {

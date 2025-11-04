@@ -36,9 +36,8 @@
             </div>
             <div class="nav-links">
                 <a href="/">INÍCIO</a>
-                <a href="/sobre">SOBRE & SERVIÇOS</a>
-                <a href="/planos">PLANOS</a>
-                <a href="/contato">CONTATO</a>
+                <a href="/chat">CHAT</a>
+                <a href="/documentos">DOCUMENTOS</a>
             </div>
         </nav>
     </header>
@@ -51,7 +50,7 @@
         <div class="processor-section">
             <h2><i class="fas fa-robot"></i> Processar Texto da IA e Gerar PDF</h2>
             <p style="color: var(--light-text); margin-bottom: 15px;">
-                Cole o texto gerado pela IA e o sistema irá processar e gerar um PDF profissional baseado no template Documentacao/prompts_txt/ExemploRelatorio.txt.
+                Cole o texto gerado pela IA e o sistema irá processar e gerar um PDF profissional.
             </p>
             <form id="aiProcessorForm">
                 <div class="form-grid">
@@ -71,8 +70,13 @@
                 </div>
 
                 <div class="form-group full-width">
+<<<<<<< Updated upstream
                     <label for="aiText">Texto da IA (Cole aqui o resultado da análise)</label>
                     <textarea id="aiText" class="ai-text-area" placeholder="Cole aqui o texto completo gerado pela IA..."></textarea>
+=======
+                    <label for="aiText">Texto da IA (Atualizado da conversa do Chat)</label>
+                    <textarea id="aiText" class="ai-text-area" placeholder="Clique em 'Atualizar do Chat' abaixo do preview para adicionar o conteúdo da sua conversa com a IA..."></textarea>
+>>>>>>> Stashed changes
                 </div>
 
                 <div class="form-group full-width" style="margin-top: 20px;">
@@ -127,6 +131,9 @@
                     </p>
                 </div>
             </div>
+            <button type="button" id="updateFromChatBtn" class="btn-update-chat-below" title="Atualizar com conversa do Chat">
+                <i class="fas fa-sync-alt"></i> Atualizar do Chat
+            </button>
         </div>
     </div>
 
@@ -384,6 +391,7 @@
 
         // Atualizar pré-visualização
         function updatePreview() {
+<<<<<<< Updated upstream
             const title = document.getElementById('reportTitle')?.value || 'Relatório Estratégico';
             const client = document.getElementById('clientName')?.value || 'Cliente';
             const company = document.getElementById('companyName')?.value || 'Empresa';
@@ -397,9 +405,81 @@
                     <p style="text-align: center; color: #666; font-style: italic; padding: 40px 20px;">
                         Cole o texto da IA para ver a pré-visualização
                     </p>
+=======
+            try {
+                const title = document.getElementById('reportTitle').value;
+                const client = document.getElementById('clientName').value;
+                const company = document.getElementById('companyName').value;
+                const aiText = document.getElementById('aiText').value;
+
+                console.log('🔍 updatePreview chamado');
+                console.log('📝 Título:', title || '(vazio)');
+                console.log('👤 Cliente:', client || '(vazio)');
+                console.log('🏢 Empresa:', company || '(vazio)');
+                console.log('📄 Texto IA (tamanho):', aiText.length, 'caracteres');
+                if (aiText.length > 0) {
+                    console.log('📄 Texto IA (início):', aiText.substring(0, 100));
+                }
+
+                if (!aiText.trim()) {
+                    document.getElementById('previewContent').innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center;">
+                            <i class="fas fa-file-alt" style="font-size: 64px; color: #ddd; margin-bottom: 20px;"></i>
+                            <p style="color: #666; font-style: italic; font-size: 16px; margin-bottom: 10px;">
+                                Preview vazio - Aguardando conteúdo
+                            </p>
+                            <p style="color: #999; font-size: 14px;">
+                                Clique em "Atualizar do Chat" para adicionar o conteúdo da sua conversa
+                            </p>
+                        </div>
+                    `;
+                    console.log('⚠️ Preview vazio - sem texto para processar');
+                    return;
+                }
+
+                // Verificar se aiTextProcessor está disponível
+                if (!window.aiTextProcessor) {
+                    console.error('❌ aiTextProcessor não está disponível!');
+                    document.getElementById('previewContent').innerHTML = `
+                        <div style="text-align: center; padding: 60px 20px; color: #ff5252;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 64px; margin-bottom: 20px;"></i>
+                            <p style="font-size: 18px; font-weight: 600; margin: 0;">Erro ao carregar processador de texto</p>
+                            <p style="font-size: 14px; margin-top: 10px;">Por favor, recarregue a página</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Processar texto da IA
+                const context = {
+                    title: title || 'Relatório Arkad AI',
+                    subtitle: title || 'Análise e Recomendações',
+                    client: client || 'Cliente',
+                    company: company || 'Empresa'
+                };
+
+                console.log('🔄 Processando texto com contexto:', context);
+                const processedData = window.aiTextProcessor.processAIText(aiText, context);
+                console.log('✅ Dados processados:', processedData ? 'sucesso' : 'falhou');
+                
+                const htmlContent = window.aiTextProcessor.generateReportHTML(processedData);
+                console.log('✅ HTML gerado (tamanho):', htmlContent.length, 'caracteres');
+                
+                document.getElementById('previewContent').innerHTML = htmlContent;
+                console.log('✅ Preview atualizado com sucesso!');
+            } catch (error) {
+                console.error('❌ Erro ao atualizar preview:', error);
+                console.error('Stack:', error.stack);
+                document.getElementById('previewContent').innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: #ff5252;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 64px; margin-bottom: 20px;"></i>
+                        <p style="font-size: 18px; font-weight: 600; margin: 0;">Erro ao gerar preview</p>
+                        <p style="font-size: 14px; margin-top: 10px;">${error.message}</p>
+                    </div>
+>>>>>>> Stashed changes
                 `;
-                return;
             }
+<<<<<<< Updated upstream
 
             // Processar texto da IA
             const context = {
@@ -428,6 +508,8 @@
                 `;
                 previewContent.innerHTML = simpleHTML;
             }
+=======
+>>>>>>> Stashed changes
         }
         
         // Adicionar event listeners para atualizar preview em tempo real
@@ -566,6 +648,243 @@
         
         // Inicializar contador
         updatePdfCounter();
+
+        // Funcionalidade do botão "Atualizar do Chat"
+        const updateBtn = document.getElementById('updateFromChatBtn');
+        if (updateBtn) {
+            updateBtn.addEventListener('click', function() {
+                try {
+                    const btn = this;
+                    const icon = btn.querySelector('i');
+                    
+                    // Animação do botão
+                    btn.disabled = true;
+                    icon.classList.add('fa-spin');
+                    
+                    // Tentar obter mensagens do chat do localStorage
+                    let chatContent = '';
+                    let clientName = '';
+                    let companyName = '';
+                    let reportTitle = '';
+                    
+                    // 1. Obter histórico do chat
+                    console.log('🔍 Buscando histórico do chat no localStorage...');
+                    
+                    // Verificar se há dados do usuário
+                    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                    const userId = userInfo.id || 'guest';
+                    console.log('👤 ID do usuário:', userId);
+                    
+                    // Tentar carregar histórico específico do usuário
+                    const userChatKey = `chatHistory_${userId}`;
+                    let chatHistory = localStorage.getItem(userChatKey);
+                    console.log(`🔍 Buscando em "${userChatKey}":`, chatHistory ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+                    
+                    // Fallback para chave padrão
+                    if (!chatHistory) {
+                        chatHistory = localStorage.getItem('currentChatHistory');
+                        console.log('🔍 Buscando em "currentChatHistory":', chatHistory ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+                    }
+                    
+                    if (chatHistory) {
+                        try {
+                            const messages = JSON.parse(chatHistory);
+                            console.log('📦 Mensagens carregadas:', messages.length, 'mensagens');
+                            console.log('📋 Primeiras 3 mensagens:', messages.slice(0, 3).map(m => ({ type: m.type, length: m.text.length })));
+                            
+                            chatContent = formatChatMessagesToText(messages);
+                            console.log('✅ Texto formatado:', chatContent.length, 'caracteres');
+                            console.log('📄 Primeiros 200 caracteres do texto:', chatContent.substring(0, 200));
+                        } catch (e) {
+                            console.error('❌ Erro ao parsear histórico:', e);
+                        }
+                    } else {
+                        console.warn('⚠️ Nenhum histórico de chat encontrado no localStorage');
+                        console.log('🔑 Chaves disponíveis no localStorage:', Object.keys(localStorage));
+                    }
+                    
+                    // 2. Obter informações do cliente
+                    console.log('🔍 Buscando informações do cliente...');
+                    
+                    // Tentar carregar informações específicas do usuário
+                    const userClientKey = `clientInfo_${userId}`;
+                    let clientInfoStr = localStorage.getItem(userClientKey);
+                    console.log(`🔍 Buscando em "${userClientKey}":`, clientInfoStr ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+                    
+                    // Fallback para chave padrão
+                    if (!clientInfoStr) {
+                        clientInfoStr = localStorage.getItem('clientInfo');
+                        console.log('🔍 Buscando em "clientInfo":', clientInfoStr ? 'ENCONTRADO' : 'NÃO ENCONTRADO');
+                    }
+                    
+                    if (clientInfoStr) {
+                        try {
+                            const info = JSON.parse(clientInfoStr);
+                            clientName = info.name || '';
+                            companyName = info.company || '';
+                            reportTitle = info.reportTitle || '';
+                            console.log('✅ Informações do cliente carregadas:', { 
+                                clientName: clientName || '(vazio)', 
+                                companyName: companyName || '(vazio)', 
+                                reportTitle: reportTitle || '(vazio)' 
+                            });
+                        } catch (e) {
+                            console.error('❌ Erro ao parsear clientInfo:', e);
+                        }
+                    } else {
+                        console.warn('⚠️ Nenhuma informação de cliente encontrada');
+                    }
+                    
+                    // 3. Se não tem histórico, tentar backendStorage
+                    if (!chatContent && window.backendStorage) {
+                        try {
+                            const currentSession = JSON.parse(localStorage.getItem('currentSession') || 'null');
+                            if (currentSession) {
+                                const chats = window.backendStorage.getChatsBySession(currentSession.id);
+                                if (chats && chats.length > 0) {
+                                    const latestChat = chats[chats.length - 1];
+                                    if (latestChat.mensagens && latestChat.mensagens.length > 0) {
+                                        chatContent = formatChatMessagesFromBackend(latestChat.mensagens);
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            console.warn('Erro ao obter chat do backendStorage:', e);
+                        }
+                    }
+                    
+                    if (chatContent) {
+                        // Atualizar campos
+                        const aiTextArea = document.getElementById('aiText');
+                        const clientNameInput = document.getElementById('clientName');
+                        const companyNameInput = document.getElementById('companyName');
+                        const reportTitleInput = document.getElementById('reportTitle');
+                        
+                        console.log('📄 Conteúdo do chat (primeiros 200 caracteres):', chatContent.substring(0, 200));
+                        console.log('📏 Tamanho total do conteúdo:', chatContent.length, 'caracteres');
+                        
+                        // Preencher textarea
+                        aiTextArea.value = chatContent;
+                        console.log('✅ Textarea preenchido');
+                        
+                        if (clientName) {
+                            clientNameInput.value = clientName;
+                            console.log('📝 Nome do cliente preenchido:', clientName);
+                        } else {
+                            console.warn('⚠️ Nome do cliente não encontrado');
+                        }
+                        
+                        if (companyName) {
+                            companyNameInput.value = companyName;
+                            console.log('🏢 Nome da empresa preenchido:', companyName);
+                        } else {
+                            console.warn('⚠️ Nome da empresa não encontrado');
+                        }
+                        
+                        if (reportTitle) {
+                            reportTitleInput.value = reportTitle;
+                            console.log('📋 Título do relatório preenchido:', reportTitle);
+                        } else {
+                            console.warn('⚠️ Título do relatório não encontrado');
+                        }
+                        
+                        // Atualizar preview
+                        console.log('🔄 Atualizando preview...');
+                        updatePreview();
+                        console.log('✅ Preview atualizado');
+                        
+                        // Feedback visual
+                        btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                        btn.innerHTML = '<i class="fas fa-check"></i> Atualizado com Sucesso!';
+                        
+                        // Mostrar resumo do que foi preenchido
+                        const filledFields = [];
+                        if (clientName) filledFields.push('Nome');
+                        if (companyName) filledFields.push('Empresa');
+                        if (reportTitle) filledFields.push('Título');
+                        filledFields.push('Texto do Chat (' + chatContent.length + ' caracteres)');
+                        
+                        console.log('✅ Campos preenchidos:', filledFields.join(', '));
+                        
+                        setTimeout(() => {
+                            btn.style.background = '';
+                            btn.innerHTML = '<i class="fas fa-sync-alt"></i> Atualizar do Chat';
+                            btn.disabled = false;
+                        }, 2000);
+                    } else {
+                        console.error('❌ Nenhum conteúdo do chat encontrado');
+                        alert('Nenhuma conversa encontrada. Inicie uma conversa no chat primeiro.\n\nDica: Converse com a IA sobre seu projeto e depois clique em "Atualizar do Chat".');
+                        btn.disabled = false;
+                        icon.classList.remove('fa-spin');
+                    }
+                    
+                } catch (error) {
+                    console.error('Erro ao atualizar do chat:', error);
+                    alert('Erro ao obter conteúdo do chat. Por favor, tente novamente.');
+                    const btn = document.getElementById('updateFromChatBtn');
+                    if (btn) {
+                        btn.disabled = false;
+                        const icon = btn.querySelector('i');
+                        if (icon) icon.classList.remove('fa-spin');
+                    }
+                }
+            });
+        }
+        
+        // Função para formatar mensagens do histórico em texto
+        function formatChatMessagesToText(messages) {
+            if (!messages || messages.length === 0) {
+                return '';
+            }
+            
+            // Filtrar apenas mensagens da IA que contenham informações relevantes
+            const aiMessages = messages
+                .filter(msg => msg.type === 'ai')
+                .map(msg => msg.text.replace(/<[^>]*>/g, '').replace(/\*\*/g, '').replace(/\*/g, ''))
+                .filter(text => {
+                    // Filtrar mensagens muito curtas ou saudações iniciais
+                    const lower = text.toLowerCase();
+                    return text.length > 100 && 
+                           !lower.includes('olá! sou a ia') &&
+                           !lower.includes('como posso ajudar');
+                });
+            
+            // Se tiver mensagens da IA, juntar todas
+            if (aiMessages.length > 0) {
+                return aiMessages.join('\n\n');
+            }
+            
+            // Fallback: retornar todas as mensagens formatadas
+            let text = '';
+            messages.forEach((msg, index) => {
+                if (msg.type === 'ai') {
+                    const cleanText = msg.text.replace(/<[^>]*>/g, '').replace(/\*\*/g, '').replace(/\*/g, '');
+                    text += cleanText + '\n\n';
+                }
+            });
+            
+            return text.trim();
+        }
+        
+        // Função para formatar mensagens do backendStorage
+        function formatChatMessagesFromBackend(messages) {
+            let text = 'Relatório da Conversa com IA\n\n';
+            text += '='.repeat(50) + '\n\n';
+            
+            messages.forEach((msg, index) => {
+                const sender = msg.role === 'user' ? 'USUÁRIO' : 'IA ARKAD';
+                const timestamp = msg.timestamp ? new Date(msg.timestamp).toLocaleString('pt-BR') : '';
+                
+                text += `[${sender}]`;
+                if (timestamp) text += ` - ${timestamp}`;
+                text += '\n';
+                text += msg.content.replace(/\*\*/g, '').replace(/\*/g, '');
+                text += '\n\n';
+                text += '-'.repeat(50) + '\n\n';
+            });
+            
+            return text;
+        }
 
         // Pré-visualização inicial
         updatePreview();

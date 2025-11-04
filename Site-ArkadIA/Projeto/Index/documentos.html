@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentos - ARKAD AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .documents-container {
+            max-width: 1400px;
+            margin: 120px auto 40px;
+            padding: 0 20px;
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .document-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .document-section h2 {
+            color: var(--primary-color);
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pdf-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .pdf-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .pdf-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 181, 184, 0.3);
+        }
+
+        .pdf-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .pdf-icon {
+            font-size: 32px;
+            color: var(--primary-color);
+        }
+
+        .pdf-details h3 {
+            color: var(--text-color);
+            font-size: 16px;
+            margin: 0 0 5px 0;
+        }
+
+        .pdf-details p {
+            color: var(--light-text);
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .pdf-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .pdf-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pdf-btn:hover {
+            background: #00a8a8;
+            transform: scale(1.05);
+        }
+
+        .chat-history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .chat-history-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .chat-history-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(0, 181, 184, 0.3);
+        }
+
+        .chat-header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-metadata {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .chat-metadata strong {
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+
+        .chat-metadata span {
+            color: var(--light-text);
+            font-size: 13px;
+        }
+
+        .chat-preview {
+            color: var(--text-color);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            max-height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-preview::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: linear-gradient(transparent, rgba(10, 25, 47, 0.95));
+        }
+
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-view-chat, .btn-export-pdf {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-view-chat {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-view-chat:hover {
+            background: #00a8a8;
+        }
+
+        .btn-export-pdf {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-export-pdf:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--light-text);
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 992px) {
+            .documents-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar customizada */
+        .chat-history-list::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .chat-history-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+
+        .chat-history-list::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 5px;
+        }
+
+        .chat-history-list::-webkit-scrollbar-thumb:hover {
+            background: #00a8a8;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="neural-bg"></canvas>
+    <div class="animated-background">
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo" onclick="window.location.href='../index.html'" style="cursor: pointer;">
+                <img src="../images/logo.png" alt="Logo ARKAD AI">
+                <span class="logo-text">ARKAD AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="../index.html">INÍCIO</a>
+                <a href="/chat">CHAT</a>
+                <a href="/processar-ia-pdf">PROCESSAR PDF</a>
+                <a href="/documentos" class="active">DOCUMENTOS</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="documents-container">
+            <div class="documents-grid">
+                <!-- Seção de PDFs Legais -->
+                <div class="document-section">
+                    <h2><i class="fas fa-file-pdf"></i> Documentos Legais</h2>
+                    <div class="pdf-list" id="pdfList">
+                        <p style="color: var(--light-text); text-align: center;">Carregando documentos...</p>
+                    </div>
+                </div>
+
+                <!-- Seção de Histórico de Conversas -->
+                <div class="document-section">
+                    <h2><i class="fas fa-history"></i> Histórico de Conversas</h2>
+                    <div class="chat-history-list" id="chatHistoryList">
+                        <div class="empty-state">
+                            <i class="fas fa-comments"></i>
+                            <p>Nenhuma conversa salva ainda.</p>
+                            <p style="font-size: 13px;">Comece uma conversa no chat para ver o histórico aqui.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>EMPRESA</h3>
+                <p>Plataforma inteligente de consultoria empresarial que combina tecnologia e análise de mercado.</p>
+            </div>
+            <div class="footer-section">
+                <h3>CONTATO</h3>
+                <ul>
+                    <li><i class="fas fa-envelope"></i> arkadai.contact@gmail.com</li>
+                    <li><i class="fas fa-phone"></i> +55 11 98414-5527</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Copyright: <a href="#">ARKAD AI</a></p>
+        </div>
+    </footer>
+
+    <script src="../js/neural-background.js"></script>
+    <script src="../js/header-scroll.js"></script>
+    <script>
+        // Lista de PDFs disponíveis
+        const availablePDFs = [
+            { name: 'Política de Privacidade LGPD', file: 'Política de Privacidade LGPD - Arkad AI.pdf', size: '36 KB' },
+            { name: 'Termo de Consentimento LGPD', file: 'Termo de Consentimento LGPD - Arkad AI.pdf', size: '32 KB' },
+            { name: 'Termos de Uso', file: 'Termos_de_Uso_ArkadAI.pdf', size: '34 KB' },
+            { name: 'Política de Cookies', file: 'Política de Cookies - Arkad AI.pdf', size: '30 KB' },
+            { name: 'Aviso Legal (Disclaimer)', file: 'Aviso Legal Disclaimer - Arkad AI.pdf', size: '30 KB' },
+            { name: 'Contrato de Prestação de Serviços', file: 'Contrato de Prestação de Serviços - Arkad AI.pdf', size: '35 KB' },
+            { name: 'Termos de Assinatura e Pagamentos', file: 'Termos de Assinatura e Pagamentos - Arkad AI.pdf', size: '32 KB' }
+        ];
+
+        // Carregar lista de PDFs
+        function loadPDFList() {
+            const pdfList = document.getElementById('pdfList');
+            pdfList.innerHTML = '';
+
+            availablePDFs.forEach(pdf => {
+                const pdfItem = document.createElement('div');
+                pdfItem.className = 'pdf-item';
+                pdfItem.innerHTML = `
+                    <div class="pdf-info">
+                        <i class="fas fa-file-pdf pdf-icon"></i>
+                        <div class="pdf-details">
+                            <h3>${pdf.name}</h3>
+                            <p>${pdf.size}</p>
+                        </div>
+                    </div>
+                    <div class="pdf-actions">
+                        <button class="pdf-btn" onclick="downloadPDF('${pdf.file}', '${pdf.name}')">
+                            <i class="fas fa-download"></i> Baixar
+                        </button>
+                    </div>
+                `;
+                pdfList.appendChild(pdfItem);
+            });
+        }
+
+        // Baixar PDF
+        function downloadPDF(filename, displayName) {
+            const link = document.createElement('a');
+            link.href = `../../Documentacao/novospdfs/${filename}`;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Carregar histórico de conversas
+        function loadChatHistory() {
+            const chatHistory = localStorage.getItem('currentChatHistory');
+            const clientInfo = localStorage.getItem('clientInfo');
+            const historyList = document.getElementById('chatHistoryList');
+
+            if (!chatHistory) {
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <p>Nenhuma conversa salva ainda.</p>
+                        <p style="font-size: 13px;">Comece uma conversa no <a href="/chat" style="color: var(--primary-color);">chat</a> para ver o histórico aqui.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const messages = JSON.parse(chatHistory);
+                const client = clientInfo ? JSON.parse(clientInfo) : { name: 'Usuário', company: 'Não informado' };
+
+                // Criar preview da conversa
+                const preview = messages.slice(0, 5).map(msg => 
+                    `<strong>${msg.type === 'user' ? 'Você' : 'IA'}:</strong> ${msg.text.substring(0, 100)}...`
+                ).join('<br>');
+
+                const date = new Date(messages[0]?.timestamp || Date.now()).toLocaleString('pt-BR');
+
+                historyList.innerHTML = `
+                    <div class="chat-history-item">
+                        <div class="chat-header-info">
+                            <div class="chat-metadata">
+                                <strong>${client.name || 'Usuário'}</strong>
+                                <span>${client.company || 'Empresa não informada'}</span>
+                                <span><i class="fas fa-clock"></i> ${date}</span>
+                            </div>
+                        </div>
+                        <div class="chat-preview">${preview}</div>
+                        <div class="chat-actions">
+                            <button class="btn-view-chat" onclick="window.location.href='/chat'">
+                                <i class="fas fa-eye"></i> Ver Conversa
+                            </button>
+                            <button class="btn-export-pdf" onclick="exportChatToPDF()">
+                                <i class="fas fa-file-pdf"></i> Exportar PDF
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Erro ao carregar histórico:', error);
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>Erro ao carregar histórico.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Exportar chat para PDF
+        function exportChatToPDF() {
+            // Redirecionar para página de processar PDF com dados do chat
+            window.location.href = '/processar-ia-pdf';
+        }
+
+        // Inicializar página
+        window.onload = function() {
+            loadPDFList();
+            loadChatHistory();
+        };
+    </script>
+</body>
+</html>
+

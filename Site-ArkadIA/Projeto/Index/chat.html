@@ -33,7 +33,8 @@
                 <span class="logo-text">ARKAD AI</span>
             </div>
             <div class="nav-links">
-                <a href="../index.html">VOLTAR</a>
+                <a href="../index.html">INÍCIO</a>
+                <a href="/documentos">DOCUMENTOS</a>
             </div>
         </nav>
     </header>
@@ -43,8 +44,15 @@
             <div class="chat-column">
                 <div class="chat-container">
                 <div class="chat-header">
-                    <h2>Chat com IA</h2>
-                    <p>Como posso ajudar você hoje?</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div>
+                            <h2>Chat com IA</h2>
+                            <p>Como posso ajudar você hoje?</p>
+                        </div>
+                        <button onclick="clearChatHistory()" style="background: rgba(255, 82, 82, 0.2); border: 1px solid rgba(255, 82, 82, 0.4); color: #ff5252; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255, 82, 82, 0.3)'" onmouseout="this.style.background='rgba(255, 82, 82, 0.2)'">
+                            <i class="fas fa-trash-alt"></i> Limpar Chat
+                        </button>
+                    </div>
                 </div>
                 <div class="chat-messages" id="chatMessages">
                 <div class="message ai-message">
@@ -60,7 +68,10 @@
                         <i class="fas fa-robot"></i>
                         <div>
                             <p><strong>Olá! Sou a IA da Arkad.</strong> 👋</p>
-                            <p>Como posso ajudar você hoje?</p>
+                            <p>Antes de começarmos, preciso de algumas informações:</p>
+                            <p><strong>1.</strong> Qual é o seu nome?</p>
+                            <p><strong>2.</strong> Qual é o nome da sua empresa?</p>
+                            <p>Depois me conte: como posso ajudá-lo(a) hoje?</p>
                         </div>
                     </div>
                 </div>
@@ -171,6 +182,8 @@
         let currentSessionId = null;
         let geminiIntegration = null;
         let useProMode = true; // Usar modo PRO (Gemini) por padrão
+        let chatHistory = []; // Histórico de mensagens
+        let clientInfo = { name: '', company: '', reportTitle: '' }; // Informações do cliente
 
         // Inicializar chat no backendStorage
         async function initializeChat() {
@@ -259,6 +272,7 @@
             }
         }
 
+<<<<<<< Updated upstream
         // Verificar autenticação ANTES de inicializar chat
         function checkAuth() {
             console.log('🔐 Verificando autenticação...');
@@ -300,16 +314,186 @@
             
             console.log('✅ Autenticação OK - usuário já estava logado');
             return true;
+=======
+        // Restaurar chat do localStorage (por usuário)
+        function restoreChatFromStorage() {
+            try {
+                // Obter ID do usuário
+                const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                const userId = userInfo.id || 'guest';
+                
+                // Tentar carregar histórico específico do usuário primeiro
+                const chatKey = `chatHistory_${userId}`;
+                const clientKey = `clientInfo_${userId}`;
+                
+                let storedHistory = localStorage.getItem(chatKey);
+                let storedClientInfo = localStorage.getItem(clientKey);
+                
+                // Fallback para chaves antigas
+                if (!storedHistory) {
+                    storedHistory = localStorage.getItem('currentChatHistory');
+                }
+                if (!storedClientInfo) {
+                    storedClientInfo = localStorage.getItem('clientInfo');
+                }
+                
+                if (storedHistory) {
+                    try {
+                        chatHistory = JSON.parse(storedHistory);
+                        // Restaurar mensagens na interface (exceto as iniciais já existentes)
+                        const existingMessages = messagesContainer.querySelectorAll('.message').length;
+                        chatHistory.slice(existingMessages).forEach(msg => {
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = `message ${msg.type}-message`;
+                            const icon = msg.type === 'ai' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>';
+                            messageDiv.innerHTML = `
+                                <div class="message-content">
+                                    ${icon}
+                                    <div>${formatMessage(msg.text)}</div>
+                                </div>
+                            `;
+                            messagesContainer.appendChild(messageDiv);
+                        });
+                        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                        console.log('✅ Chat restaurado para usuário:', userId, '(' + chatHistory.length + ' mensagens)');
+                    } catch (error) {
+                        console.error('Erro ao restaurar chat:', error);
+                    }
+                }
+                
+                if (storedClientInfo) {
+                    try {
+                        clientInfo = JSON.parse(storedClientInfo);
+                        console.log('✅ Informações do cliente restauradas:', clientInfo);
+                    } catch (error) {
+                        console.error('Erro ao restaurar informações do cliente:', error);
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao restaurar chat do storage:', error);
+            }
+        }
+
+        // Salvar chat no localStorage (por usuário)
+        function saveChatToStorage() {
+            try {
+                // Obter ID do usuário
+                const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                const userId = userInfo.id || 'guest';
+                
+                // Salvar histórico do chat com prefixo do usuário
+                const chatKey = `chatHistory_${userId}`;
+                const clientKey = `clientInfo_${userId}`;
+                
+                localStorage.setItem(chatKey, JSON.stringify(chatHistory));
+                localStorage.setItem(clientKey, JSON.stringify(clientInfo));
+                
+                // Manter também as chaves antigas para compatibilidade
+                localStorage.setItem('currentChatHistory', JSON.stringify(chatHistory));
+                localStorage.setItem('clientInfo', JSON.stringify(clientInfo));
+                
+                console.log('💾 Chat salvo para usuário:', userId);
+            } catch (error) {
+                console.error('Erro ao salvar chat:', error);
+            }
+        }
+
+        // Extrair nome, empresa e título do relatório das mensagens
+        function extractClientInfo(message) {
+            const lowerMsg = message.toLowerCase();
+            const userMessages = chatHistory.filter(m => m.type === 'user').length;
+            
+            // Extrair nome (primeira ou segunda mensagem do usuário)
+            if (!clientInfo.name && userMessages <= 2) {
+                // Padrões para identificar nome
+                const nameMatch = message.match(/(?:me chamo|meu nome é|sou|nome:?\s*)([A-Za-zÀ-ÿ\s]+?)(?:\.|,|$)/i);
+                if (nameMatch) {
+                    clientInfo.name = nameMatch[1].trim();
+                } else if (message.length < 50 && !lowerMsg.includes('empresa') && !lowerMsg.includes('análise') && !lowerMsg.includes('relatório')) {
+                    // Se for mensagem curta e não menciona empresa/análise, provavelmente é o nome
+                    clientInfo.name = message.trim();
+                }
+            }
+            
+            // Extrair empresa
+            if (lowerMsg.includes('empresa')) {
+                const companyMatches = [
+                    message.match(/empresa[:\s]+([A-Za-z0-9À-ÿ\s]+?)(?:\.|,|e\s|$)/i),
+                    message.match(/(?:trabalho na|da empresa|minha empresa é)\s+([A-Za-z0-9À-ÿ\s]+?)(?:\.|,|$)/i)
+                ];
+                
+                for (const match of companyMatches) {
+                    if (match) {
+                        clientInfo.company = match[1].trim();
+                        break;
+                    }
+                }
+            }
+            
+            saveChatToStorage();
+        }
+        
+        // Extrair título do relatório das respostas da IA
+        function extractReportTitle(aiMessage) {
+            const titlePatterns = [
+                /Título do Relatório:?\s*["\"]?(.+?)["\"]?(?:\n|$)/i,
+                /\*\*Título:?\*\*\s*(.+?)(?:\n|$)/i,
+                /Análise de\s+(.+?)(?:\n|$)/i,
+                /Relatório de\s+(.+?)(?:\n|$)/i,
+                /Proposta de\s+(.+?)(?:\n|$)/i,
+                /Plano de\s+(.+?)(?:\n|$)/i
+            ];
+            
+            for (const pattern of titlePatterns) {
+                const match = aiMessage.match(pattern);
+                if (match && !clientInfo.reportTitle) {
+                    clientInfo.reportTitle = match[1].trim();
+                    saveChatToStorage();
+                    console.log('📋 Título do relatório extraído:', clientInfo.reportTitle);
+                    break;
+                }
+            }
+        }
+        
+        // Limpar histórico do chat e começar nova conversa
+        function clearChatHistory() {
+            if (confirm('Tem certeza que deseja limpar todo o histórico do chat?\n\nEsta ação não pode ser desfeita.')) {
+                // Limpar variáveis
+                chatHistory = [];
+                clientInfo = { name: '', company: '', reportTitle: '' };
+                
+                // Limpar localStorage
+                const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                const userId = userInfo.id || 'guest';
+                
+                localStorage.removeItem(`chatHistory_${userId}`);
+                localStorage.removeItem(`clientInfo_${userId}`);
+                localStorage.removeItem('currentChatHistory');
+                localStorage.removeItem('clientInfo');
+                
+                // Recarregar página
+                location.reload();
+                
+                console.log('🗑️ Chat limpo com sucesso');
+            }
+>>>>>>> Stashed changes
         }
 
         // Mostra a consulta inicial do usuário
         window.onload = async function() {
             messagesContainer = document.getElementById('chatMessages');
             
+<<<<<<< Updated upstream
             // IMPORTANTE: Verificar autenticação PRIMEIRO
             checkAuth();
             
             // Depois inicializar chat no backendStorage
+=======
+            // Restaurar chat anterior
+            restoreChatFromStorage();
+            
+            // Inicializar chat no backendStorage
+>>>>>>> Stashed changes
             await initializeChat();
             
             // Verificar se há prompt selecionado do processar-ia-pdf.html
@@ -532,14 +716,6 @@
 
                 if (response.success) {
                     await addMessage(response.message, 'ai');
-                    
-                    // Adicionar opções rápidas para próximas ações
-                    setTimeout(() => {
-                        addQuickReply("📄 Gerar Relatório PDF");
-                        addQuickReply("📝 Exportar em TXT");
-                        addQuickReply("🔄 Nova Análise");
-                        addQuickReply("❓ Fazer outra pergunta");
-                    }, 1000);
                 } else {
                     await addMessage(response.message, 'ai');
                 }
@@ -599,6 +775,18 @@
             messagesContainer.appendChild(messageDiv);
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
             
+            // Adicionar ao histórico e salvar
+            chatHistory.push({ type: sender, text: text, timestamp: Date.now() });
+            
+            // Extrair informações do cliente
+            if (sender === 'user') {
+                extractClientInfo(text);
+            } else if (sender === 'ai') {
+                extractReportTitle(text);
+            }
+            
+            saveChatToStorage();
+            
             // Salvar mensagem no backendStorage se chat estiver inicializado
             if (currentChatId && window.backendStorage) {
                 try {
@@ -626,18 +814,9 @@
             quickReplyDiv.className = 'quick-reply';
             quickReplyDiv.textContent = text;
             quickReplyDiv.onclick = async () => {
-                // Verificar se é comando especial
-                if (text.includes('Gerar Relatório PDF') || text.includes('PDF')) {
-                    await generatePDFReport();
-                } else if (text.includes('Exportar em TXT') || text.includes('TXT')) {
-                    await generateTextReport();
-                } else if (text.includes('Nova Análise')) {
-                    location.reload();
-                } else {
-                    // Comportamento padrão - enviar como mensagem
-                    document.getElementById('userInput').value = text;
-                    sendMessage();
-                }
+                // Comportamento padrão - enviar como mensagem
+                document.getElementById('userInput').value = text;
+                sendMessage();
             };
             
             messagesContainer.appendChild(quickReplyDiv);
@@ -989,4 +1168,5 @@
     <script src="../js/neural-background.js"></script>
     <script src="../js/mobile-menu.js"></script>
 </body>
+</html> 
 </html> 

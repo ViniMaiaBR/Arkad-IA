@@ -10,3 +10,33 @@
     display: none;
 }
 
+/* Indicador de digitação */
+.typing-indicator .typing-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin: 0 2px;
+    background-color: #666;
+    border-radius: 50%;
+    animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator .typing-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-indicator .typing-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes typing-bounce {
+    0%, 80%, 100% {
+        transform: scale(0);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+

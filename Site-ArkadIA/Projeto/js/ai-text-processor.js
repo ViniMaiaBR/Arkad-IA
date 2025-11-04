@@ -302,6 +302,7 @@ class AITextProcessor {
             .replace(/\n /g, '\n') // Remover espaços no início de linhas
             .replace(/ \n/g, '\n'); // Remover espaços no final de linhas
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     }
 
     // Limpar texto do objetivo removendo linguagem informal
@@ -316,6 +317,8 @@ class AITextProcessor {
             .replace(/^[\.\s]*/, '') // Remover pontos e espaços no início
             .replace(/\s+/g, ' ')
             .trim();
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     }
@@ -479,8 +482,13 @@ class AITextProcessor {
                     </h3>
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #00B5B8;">
                         <p style="margin: 0; font-size: 16px; line-height: 1.6;">${this.cleanObjectiveText(data.objective)}</p>
+=======
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #00B5B8; box-shadow: 0 1px 3px rgba(0,181,184,0.1);">
+                        <div style="font-size: 14px; line-height: 1.6; color: #444;">${this.formatTextToHTML(data.objective)}</div>
+>>>>>>> Stashed changes
 =======
                     <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #00B5B8; box-shadow: 0 1px 3px rgba(0,181,184,0.1);">
                         <div style="font-size: 14px; line-height: 1.6; color: #444;">${this.formatTextToHTML(data.objective)}</div>

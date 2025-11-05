@@ -5,7 +5,7 @@ class AITextProcessor {
     constructor() {
         this.template = {
             header: {
-                title: "Relatório Estratégico Arkad AI",
+                title: "Relatório Arkad IA",
                 subtitle: "",
                 client: "",
                 company: "",
@@ -19,16 +19,16 @@ class AITextProcessor {
     // Processar texto da IA e extrair informações estruturadas
     processAIText(aiText, context = {}) {
         try {
+            console.log('🔍 Processando texto da IA...');
+            console.log('📄 Texto original (primeiros 300 chars):', aiText.substring(0, 300));
+            
+            // Nova abordagem: detectar seções automaticamente
+            const sections = this.detectSections(aiText);
+            console.log('✅ Seções detectadas:', sections.length);
+            
             const processedData = {
                 header: this.extractHeader(aiText, context),
-                objective: this.extractObjective(aiText),
-                diagnosis: this.extractDiagnosis(aiText),
-                strategy: this.extractStrategy(aiText),
-                phases: this.extractPhases(aiText),
-                technology: this.extractTechnology(aiText),
-                risks: this.extractRisks(aiText),
-                financial: this.extractFinancial(aiText),
-                conclusion: this.extractConclusion(aiText)
+                sections: sections
             };
 
             return processedData;
@@ -38,12 +38,204 @@ class AITextProcessor {
         }
     }
 
+    // Nova função para detectar seções automaticamente
+    detectSections(aiText) {
+        const sections = [];
+        
+        // Limpar texto
+        const cleanedText = aiText
+            .replace(/\r\n/g, '\n')
+            .replace(/\r/g, '\n')
+            .trim();
+        
+        console.log('📝 Texto limpo para análise (primeiros 300 chars):', cleanedText.substring(0, 300));
+        
+        // Palavras-chave que indicam informações do cabeçalho (devem ser ignoradas)
+        const headerKeywords = [
+            'cliente', 'client', 'nome do cliente',
+            'empresa', 'company', 'nome da empresa', 'organização',
+            'data', 'date', 'data de', 'data do',
+            'título', 'titulo', 'title', 'título do relatório', 'titulo do relatorio',
+            'relatório', 'relatorio', 'report',
+            'consultoria', 'consultor', 'consultant', 'consultora',
+            'consultor de ia', 'consultora de ia'
+        ];
+        
+        // Função para verificar se uma seção é do cabeçalho
+        const isHeaderSection = (title, position, totalSections) => {
+            const titleLower = title.toLowerCase().trim();
+            
+            // Verificar se o título contém palavras-chave do cabeçalho
+            const isHeaderKeyword = headerKeywords.some(keyword => 
+                titleLower.includes(keyword.toLowerCase())
+            );
+            
+            // Se for uma das primeiras 3 seções E contiver palavras-chave do cabeçalho, ignorar
+            if (position < 3 && isHeaderKeyword) {
+                console.log(`⏭️ Seção ignorada (cabeçalho): "${title}" (posição ${position})`);
+                return true;
+            }
+            
+            // Verificar padrões específicos de cabeçalho
+            const headerPatterns = [
+                /^cliente/i,
+                /^empresa/i,
+                /^data/i,
+                /^título/i,
+                /^titulo/i,
+                /^relatório/i,
+                /^relatorio/i,
+                /^consultor/i
+            ];
+            
+            const matchesPattern = headerPatterns.some(pattern => pattern.test(titleLower));
+            
+            if (position < 4 && matchesPattern) {
+                console.log(`⏭️ Seção ignorada (padrão cabeçalho): "${title}" (posição ${position})`);
+                return true;
+            }
+            
+            return false;
+        };
+        
+        // Padrão para detectar títulos: texto que termina com ":" ou ":" seguido de texto
+        // Aceita formatos como:
+        // - "Objetivo projeto: texto"
+        // - "1. Diagnóstico: texto"
+        // - "Diagnóstico e Contexto Atual: texto"
+        const sectionPattern = /([A-ZÁÉÍÓÚÂÊÔÃÕÇ][^:\n]{3,80}):\s*([^\n]+(?:\n(?![A-ZÁÉÍÓÚÂÊÔÃÕÇ][^:\n]{3,80}:)[^\n]+)*)/gi;
+        
+        let match;
+        let foundSections = 0;
+        let position = 0;
+        const allMatches = [];
+        
+        // Primeiro, coletar todas as seções encontradas
+        while ((match = sectionPattern.exec(cleanedText)) !== null) {
+            const title = match[1].trim()
+                .replace(/^\d+\.\s*/, '') // Remove numeração se já existir
+                .replace(/^[-•*]\s*/, ''); // Remove bullets
+            const content = match[2].trim();
+            
+            allMatches.push({
+                title: title,
+                content: content,
+                position: position++,
+                matchIndex: match.index
+            });
+        }
+        
+        console.log(`📊 Total de seções encontradas (antes do filtro): ${allMatches.length}`);
+        
+        // Filtrar seções do cabeçalho e adicionar as válidas
+        allMatches.forEach((match, index) => {
+            if (!isHeaderSection(match.title, match.position, allMatches.length)) {
+                console.log(`✅ Seção adicionada: "${match.title}" (${match.content.length} chars)`);
+                sections.push({
+                    title: match.title,
+                    content: match.content
+                });
+                foundSections++;
+            }
+        });
+        
+        console.log(`✅ Total de seções válidas (após filtro): ${foundSections}`);
+        
+        // Se não encontrou nenhuma seção, tentar separar por pontos finais seguidos de letra maiúscula
+        if (sections.length === 0) {
+            console.log('⚠️ Nenhuma seção detectada, tentando abordagem alternativa...');
+            
+            // Separar por frases que começam com letra maiúscula após ponto final
+            const sentences = cleanedText.split(/\.\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ])/);
+            
+            const tempSections = [];
+            
+            sentences.forEach((sentence, index) => {
+                const trimmed = sentence.trim();
+                if (trimmed.length > 20) {
+                    let sectionTitle = '';
+                    let sectionContent = '';
+                    
+                    // Primeiro encontrado pode ser objetivo ou informação do cabeçalho
+                    if (index === 0) {
+                        // Verificar se contém informações do cabeçalho
+                        const firstPart = trimmed.substring(0, 100).toLowerCase();
+                        const hasHeaderInfo = headerKeywords.some(keyword => firstPart.includes(keyword));
+                        
+                        if (!hasHeaderInfo) {
+                            sectionTitle = 'Objetivo do Projeto';
+                            sectionContent = trimmed;
+                        } else {
+                            console.log(`⏭️ Primeira frase ignorada (cabeçalho): "${trimmed.substring(0, 50)}..."`);
+                            return; // Pular esta frase
+                        }
+                    } else {
+                        // Tentar extrair título da primeira parte da frase
+                        const firstPart = trimmed.substring(0, 80);
+                        const colonIndex = firstPart.indexOf(':');
+                        
+                        if (colonIndex > 0) {
+                            sectionTitle = trimmed.substring(0, colonIndex).trim();
+                            sectionContent = trimmed.substring(colonIndex + 1).trim();
+                            
+                            // Verificar se o título é do cabeçalho
+                            if (isHeaderSection(sectionTitle, index, sentences.length)) {
+                                console.log(`⏭️ Seção ignorada (cabeçalho): "${sectionTitle}"`);
+                                return; // Pular esta seção
+                            }
+                        } else {
+                            // Usar primeiras palavras como título
+                            const words = trimmed.split(' ');
+                            sectionTitle = words.slice(0, Math.min(5, words.length)).join(' ');
+                            sectionContent = trimmed;
+                            
+                            // Verificar se o título é do cabeçalho
+                            if (isHeaderSection(sectionTitle, index, sentences.length)) {
+                                console.log(`⏭️ Seção ignorada (cabeçalho): "${sectionTitle}"`);
+                                return; // Pular esta seção
+                            }
+                        }
+                    }
+                    
+                    if (sectionTitle && sectionContent) {
+                        tempSections.push({
+                            title: sectionTitle,
+                            content: sectionContent,
+                            position: index
+                        });
+                    }
+                }
+            });
+            
+            // Adicionar apenas seções válidas
+            tempSections.forEach(section => {
+                sections.push({
+                    title: section.title,
+                    content: section.content
+                });
+            });
+            
+            console.log(`✅ Seções criadas pela abordagem alternativa: ${sections.length}`);
+        }
+        
+        // Se ainda não tem seções, criar uma seção padrão
+        if (sections.length === 0) {
+            console.log('⚠️ Criando seção padrão...');
+            sections.push({
+                title: 'Análise Completa',
+                content: cleanedText
+            });
+        }
+        
+        return sections;
+    }
+
     // Extrair cabeçalho do relatório
     extractHeader(aiText, context) {
         const currentDate = new Date().toLocaleDateString('pt-BR');
         
         return {
-            title: context.title || "Relatório Estratégico Arkad AI",
+            title: context.title || "Relatório Arkad IA",
             subtitle: context.subtitle || this.extractSubtitle(aiText),
             client: context.client || this.extractClient(aiText),
             company: context.company || this.extractCompany(aiText),
@@ -269,27 +461,19 @@ class AITextProcessor {
     createDefaultStructure(aiText, context) {
         return {
             header: {
-                title: "Relatório Estratégico Arkad AI",
+                title: "Relatório Arkad IA",
                 subtitle: context.subtitle || "Análise e Recomendações",
                 client: context.client || "Cliente",
                 company: context.company || "Empresa",
                 date: new Date().toLocaleDateString('pt-BR'),
                 consultant: "Arkad AI – Unidade Estratégica de Negócios"
             },
-            objective: "Análise estratégica baseada nos dados fornecidos pela IA.",
-            diagnosis: aiText.substring(0, 500) + "...",
-            strategy: "Desenvolvimento de estratégia personalizada.",
-            phases: [
+            sections: [
                 {
-                    number: "1",
-                    title: "Fase 1: Análise",
-                    content: "Análise inicial dos dados e identificação de oportunidades."
+                    title: "Análise Completa",
+                    content: aiText || "Conteúdo não disponível."
                 }
-            ],
-            technology: "Recomendações de tecnologia e ferramentas.",
-            risks: "Identificação de riscos e estratégias de mitigação.",
-            financial: "Análise financeira e projeções.",
-            conclusion: "Conclusões e recomendações finais baseadas na análise da IA."
+            ]
         };
     }
 
@@ -437,106 +621,71 @@ class AITextProcessor {
 
     // Gerar HTML do relatório baseado no template
     generateReportHTML(data) {
+        // Ícones para as seções
+        const icons = ['🎯', '🔍', '💡', '📊', '⚙️', '📈', '💼', '🚀', '🎓', '🔬', '💻', '📋'];
+        
         return `
             <div style="font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 0;">
                 
                 <!-- Cabeçalho -->
-                <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #00B5B8; padding: 15px 20px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px;">
-                    <h1 style="color: #00B5B8; font-size: 24px; margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">${data.header.title}</h1>
-                    <h2 style="color: #555; font-size: 18px; margin: 0 0 15px 0; font-weight: 600;">${data.header.subtitle}</h2>
+                <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #00B5B8; padding: 20px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px;">
+                    <h1 style="color: #00B5B8; font-size: 26px; margin: 0 0 15px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">RELATÓRIO ARKAD IA</h1>
                     
-                    <div style="margin: 10px 0; font-size: 14px; text-align: left; background: white; padding: 12px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                        <p style="margin: 6px 0; padding: 4px 0; border-bottom: 1px solid #eee;"><strong style="color: #00B5B8;">Cliente:</strong> <span style="color: #333;">${data.header.client}</span></p>
-                        <p style="margin: 6px 0; padding: 4px 0;"><strong style="color: #00B5B8;">Empresa:</strong> <span style="color: #333;">${data.header.company}</span></p>
-                    </div>
-                    <div style="margin-top: 8px; font-size: 12px; text-align: left; color: #666;">
-                        <p style="margin: 3px 0;"><strong>Data:</strong> ${data.header.date}</p>
-                        <p style="margin: 3px 0;"><strong>Consultora de IA:</strong> ${data.header.consultant}</p>
-                    </div>
-                </div>
-
-                <!-- Objetivo do Projeto -->
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                        📋 Objetivo do Projeto
-                    </h3>
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #00B5B8; box-shadow: 0 1px 3px rgba(0,181,184,0.1);">
-                        <div style="font-size: 14px; line-height: 1.6; color: #444;">${this.formatTextToHTML(data.objective)}</div>
-                    </div>
-                </div>
-
-                <!-- Diagnóstico -->
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                        1. 🔍 Diagnóstico e Contexto Atual
-                    </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.diagnosis)}</div>
-                    </div>
-                </div>
-
-                <!-- Estratégia -->
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                        2. 🎯 Estratégia de Implementação
-                    </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.strategy)}</div>
-                    </div>
-                </div>
-
-                <!-- Fases de Execução -->
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                        3. 📅 Plano Estratégico – Fases de Execução
-                    </h3>
-                    ${data.phases.map((phase, index) => `
-                        <div style="margin-bottom: 15px; background: linear-gradient(to right, #f8f9fa, #ffffff); border-radius: 6px; padding: 15px; border-left: 4px solid #00B5B8; box-shadow: 0 1px 3px rgba(0,181,184,0.1); page-break-inside: avoid;">
-                            <h4 style="color: #00B5B8; font-size: 15px; margin: 0 0 10px 0; font-weight: 700;">${phase.title}</h4>
-                            <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(phase.content)}</div>
+                    <div style="background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 15px;">
+                        <h2 style="color: #00B5B8; font-size: 16px; margin: 0 0 12px 0; font-weight: 600; text-transform: uppercase; border-bottom: 2px solid #00B5B8; padding-bottom: 8px;">${data.header.subtitle || 'Análise Estratégica e Recomendações'}</h2>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; text-align: left; font-size: 13px; margin-top: 12px;">
+                            <div style="padding: 6px;">
+                                <strong style="color: #00B5B8; display: block; margin-bottom: 4px;">Cliente:</strong>
+                                <span style="color: #333;">${data.header.client}</span>
+                            </div>
+                            <div style="padding: 6px;">
+                                <strong style="color: #00B5B8; display: block; margin-bottom: 4px;">Empresa:</strong>
+                                <span style="color: #333;">${data.header.company}</span>
+                            </div>
+                            <div style="padding: 6px;">
+                                <strong style="color: #00B5B8; display: block; margin-bottom: 4px;">Data:</strong>
+                                <span style="color: #333;">${data.header.date}</span>
+                            </div>
+                            <div style="padding: 6px;">
+                                <strong style="color: #00B5B8; display: block; margin-bottom: 4px;">Consultoria:</strong>
+                                <span style="color: #333; font-size: 11px;">${data.header.consultant}</span>
+                            </div>
                         </div>
-                    `).join('')}
-                </div>
-
-                <!-- Tecnologia -->
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                        4. 💻 Stack Operacional Recomendado
-                    </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.technology)}</div>
                     </div>
                 </div>
 
-                <!-- Riscos -->
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                        5. ⚠️ Análise de Riscos e Mitigações
-                    </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.risks)}</div>
+                ${data.sections && data.sections.length > 0 ? data.sections.map((section, index) => {
+                    const isFirst = index === 0;
+                    const icon = icons[index % icons.length];
+                    
+                    // Primeira seção tem destaque especial (Objetivo do Projeto)
+                    if (isFirst) {
+                        return `
+                        <!-- Objetivo do Projeto (Primeira Seção) -->
+                        <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                            <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                                ${icon} ${this.capitalizeFirst(section.title)}
+                            </h3>
+                            <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; border-left: 4px solid #00B5B8; box-shadow: 0 1px 3px rgba(0,181,184,0.1);">
+                                <div style="font-size: 14px; line-height: 1.6; color: #444;">${this.formatTextToHTML(section.content)}</div>
+                            </div>
+                        </div>
+                        `;
+                    }
+                    
+                    // Demais seções numeradas
+                    return `
+                    <div style="margin-bottom: 25px; page-break-inside: avoid;">
+                        <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
+                            ${index}. ${icon} ${this.capitalizeFirst(section.title)}
+                        </h3>
+                        <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(section.content)}</div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Financeiro -->
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                        6. 💰 Projeção Financeira
-                    </h3>
-                    <div style="background: #fff; border: 1px solid #e9ecef; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-                        <div style="font-size: 13px; line-height: 1.6; color: #555;">${this.formatTextToHTML(data.financial)}</div>
-                    </div>
-                </div>
-
-                <!-- Conclusão -->
-                <div style="margin-bottom: 25px; page-break-inside: avoid;">
-                    <h3 style="color: #00B5B8; font-size: 17px; margin-bottom: 10px; border-left: 4px solid #00B5B8; padding-left: 10px; font-weight: 700; background: #f8f9fa; padding: 10px; border-radius: 4px;">
-                        ✅ Conclusão
-                    </h3>
-                    <div style="background: linear-gradient(135deg, #e8f5e8, #d4edda); border-left: 4px solid #28a745; border-radius: 6px; padding: 15px; box-shadow: 0 1px 3px rgba(40,167,69,0.2);">
-                        <div style="font-size: 14px; line-height: 1.6; font-weight: 500; color: #155724;">${this.formatTextToHTML(data.conclusion)}</div>
-                    </div>
-                </div>
+                    `;
+                }).join('') : ''}
 
                 <!-- Contato -->
                 <div style="margin-top: 50px; padding-top: 25px; border-top: 3px solid #e9ecef; text-align: center; background: #f8f9fa; padding: 25px; border-radius: 8px;">
@@ -550,6 +699,12 @@ class AITextProcessor {
 
             </div>
         `;
+    }
+    
+    // Capitalizar primeira letra
+    capitalizeFirst(text) {
+        if (!text) return '';
+        return text.charAt(0).toUpperCase() + text.slice(1);
     }
 }
 

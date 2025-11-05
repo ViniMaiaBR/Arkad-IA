@@ -488,97 +488,35 @@ class AITextProcessor {
     }
 
     // Gerar PDF baseado no template Documentacao/prompts_txt/ExemploRelatorio.txt
-    async generateReportPDF(aiText, context = {}, progressCallback = null, options = {}) {
+    async generateReportPDF(aiText, context = {}, progressCallback = null) {
         try {
             const processedData = this.processAIText(aiText, context);
             const htmlContent = this.generateReportHTML(processedData);
             
             const dateStr = new Date().toISOString().split('T')[0];
             
-            // Opções padrão
-            const includePrivacy = options.includePrivacy !== undefined ? options.includePrivacy : false;
-            const includeDisclaimer = options.includeDisclaimer !== undefined ? options.includeDisclaimer : false;
-            
-            // Calcular total de PDFs a gerar
-            const totalPdfs = 1 + (includePrivacy ? 1 : 0) + (includeDisclaimer ? 1 : 0);
-            let currentPdf = 1;
-            
-            // 1. Gerar relatório principal (sempre)
-            if (progressCallback) progressCallback(`Gerando Relatório Principal... (${currentPdf}/${totalPdfs})`);
+            // Gerar apenas o relatório principal
+            if (progressCallback) progressCallback('Gerando Relatório...');
             
             const result = await window.generateCustomPDF(htmlContent, {
                 filename: `Relatorio_Arkad_AI_${dateStr}.pdf`
             });
 
             if (!result.success) {
-                throw new Error('Erro ao gerar relatório principal');
+                throw new Error('Erro ao gerar relatório');
             }
 
-            console.log('✓ Relatório principal gerado');
-            currentPdf++;
-
-            const details = {
-                report: result,
-                privacy: null,
-                disclaimer: null
-            };
-
-            // 2. Gerar PDF de Política de Privacidade (se selecionado)
-            if (includePrivacy) {
-                await this.delay(800);
-                
-                if (progressCallback) progressCallback(`Gerando Política de Privacidade... (${currentPdf}/${totalPdfs})`);
-                
-                console.log('Gerando PDF de Política de Privacidade...');
-                const privacyResult = await window.pdfGenerator.loadAndGenerateLegalPDF(
-                    '../documentos-legais/PoliticaDePrivacidaEusodedados.txt',
-                    'Política de Privacidade e Proteção de Dados',
-                    `Politica_Privacidade_Arkad_AI_${dateStr}.pdf`
-                );
-
-                if (privacyResult.success) {
-                    console.log('✓ PDF de Política de Privacidade gerado');
-                }
-                
-                details.privacy = privacyResult;
-                currentPdf++;
-            }
-
-            // 3. Gerar PDF de Aviso Legal (se selecionado)
-            if (includeDisclaimer) {
-                await this.delay(800);
-                
-                if (progressCallback) progressCallback(`Gerando Aviso Legal... (${currentPdf}/${totalPdfs})`);
-                
-                console.log('Gerando PDF de Aviso Legal...');
-                const disclaimerResult = await window.pdfGenerator.loadAndGenerateLegalPDF(
-                    '../documentos-legais/AvisoLegal.txt',
-                    'Aviso Legal (Disclaimer)',
-                    `Aviso_Legal_Arkad_AI_${dateStr}.pdf`
-                );
-
-                if (disclaimerResult.success) {
-                    console.log('✓ PDF de Aviso Legal gerado');
-                }
-                
-                details.disclaimer = disclaimerResult;
-            }
+            console.log('✓ Relatório gerado');
 
             if (progressCallback) progressCallback('Finalizando...');
 
-            // Mensagem de sucesso dinâmica
-            let successMessage = 'Relatório gerado com sucesso!';
-            if (includePrivacy && includeDisclaimer) {
-                successMessage = 'Relatório e documentos legais gerados com sucesso!';
-            } else if (includePrivacy || includeDisclaimer) {
-                successMessage = 'Relatório e documento legal gerado com sucesso!';
-            }
-
-            // Retornar resultado consolidado
+            // Retornar resultado
             return {
                 success: true,
-                message: successMessage,
-                details: details
+                message: 'Relatório gerado com sucesso!',
+                details: {
+                    report: result
+                }
             };
 
         } catch (error) {

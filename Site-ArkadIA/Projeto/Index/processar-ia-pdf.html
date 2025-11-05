@@ -781,35 +781,55 @@
         // Função para formatar mensagens do histórico em texto
         function formatChatMessagesToText(messages) {
             if (!messages || messages.length === 0) {
+                console.log('⚠️ Nenhuma mensagem para formatar');
                 return '';
             }
             
-            // Filtrar apenas mensagens da IA que contenham informações relevantes
+            console.log('📝 Formatando', messages.length, 'mensagens');
+            
+            // Pegar TODAS as mensagens da IA, exceto as 2 primeiras (que são saudações padrão)
             const aiMessages = messages
                 .filter(msg => msg.type === 'ai')
-                .map(msg => msg.text.replace(/<[^>]*>/g, '').replace(/\*\*/g, '').replace(/\*/g, ''))
-                .filter(text => {
-                    // Filtrar mensagens muito curtas ou saudações iniciais
-                    const lower = text.toLowerCase();
-                    return text.length > 100 && 
-                           !lower.includes('olá! sou a ia') &&
-                           !lower.includes('como posso ajudar');
-                });
+                .slice(2) // Pular as 2 primeiras mensagens de saudação
+                .map(msg => {
+                    // Limpar HTML e formatação markdown
+                    let cleanText = msg.text
+                        .replace(/<br\s*\/?>/gi, '\n')
+                        .replace(/<[^>]*>/g, '')
+                        .replace(/\*\*/g, '')
+                        .replace(/\*/g, '')
+                        .trim();
+                    return cleanText;
+                })
+                .filter(text => text.length > 50); // Filtrar apenas mensagens muito curtas (menos de 50 chars)
             
-            // Se tiver mensagens da IA, juntar todas
+            console.log('📊 Mensagens da IA filtradas:', aiMessages.length);
+            
             if (aiMessages.length > 0) {
-                return aiMessages.join('\n\n');
+                const result = aiMessages.join('\n\n---\n\n');
+                console.log('✅ Texto formatado com sucesso:', result.length, 'caracteres');
+                console.log('📄 Primeiros 200 caracteres:', result.substring(0, 200));
+                return result;
             }
             
-            // Fallback: retornar todas as mensagens formatadas
+            // Fallback: pegar TODAS as mensagens da IA sem filtro
+            console.log('⚠️ Usando fallback - pegando todas as mensagens');
             let text = '';
             messages.forEach((msg, index) => {
-                if (msg.type === 'ai') {
-                    const cleanText = msg.text.replace(/<[^>]*>/g, '').replace(/\*\*/g, '').replace(/\*/g, '');
-                    text += cleanText + '\n\n';
+                if (msg.type === 'ai' && index >= 2) { // Pular as 2 primeiras
+                    const cleanText = msg.text
+                        .replace(/<br\s*\/?>/gi, '\n')
+                        .replace(/<[^>]*>/g, '')
+                        .replace(/\*\*/g, '')
+                        .replace(/\*/g, '')
+                        .trim();
+                    if (cleanText) {
+                        text += cleanText + '\n\n---\n\n';
+                    }
                 }
             });
             
+            console.log('✅ Fallback concluído:', text.length, 'caracteres');
             return text.trim();
         }
         

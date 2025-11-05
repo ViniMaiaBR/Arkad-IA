@@ -1,0 +1,50 @@
+Termo de Consentimento para Tratamento
+de Dados Pessoais
+(Em conformidade com a LGPD - Lei nº 13.709/2018)
+4 de novembro de 2025
+Este documento visa registrar a manifestação livre, informada e inequívoca pela qual
+o Titular de Dados (”USUÁRIO”) concorda com o tratamento de seus dados pessoais e
+empresariais para finalidades específicas, em conformidade com a Lei Geral de Proteção
+de Dados Pessoais.
+Ao assinalar ”Eu li e aceito” (ou mecanismo de aceite equivalente) na plataforma ”Arkad
+AI” (”Plataforma”), o USUÁRIO declara seu consentimento expresso para com a controladora dos dados:
+CONTROLADORA: [Nome da Empresa Proprietária da Arkad AI], doravante denominada ”ARKAD AI”, pessoa jurídica de direito privado, inscrita no CNPJ sob o nº [Inserir CNPJ],
+com sede na Av. Príncipe de Gales, 821 - Bairro Vila Príncipe de Gales, Santo André - SP,
+CEP: 09060-650.
+O presente consentimento é concedido sob as seguintes condições:
+1. DA DECLARAÇÃO DE CIÊNCIA
+1.1. O USUÁRIO declara, para todos os fins de direito, ter lido, compreendido e concordado integralmente com os termos da Política de Privacidade e Proteção
+de Dados (LGPD) da Arkad AI, documento anexo e parte indissociável deste
+consentimento.
+2.2. O USUÁRIO reconhece que a referida Política detalha exaustivamente como
+seus dados são coletados, tratados, armazenados e protegidos.
+2. DOS DADOS OBJETO DO TRATAMENTO
+1.1. O consentimento abrange o tratamento dos seguintes dados:
+2.2. Dados Fornecidos pelo USUÁRIO: Informações de cadastro (nome, e-mail, empresa), dados de pagamento (se aplicável), e informações estratégicas inseridas
+voluntariamente (ex: metas, concorrentes).
+3.3. Dados Coletados de Fontes Externas e Públicas: Dados de fontes abertas,
+APIs de mercado, bases governamentais e índices econômicos, conforme descrito na Política de Privacidade.
+3. DAS FINALIDADES ESPECÍFICAS DO TRATAMENTO
+1.1. O USUÁRIO consente que a ARKAD AI utilize os dados mencionados exclusivamente para as seguintes finalidades, essenciais ao funcionamento da Plataforma:
+2.2. Gerar análises de mercado, concorrência e dashboards interativos;
+3.3. Fornecer sugestões de estratégias de crescimento e previsões de tendências
+(utilizando modelos como ARIMA e aprendizado supervisionado);
+4.4. Operar o chatbot integrado para responder consultas sobre negócios e riscos;
+5.5. Filtrar e cruzar informações (por país, setor, porte de empresa) para gerar relatórios personalizados;
+6.6. Garantir a segurança da conta e cumprir obrigações legais.
+4. DO COMPARTILHAMENTO E SEGURANÇA
+1.1. O USUÁRIO está ciente de que a ARKAD AI não comercializa nem compartilha
+seus dados com terceiros sem sua permissão expressa, ressalvadas as hipóteses legais.
+2.2. O USUÁRIO está ciente de que a ARKAD AI adota medidas rigorosas de segurança, como criptografia total (em repouso e trânsito) e operação em servidores
+com certificação ISO/IEC 27001.
+5. DA REVOGAÇÃO DO CONSENTIMENTO E DIREITOS
+1.1. Este consentimento é concedido por prazo indeterminado, vigorando enquanto
+perdurar a relação contratual (uso da Plataforma) entre o USUÁRIO e a ARKAD
+AI, ou até que seja revogado.
+2.2. O USUÁRIO está ciente de que pode, a qualquer tempo e de forma gratuita,
+revogar este consentimento. A revogação pode implicar na impossibilidade de
+utilização total ou parcial da Plataforma.
+3.3. O USUÁRIO pode exercer todos os seus direitos de titular (acesso, correção, exclusão, portabilidade, etc.), conforme previstos no Art. 18 da LGPD e detalhados
+na Política de Privacidade, entrando em contato com o Encarregado de Proteção
+de Dados (DPO) da ARKAD AI.
+Ao manifestar seu aceite, o USUÁRIO confirma que o presente consentimento foi concedido de forma livre, informada e inequívoca.

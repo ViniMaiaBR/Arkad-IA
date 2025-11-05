@@ -183,7 +183,11 @@
         let geminiIntegration = null;
         let useProMode = true; // Usar modo PRO (Gemini) por padrão
         let chatHistory = []; // Histórico de mensagens
-        let clientInfo = { name: '', company: '', reportTitle: '' }; // Informações do cliente
+        
+        // Inicializar clientInfo com nome do usuário
+        const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+        const defaultUserName = userInfo.name || userInfo.email || '';
+        let clientInfo = { name: defaultUserName, company: '', reportTitle: '' }; // Informações do cliente
 
         // Inicializar chat no backendStorage
         async function initializeChat() {
@@ -364,10 +368,19 @@
                 if (storedClientInfo) {
                     try {
                         clientInfo = JSON.parse(storedClientInfo);
+                        // Se não houver nome, usar o nome do usuário
+                        if (!clientInfo.name) {
+                            const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                            clientInfo.name = userInfo.name || userInfo.email || '';
+                        }
                         console.log('✅ Informações do cliente restauradas:', clientInfo);
                     } catch (error) {
                         console.error('Erro ao restaurar informações do cliente:', error);
                     }
+                } else {
+                    // Se não houver clientInfo salvo, usar o nome do usuário
+                    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+                    clientInfo.name = userInfo.name || userInfo.email || '';
                 }
             } catch (error) {
                 console.error('Erro ao restaurar chat do storage:', error);
@@ -403,15 +416,11 @@
             const lowerMsg = message.toLowerCase();
             const userMessages = chatHistory.filter(m => m.type === 'user').length;
             
-            // Extrair nome (primeira ou segunda mensagem do usuário)
-            if (!clientInfo.name && userMessages <= 2) {
-                // Padrões para identificar nome
-                const nameMatch = message.match(/(?:me chamo|meu nome é|sou|nome:?\s*)([A-Za-zÀ-ÿ\s]+?)(?:\.|,|$)/i);
+            // Extrair nome apenas se explicitamente mencionado
+            if (userMessages <= 2) {
+                const nameMatch = message.match(/(?:me chamo|meu nome é|sou)\s+([A-Za-zÀ-ÿ\s]+?)(?:\.|,|$)/i);
                 if (nameMatch) {
                     clientInfo.name = nameMatch[1].trim();
-                } else if (message.length < 50 && !lowerMsg.includes('empresa') && !lowerMsg.includes('análise') && !lowerMsg.includes('relatório')) {
-                    // Se for mensagem curta e não menciona empresa/análise, provavelmente é o nome
-                    clientInfo.name = message.trim();
                 }
             }
             

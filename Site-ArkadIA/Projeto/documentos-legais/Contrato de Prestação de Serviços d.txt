@@ -1,0 +1,85 @@
+Contrato de Prestação de Serviços de
+Consultoria com Inteligência Artificial
+CONTRATADA: [Nome da Empresa Proprietária da Arkad AI], pessoa jurídica de direito
+privado, inscrita no CNPJ sob o nº [Inserir CNPJ], com sede na Av. Príncipe de Gales, 821
+- Bairro Vila Príncipe de Gales, Santo André - SP, CEP: 09060-650, doravante denominada
+ARKAD AI.
+CONTRATANTE: [Nome/Razão Social do Cliente], pessoa [física/jurídica] inscrita no [CPF/CNPJ]
+sob o nº [Inserir CPF/CNPJ], com sede em [Inserir Endereço do Cliente], doravante denominado(a) CLIENTE.
+As partes acima identificadas celebram o presente Contrato de Prestação de Serviços
+(”Contrato”), que se regerá pelas seguintes cláusulas e condições:
+1. DO OBJETO DO CONTRATO
+1.1. O objeto deste Contrato é a prestação de serviços de consultoria estratégica de
+negócios baseada em análise de dados, fornecida por meio de acesso e uso da
+plataforma de inteligência artificial ”Arkad AI” (”Plataforma”).
+2.2. Os serviços incluem, mas não se limitam a:
+3.3. Acesso à Plataforma Arkad AI conforme o plano de assinatura contratado;
+4.4. Processamento e transformação de dados brutos fornecidos pelo CLIENTE ou
+coletados pela Plataforma de fontes abertas e APIs de mercado;
+5.5. Geração de análises de mercado, concorrência, dashboards interativos e relatórios comparativos;
+6.6. Disponibilização de mecanismos de inferência inteligente para sugestão de estratégias de crescimento;
+7.7. Fornecimento de previsões de tendências baseadas em modelos estatísticos e
+aprendizado supervisionado.
+2. DAS OBRIGAÇÕES DA ARKAD AI (CONTRATADA)
+1.1. Prestar os serviços descritos na Cláusula 1ª, garantindo o funcionamento da
+Plataforma em níveis adequados de disponibilidade (Uptime), ressalvadas manutenções programadas e falhas de força maior.
+2.2. Manter sigilo absoluto sobre todas as informações, dados e metas estratégicas inseridas pelo CLIENTE na Plataforma, em conformidade com a ”Política de
+Privacidade” e a LGPD.
+3.3. Garantir que todo o tratamento de dados siga rigorosamente os princípios da
+Lei Geral de Proteção de Dados, utilizando criptografia, anonimização (quando
+aplicável) e servidores seguros (ISO/IEC 27001).
+4.4. Fornecer suporte técnico para questões relativas ao funcionamento da Plataforma, nos termos do plano contratado.
+5.5. Não compartilhar, vender ou utilizar os dados do CLIENTE para quaisquer fins
+alheios ao objeto deste Contrato sem autorização expressa.
+3. DAS OBRIGAÇÕES DO CLIENTE (CONTRATANTE)
+1.1. Realizar o pagamento pontual dos valores referentes à assinatura, conforme
+estabelecido nos ”Termos de Assinatura e Pagamentos”.
+2.2. Fornecer à Plataforma dados e informações corretas, completas e atualizadas
+(como metas específicas) para que as análises e inferências sejam relevantes.
+3.3. Utilizar a Plataforma e as informações dela derivadas de forma ética e lícita,
+respeitando os ”Termos de Uso”.
+4.4. Manter a confidencialidade de suas credenciais de acesso (login e senha), sendo
+o único responsável por qualquer atividade em sua conta.
+5.5. Indicar um responsável técnico ou gestor para ser o ponto de contato na interação com a Plataforma.
+4. DA REMUNERAÇÃO E CONDIÇÕES DE PAGAMENTO
+1.1. Pelos serviços prestados, o CLIENTE pagará à ARKAD AI os valores estipulados
+no plano de assinatura escolhido no momento da contratação.
+2.2. As condições de faturamento, recorrência, multas por atraso e política de cancelamento são regidas integralmente pelos ”Termos de Assinatura e Pagamentos”, documento anexo e parte integrante deste Contrato.
+5. DA LIMITAÇÃO DE RESPONSABILIDADE (NATUREZA DA IA)
+1.1. O CLIENTE declara estar ciente de que os serviços da ARKAD AI são uma ferramenta de consultoria e apoio à decisão, e não uma garantia de resultados
+financeiros ou de mercado.
+2.2. As análises, previsões de tendências e sugestões de estratégia são geradas por
+modelos estatísticos e de inferência inteligente, possuindo natureza preditiva e
+probabilística.
+3.3. A ARKAD AI não se responsabiliza pelas decisões de negócios tomadas pelo CLIENTE com base nos relatórios e insights gerados pela Plataforma, sendo de inteira responsabilidade do CLIENTE a interpretação e a aplicação de tais informações.
+6. DA CONFIDENCIALIDADE E PROPRIEDADE INTELECTUAL
+1.1. Os dados inseridos pelo CLIENTE na Plataforma são de propriedade exclusiva
+do CLIENTE e são tratados como estritamente confidenciais.
+2.2. O software, os algoritmos, os modelos de inferência, a estrutura de dados (SQLServer, MongoDB), o processo de ETL e a interface (design) da Plataforma Arkad
+AI são propriedade intelectual exclusiva da ARKAD AI e não são objeto deste
+Contrato.
+3.3. Ao término do contrato, a ARKAD AI procederá com a exclusão segura dos dados
+do CLIENTE, conforme a Política de Privacidade.
+7. DA VIGÊNCIA E RESCISÃO
+1.1. Este Contrato entra em vigor na data de sua aceitação eletrônica (contratação
+da assinatura) e terá a duração do período de assinatura escolhido (mensal,
+anual, etc.).
+2.2. O Contrato será renovado automaticamente por períodos iguais, conforme os
+”Termos de Assinatura e Pagamentos”.
+3.3. O Contrato poderá ser rescindido por qualquer das partes, a qualquer tempo,
+mediante a solicitação de cancelamento da assinatura, respeitando-se o aviso
+prévio e as regras de reembolso (ou não reembolso) definidas nos Termos de
+Assinatura.
+4.4. A ARKAD AI poderá rescindir o contrato imediatamente em caso de violação dos
+”Termos de Uso” ou inadimplência do CLIENTE.
+8. DAS DISPOSIÇÕES GERAIS
+1.1. Este Contrato, juntamente com os ”Termos de Uso”, a ”Política de Privacidade”
+e os ”Termos de Assinatura e Pagamentos”, constituem o acordo integral entre
+as partes.
+2.2. Nenhuma alteração deste Contrato será válida, exceto se feita por escrito ou
+mediante aceite eletrônico de novas versões disponibilizadas pela ARKAD AI.
+3.3. O CLIENTE declara ter lido, compreendido e aceito todos os documentos mencionados no item 8.1.
+9. DO FORO
+1.1. Fica eleito o foro da Comarca de Santo André, Estado de São Paulo, para dirimir
+quaisquer questões oriundas deste Contrato, com renúncia expressa a qualquer
+outro, por mais privilegiado que seja.

@@ -290,8 +290,16 @@
             <div class="documents-grid">
                 <!-- Seção de PDFs Legais -->
                 <div class="document-section">
-                    <h2><i class="fas fa-file-pdf"></i> Documentos Legais</h2>
+                    <h2><i class="fas fa-file-pdf"></i> Documentos PDF</h2>
                     <div class="pdf-list" id="pdfList">
+                        <p style="color: var(--light-text); text-align: center;">Carregando documentos...</p>
+                    </div>
+                </div>
+
+                <!-- Seção de Documentos TXT -->
+                <div class="document-section">
+                    <h2><i class="fas fa-file-alt"></i> Documentos de Texto</h2>
+                    <div class="pdf-list" id="txtList">
                         <p style="color: var(--light-text); text-align: center;">Carregando documentos...</p>
                     </div>
                 </div>
@@ -330,6 +338,8 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="../js/pdf-generator.js"></script>
     <script src="../js/neural-background.js"></script>
     <script src="../js/header-scroll.js"></script>
     <script>
@@ -342,6 +352,19 @@
             { name: 'Aviso Legal (Disclaimer)', file: 'Aviso Legal Disclaimer - Arkad AI.pdf', size: '30 KB' },
             { name: 'Contrato de Prestação de Serviços', file: 'Contrato de Prestação de Serviços - Arkad AI.pdf', size: '35 KB' },
             { name: 'Termos de Assinatura e Pagamentos', file: 'Termos de Assinatura e Pagamentos - Arkad AI.pdf', size: '32 KB' }
+        ];
+
+        // Lista de documentos TXT disponíveis
+        const availableTXTs = [
+            { name: 'Aviso Legal (Disclaimer)', file: 'Aviso Legal (Disclaimer).txt', size: '3.3 KB' },
+            { name: 'Contrato de Prestação de Serviços', file: 'Contrato de Prestação de Serviços d.txt', size: '6.3 KB' },
+            { name: 'Política de Cookies', file: 'Política de Cookies.txt', size: '3.8 KB' },
+            { name: 'Política de Privacidade e Proteção', file: 'Política de Privacidade e Proteção.txt', size: '6.1 KB' },
+            { name: 'Política de Privacidade LGPD', file: 'PoliticaDePrivacidaEusodedados.txt', size: '12 KB' },
+            { name: 'Termo de Consentimento para Tratamento', file: 'Termo de Consentimento para Tratame.txt', size: '3.8 KB' },
+            { name: 'Termos de Assinatura e Pagamentos', file: 'Termos de Assinatura e Pagamentos.txt', size: '4.8 KB' },
+            { name: 'Termos de Uso da Plataforma Arkad AI', file: 'Termos de Uso da Plataforma Arkad A.txt', size: '6.3 KB' },
+            { name: 'Aviso Legal', file: 'AvisoLegal.txt', size: '3.3 KB' }
         ];
 
         // Carregar lista de PDFs
@@ -370,14 +393,167 @@
             });
         }
 
+        // Carregar lista de TXTs
+        function loadTXTList() {
+            const txtList = document.getElementById('txtList');
+            txtList.innerHTML = '';
+
+            availableTXTs.forEach(txt => {
+                const txtItem = document.createElement('div');
+                txtItem.className = 'pdf-item';
+                txtItem.innerHTML = `
+                    <div class="pdf-info">
+                        <i class="fas fa-file-alt pdf-icon" style="color: #17a2b8;"></i>
+                        <div class="pdf-details">
+                            <h3>${txt.name}</h3>
+                            <p>${txt.size}</p>
+                        </div>
+                    </div>
+                    <div class="pdf-actions">
+                        <button class="pdf-btn" onclick="downloadTXT('${txt.file}', '${txt.name}')" style="background: linear-gradient(135deg, #17a2b8, #138496);">
+                            <i class="fas fa-file-pdf"></i> Baixar PDF
+                        </button>
+                        <button class="pdf-btn" onclick="viewTXT('${txt.file}', '${txt.name}')" style="background: linear-gradient(135deg, #28a745, #218838); margin-left: 10px;">
+                            <i class="fas fa-eye"></i> Visualizar
+                        </button>
+                    </div>
+                `;
+                txtList.appendChild(txtItem);
+            });
+        }
+
         // Baixar PDF
         function downloadPDF(filename, displayName) {
             const link = document.createElement('a');
-            link.href = `../../Documentacao/novospdfs/${filename}`;
+            link.href = `../pdfs/${filename}`;
             link.download = filename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }
+
+        // Baixar TXT como PDF
+        async function downloadTXT(filename, displayName) {
+            try {
+                // Mostrar indicador de processamento
+                const btn = event.target.closest('button');
+                const originalHTML = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando PDF...';
+                
+                // Gerar PDF a partir do TXT
+                const dateStr = new Date().toISOString().split('T')[0];
+                const pdfFilename = filename.replace('.txt', '').replace(/\s+/g, '_') + `_${dateStr}.pdf`;
+                
+                const result = await window.pdfGenerator.loadAndGenerateLegalPDF(
+                    `../documentos-legais/${filename}`,
+                    displayName,
+                    pdfFilename
+                );
+                
+                if (result.success) {
+                    // Feedback visual de sucesso
+                    btn.style.background = 'linear-gradient(135deg, #28a745, #218838)';
+                    btn.innerHTML = '<i class="fas fa-check"></i> PDF Baixado!';
+                    
+                    setTimeout(() => {
+                        btn.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
+                        btn.innerHTML = originalHTML;
+                        btn.disabled = false;
+                    }, 2000);
+                } else {
+                    throw new Error('Erro ao gerar PDF');
+                }
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                alert('Erro ao gerar PDF. Por favor, tente novamente.');
+                
+                // Restaurar botão
+                const btn = event.target.closest('button');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-download"></i> Baixar';
+                }
+            }
+        }
+
+        // Visualizar TXT
+        async function viewTXT(filename, displayName) {
+            try {
+                const response = await fetch(`../documentos-legais/${filename}`);
+                if (!response.ok) throw new Error('Erro ao carregar arquivo');
+                
+                const content = await response.text();
+                
+                // Criar modal para mostrar conteúdo
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.8);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 10000;
+                    padding: 20px;
+                `;
+                
+                modal.innerHTML = `
+                    <div style="
+                        background: linear-gradient(135deg, #0A2647 0%, #144272 100%);
+                        border-radius: 16px;
+                        max-width: 900px;
+                        width: 100%;
+                        max-height: 90vh;
+                        overflow: auto;
+                        padding: 30px;
+                        box-shadow: 0 10px 50px rgba(0, 181, 184, 0.3);
+                        border: 1px solid rgba(0, 181, 184, 0.3);
+                    ">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h2 style="color: var(--primary-color); margin: 0;">
+                                <i class="fas fa-file-alt"></i> ${displayName}
+                            </h2>
+                            <button onclick="this.closest('[style*=fixed]').remove()" style="
+                                background: rgba(255, 82, 82, 0.2);
+                                border: 1px solid rgba(255, 82, 82, 0.4);
+                                color: #ff5252;
+                                padding: 8px 15px;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-weight: 600;
+                            ">
+                                <i class="fas fa-times"></i> Fechar
+                            </button>
+                        </div>
+                        <pre style="
+                            white-space: pre-wrap;
+                            color: var(--light-text);
+                            line-height: 1.8;
+                            font-size: 14px;
+                            background: rgba(0, 0, 0, 0.3);
+                            padding: 20px;
+                            border-radius: 12px;
+                            border: 1px solid rgba(255, 255, 255, 0.1);
+                        ">${content}</pre>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // Fechar ao clicar fora
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.remove();
+                    }
+                });
+            } catch (error) {
+                console.error('Erro ao visualizar arquivo:', error);
+                alert('Erro ao carregar o arquivo. Por favor, tente novamente.');
+            }
         }
 
         // Carregar histórico de conversas
@@ -448,6 +624,7 @@
         // Inicializar página
         window.onload = function() {
             loadPDFList();
+            loadTXTList();
             loadChatHistory();
         };
     </script>

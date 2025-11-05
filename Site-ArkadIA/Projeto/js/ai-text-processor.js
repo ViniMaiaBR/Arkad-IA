@@ -347,7 +347,7 @@ class AITextProcessor {
                 
                 console.log('Gerando PDF de Política de Privacidade...');
                 const privacyResult = await window.pdfGenerator.loadAndGenerateLegalPDF(
-                    '../../Documentacao/prompts_txt/PoliticaDePrivacidaEusodedados.txt',
+                    '../documentos-legais/PoliticaDePrivacidaEusodedados.txt',
                     'Política de Privacidade e Proteção de Dados',
                     `Politica_Privacidade_Arkad_AI_${dateStr}.pdf`
                 );
@@ -368,7 +368,7 @@ class AITextProcessor {
                 
                 console.log('Gerando PDF de Aviso Legal...');
                 const disclaimerResult = await window.pdfGenerator.loadAndGenerateLegalPDF(
-                    '../../Documentacao/prompts_txt/AvisoLegal.txt',
+                    '../documentos-legais/AvisoLegal.txt',
                     'Aviso Legal (Disclaimer)',
                     `Aviso_Legal_Arkad_AI_${dateStr}.pdf`
                 );

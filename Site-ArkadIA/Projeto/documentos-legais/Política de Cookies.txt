@@ -1,0 +1,49 @@
+Política de Cookies
+Plataforma Arkad AI
+4 de novembro de 2025
+Esta Política de Cookies explica como a plataforma ”Arkad AI” (”Plataforma”, ”nós”) utiliza cookies e tecnologias similares para reconhecê-lo quando visita o nosso website e
+utiliza os nossos serviços. Este documento explica o que são essas tecnologias e por que
+as usamos, bem como os seus direitos de controlar o nosso uso delas.
+Esta política é parte integrante da nossa ”Política de Privacidade e Proteção de Dados
+(LGPD)”.
+1. O QUE SÃO COOKIES?
+1.1. Cookies são pequenos arquivos de dados que são colocados no seu computador
+ou dispositivo móvel quando visita um website. Eles são amplamente utilizados
+para fazer os websites funcionarem, ou funcionarem de forma mais eficiente,
+bem como para fornecer informações de relatórios.
+2.2. Cookies definidos pelo proprietário do website (neste caso, a Arkad AI) são chamados de ”cookies primários”. Cookies definidos por partes que não sejam o
+proprietário do website são chamados de ”cookies de terceiros”.
+2. COMO A ARKAD AI UTILIZA COOKIES?
+1.1. Utilizamos cookies primários por várias razões técnicas essenciais para que a
+nossa Plataforma opere. Referimo-nos a estes como cookies ”essenciais” ou
+”estritamente necessários”.
+2.2. Outros cookies permitem-nos rastrear e direcionar os interesses dos nossos
+usuários para melhorar a experiência na nossa Plataforma (por exemplo, análise de desempenho e funcionalidade).
+3.3. Especificamente, utilizamos cookies para:
+• Autenticação e Segurança: Para manter a sua sessão ativa, verificar a sua
+conta e garantir a segurança contra atividades fraudulentas. Utilizamos cookies para implementar a autenticação de múltiplos fatores (2FA) e monitorizar sessões.
+• Preferências e Funcionalidade: Para lembrar as suas configurações, como
+preferência de idioma (Português, Inglês, Espanhol) e configurações de interface (como contraste otimizado).
+• Análise e Desempenho: Para coletar informações sobre como os usuários
+interagem com a Plataforma (por exemplo, quais dashboards são mais acedidos) e ajudar-nos a melhorar a funcionalidade e o desempenho.
+3. TIPOS DE COOKIES UTILIZADOS
+1.1. Cookies Estritamente Necessários: Essenciais para fornecer os serviços da
+Plataforma e para usar alguns dos seus recursos, como o acesso a áreas seguras
+que exigem autenticação. Sem estes, os serviços não podem ser fornecidos.
+2.2. Cookies de Desempenho e Análise: Coletam informações usadas de forma
+agregada para nos ajudar a entender como a Plataforma está a ser usada ou
+a eficácia das nossas campanhas, ajudando-nos a personalizar e melhorar os
+serviços.
+3.3. Cookies de Funcionalidade: Permitem que a Plataforma se lembre das escolhas que faz (como nome de usuário, idioma ou região) e forneça recursos melhorados e mais pessoais.
+4. GESTÃO E CONTROLO DE COOKIES
+1.1. O USUÁRIO tem o direito de decidir se aceita ou rejeita cookies não essenciais.
+2.2. A maioria dos navegadores web (browsers) permite controlar a maioria dos cookies através das configurações do navegador. Pode configurar o seu navegador
+para bloquear todos os cookies ou para o alertar quando um cookie estiver a
+ser enviado.
+3.3. Se optar por rejeitar cookies ”estritamente necessários”, poderá não conseguir
+aceder a partes ou à totalidade da nossa Plataforma, uma vez que eles são essenciais para a autenticação e funcionamento.
+5. ALTERAÇÕES NESTA POLÍTICA
+1.1. Podemos atualizar esta Política de Cookies periodicamente para refletir, por
+exemplo, alterações nos cookies que usamos ou por outras razões operacionais, legais ou regulatórias.
+2.2. Encorajamos o USUÁRIO a rever esta política regularmente para se manter informado sobre o nosso uso de cookies. A data no topo deste documento indica
+a última atualização.

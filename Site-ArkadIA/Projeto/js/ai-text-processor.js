@@ -5,7 +5,7 @@ class AITextProcessor {
     constructor() {
         this.template = {
             header: {
-                title: "Relatório Arkad IA",
+                title: "Relatório Técnico – Arkad IA",
                 subtitle: "",
                 client: "",
                 company: "",
@@ -19,12 +19,12 @@ class AITextProcessor {
     // Processar texto da IA e extrair informações estruturadas
     processAIText(aiText, context = {}) {
         try {
-            console.log('🔍 Processando texto da IA...');
-            console.log('📄 Texto original (primeiros 300 chars):', aiText.substring(0, 300));
+            console.log('Processando texto da IA...');
+            console.log('Texto original (primeiros 300 chars):', aiText.substring(0, 300));
             
             // Nova abordagem: detectar seções automaticamente
             const sections = this.detectSections(aiText);
-            console.log('✅ Seções detectadas:', sections.length);
+            console.log('Seções detectadas:', sections.length);
             
             const processedData = {
                 header: this.extractHeader(aiText, context),
@@ -48,7 +48,7 @@ class AITextProcessor {
             .replace(/\r/g, '\n')
             .trim();
         
-        console.log('📝 Texto limpo para análise (primeiros 300 chars):', cleanedText.substring(0, 300));
+        console.log('Texto limpo para análise (primeiros 300 chars):', cleanedText.substring(0, 300));
         
         // Palavras-chave que indicam informações do cabeçalho (devem ser ignoradas)
         const headerKeywords = [
@@ -72,7 +72,7 @@ class AITextProcessor {
             
             // Se for uma das primeiras 3 seções E contiver palavras-chave do cabeçalho, ignorar
             if (position < 3 && isHeaderKeyword) {
-                console.log(`⏭️ Seção ignorada (cabeçalho): "${title}" (posição ${position})`);
+                console.log(`Seção ignorada (cabeçalho): "${title}" (posição ${position})`);
                 return true;
             }
             
@@ -91,7 +91,7 @@ class AITextProcessor {
             const matchesPattern = headerPatterns.some(pattern => pattern.test(titleLower));
             
             if (position < 4 && matchesPattern) {
-                console.log(`⏭️ Seção ignorada (padrão cabeçalho): "${title}" (posição ${position})`);
+                console.log(`Seção ignorada (padrão cabeçalho): "${title}" (posição ${position})`);
                 return true;
             }
             
@@ -125,12 +125,12 @@ class AITextProcessor {
             });
         }
         
-        console.log(`📊 Total de seções encontradas (antes do filtro): ${allMatches.length}`);
+        console.log(`Total de seções encontradas (antes do filtro): ${allMatches.length}`);
         
         // Filtrar seções do cabeçalho e adicionar as válidas
         allMatches.forEach((match, index) => {
             if (!isHeaderSection(match.title, match.position, allMatches.length)) {
-                console.log(`✅ Seção adicionada: "${match.title}" (${match.content.length} chars)`);
+                console.log(`Seção adicionada: "${match.title}" (${match.content.length} chars)`);
                 sections.push({
                     title: match.title,
                     content: match.content
@@ -139,11 +139,11 @@ class AITextProcessor {
             }
         });
         
-        console.log(`✅ Total de seções válidas (após filtro): ${foundSections}`);
+        console.log(`Total de seções válidas (após filtro): ${foundSections}`);
         
         // Se não encontrou nenhuma seção, tentar separar por pontos finais seguidos de letra maiúscula
         if (sections.length === 0) {
-            console.log('⚠️ Nenhuma seção detectada, tentando abordagem alternativa...');
+            console.log('Nenhuma seção detectada, tentando abordagem alternativa...');
             
             // Separar por frases que começam com letra maiúscula após ponto final
             const sentences = cleanedText.split(/\.\s+(?=[A-ZÁÉÍÓÚÂÊÔÃÕÇ])/);
@@ -166,7 +166,7 @@ class AITextProcessor {
                             sectionTitle = 'Objetivo do Projeto';
                             sectionContent = trimmed;
                         } else {
-                            console.log(`⏭️ Primeira frase ignorada (cabeçalho): "${trimmed.substring(0, 50)}..."`);
+                            console.log(`Primeira frase ignorada (cabeçalho): "${trimmed.substring(0, 50)}..."`);
                             return; // Pular esta frase
                         }
                     } else {
@@ -180,7 +180,7 @@ class AITextProcessor {
                             
                             // Verificar se o título é do cabeçalho
                             if (isHeaderSection(sectionTitle, index, sentences.length)) {
-                                console.log(`⏭️ Seção ignorada (cabeçalho): "${sectionTitle}"`);
+                                console.log(`Seção ignorada (cabeçalho): "${sectionTitle}"`);
                                 return; // Pular esta seção
                             }
                         } else {
@@ -191,7 +191,7 @@ class AITextProcessor {
                             
                             // Verificar se o título é do cabeçalho
                             if (isHeaderSection(sectionTitle, index, sentences.length)) {
-                                console.log(`⏭️ Seção ignorada (cabeçalho): "${sectionTitle}"`);
+                                console.log(`Seção ignorada (cabeçalho): "${sectionTitle}"`);
                                 return; // Pular esta seção
                             }
                         }
@@ -215,12 +215,12 @@ class AITextProcessor {
                 });
             });
             
-            console.log(`✅ Seções criadas pela abordagem alternativa: ${sections.length}`);
+            console.log(`Seções criadas pela abordagem alternativa: ${sections.length}`);
         }
         
         // Se ainda não tem seções, criar uma seção padrão
         if (sections.length === 0) {
-            console.log('⚠️ Criando seção padrão...');
+            console.log('Criando seção padrão...');
             sections.push({
                 title: 'Análise Completa',
                 content: cleanedText
@@ -235,7 +235,7 @@ class AITextProcessor {
         const currentDate = new Date().toLocaleDateString('pt-BR');
         
         return {
-            title: context.title || "Relatório Arkad IA",
+            title: context.title || "Relatório Técnico – Arkad IA",
             subtitle: context.subtitle || this.extractSubtitle(aiText),
             client: context.client || this.extractClient(aiText),
             company: context.company || this.extractCompany(aiText),
@@ -461,7 +461,7 @@ class AITextProcessor {
     createDefaultStructure(aiText, context) {
         return {
             header: {
-                title: "Relatório Arkad IA",
+                title: "Relatório Técnico – Arkad IA",
                 subtitle: context.subtitle || "Análise e Recomendações",
                 client: context.client || "Cliente",
                 company: context.company || "Empresa",
@@ -506,7 +506,7 @@ class AITextProcessor {
                 throw new Error('Erro ao gerar relatório');
             }
 
-            console.log('✓ Relatório gerado');
+            console.log('Relatório gerado');
 
             if (progressCallback) progressCallback('Finalizando...');
 
@@ -559,15 +559,15 @@ class AITextProcessor {
 
     // Gerar HTML do relatório baseado no template
     generateReportHTML(data) {
-        // Ícones para as seções
-        const icons = ['🎯', '🔍', '💡', '📊', '⚙️', '📈', '💼', '🚀', '🎓', '🔬', '💻', '📋'];
+        // Ícones para as seções (desabilitados)
+        const icons = ['', '', '', '', '', '', '', '', '', '', '', ''];
         
         return `
             <div style="font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 0;">
                 
                 <!-- Cabeçalho -->
                 <div style="text-align: center; margin-bottom: 25px; border-bottom: 3px solid #00B5B8; padding: 20px; background: linear-gradient(135deg, #f8f9fa, #e9ecef); border-radius: 8px;">
-                    <h1 style="color: #00B5B8; font-size: 26px; margin: 0 0 15px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">RELATÓRIO ARKAD IA</h1>
+                    <h1 style="color: #00B5B8; font-size: 26px; margin: 0 0 15px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">Relatório Técnico – Arkad IA</h1>
                     
                     <div style="background: white; padding: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-top: 15px;">
                         <h2 style="color: #00B5B8; font-size: 16px; margin: 0 0 12px 0; font-weight: 600; text-transform: uppercase; border-bottom: 2px solid #00B5B8; padding-bottom: 8px;">${data.header.subtitle || 'Análise Estratégica e Recomendações'}</h2>
@@ -629,8 +629,8 @@ class AITextProcessor {
                 <div style="margin-top: 50px; padding-top: 25px; border-top: 3px solid #e9ecef; text-align: center; background: #f8f9fa; padding: 25px; border-radius: 8px;">
                     <div style="color: #666; font-size: 13px;">
                         <p style="margin: 8px 0; font-weight: 700; color: #00B5B8; font-size: 15px;">Contato Arkad AI</p>
-                        <p style="margin: 6px 0;">📧 E-mail: contato@arkad.ai</p>
-                        <p style="margin: 6px 0;">📍 Local: Santo André – SP</p>
+                        <p style="margin: 6px 0;">E-mail: contato@arkad.ai</p>
+                        <p style="margin: 6px 0;">Local: Santo André – SP</p>
                         <p style="margin: 6px 0; font-style: italic; color: #888;">Versão do Relatório: 1.0 (Gerado automaticamente por IA)</p>
                     </div>
                 </div>

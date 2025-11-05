@@ -339,7 +339,9 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="../js/pdf-generator.js"></script>
+    <script src="../js/documentos-legais.js"></script>
     <script src="../js/neural-background.js"></script>
     <script src="../js/header-scroll.js"></script>
     <script>
@@ -411,7 +413,7 @@
         // Lista de documentos legais
         const legalDocuments = [
             { 
-                filename: 'Termos de Uso da Plataforma Arkad A.txt', 
+                filename: 'Termos de Uso da Plataforma Arkad AI.txt', 
                 title: 'Termos de Uso da Plataforma'
             },
             { 
@@ -419,7 +421,7 @@
                 title: 'Termos de Assinatura e Pagamentos'
             },
             { 
-                filename: 'Termo de Consentimento para Tratame.txt', 
+                filename: 'Termo de Consentimento para Tratamento.txt', 
                 title: 'Termo de Consentimento para Tratamento'
             },
             { 
@@ -427,24 +429,16 @@
                 title: 'Política de Privacidade e Proteção'
             },
             { 
-                filename: 'PoliticaDePrivacidaEusodedados.txt', 
-                title: 'Política de Privacidade e Uso de Dados'
-            },
-            { 
                 filename: 'Política de Cookies.txt', 
                 title: 'Política de Cookies'
             },
             { 
-                filename: 'Contrato de Prestação de Serviços d.txt', 
+                filename: 'Contrato de Prestação de Serviços.txt', 
                 title: 'Contrato de Prestação de Serviços'
             },
             { 
                 filename: 'Aviso Legal (Disclaimer).txt', 
                 title: 'Aviso Legal (Disclaimer)'
-            },
-            { 
-                filename: 'AvisoLegal.txt', 
-                title: 'Aviso Legal'
             }
         ];
 
@@ -524,386 +518,6 @@
                     downloadAllPDFs(legalDocuments);
                 };
             }
-        }
-
-        // Baixar documento legal em PDF (carrega TXT e converte para PDF)
-        async function downloadLegalPDF(filename, title) {
-            try {
-                // Tentar diferentes caminhos possíveis para documentos-legais
-                const possiblePaths = [
-                    '../documentos-legais/',
-                    './documentos-legais/',
-                    'documentos-legais/',
-                    '../Projeto/documentos-legais/',
-                    '../../documentos-legais/'
-                ];
-
-                // Criar variações de encoding para o nome do arquivo
-                const filenameVariations = [
-                    encodeURIComponent(filename),
-                    filename.replace(/ /g, '%20'),
-                    filename.replace(/ /g, '+'),
-                    filename
-                ];
-
-                let text = '';
-                let success = false;
-                let filepath = null;
-
-                console.log(`Tentando carregar: ${filename}`);
-
-                // Tentar todos os caminhos e variações
-                for (const basePath of possiblePaths) {
-                    for (const encodedFilename of filenameVariations) {
-                        const path = `${basePath}${encodedFilename}`;
-                        try {
-                            console.log(`Tentando caminho: ${path}`);
-                            const response = await fetch(path, {
-                                method: 'GET',
-                                headers: {
-                                    'Accept': 'text/plain, text/*, */*'
-                                }
-                            });
-                            
-                            if (response.ok) {
-                                text = await response.text();
-                                if (text && text.trim().length > 0) {
-                                    filepath = path;
-                                    success = true;
-                                    console.log(`Arquivo carregado de: ${path}`);
-                                    break;
-                                }
-                            }
-                        } catch (error) {
-                            console.warn(`Erro ao tentar ${path}:`, error.message);
-                            continue;
-                        }
-                    }
-                    if (success) break;
-                }
-
-                if (!success || !text) {
-                    alert(`Erro ao carregar o documento "${title}".\n\nArquivo: ${filename}\n\nVerifique se o arquivo existe na pasta documentos-legais.`);
-                    return;
-                }
-
-                // Gerar nome do arquivo PDF
-                const pdfFilename = `${title.replace(/[^a-z0-9]/gi, '_')}.pdf`;
-
-                // Usar pdf-generator.js para gerar o PDF
-                if (typeof window.pdfGenerator !== 'undefined' && window.pdfGenerator.generateLegalDocumentPDF) {
-                    const result = await window.pdfGenerator.generateLegalDocumentPDF(title, text, pdfFilename);
-                    if (!result.success) {
-                        throw new Error(result.message || 'Erro ao gerar PDF');
-                    }
-                    console.log(`PDF gerado com sucesso: ${pdfFilename}`);
-                } else {
-                    // Fallback: usar html2pdf diretamente
-                    console.warn('pdf-generator.js não encontrado, usando método alternativo');
-                    await generatePDFFromText(text, title, pdfFilename);
-                }
-
-            } catch (error) {
-                console.error('Erro ao gerar PDF:', error);
-                alert(`Erro ao gerar o PDF do documento "${title}".\n\nPor favor, tente novamente.`);
-            }
-        }
-
-        // Função para escapar HTML (mantida para compatibilidade)
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        // Baixar documento legal em PDF (função antiga - mantida para compatibilidade)
-        async function downloadLegalPDF(filename, title) {
-            try {
-                // Tentar diferentes caminhos possíveis
-                const possiblePaths = [
-                    `../documentos-legais/${encodeURIComponent(filename)}`,
-                    `./documentos-legais/${encodeURIComponent(filename)}`,
-                    `documentos-legais/${encodeURIComponent(filename)}`,
-                    `../Projeto/documentos-legais/${encodeURIComponent(filename)}`,
-                    `../../documentos-legais/${encodeURIComponent(filename)}`
-                ];
-
-                let text = '';
-                let success = false;
-                let lastError = null;
-
-                console.log(`Tentando carregar: ${filename}`);
-
-                // Criar variações de encoding para o nome do arquivo
-                const filenameVariations = [
-                    encodeURIComponent(filename),
-                    filename.replace(/ /g, '%20'),
-                    filename.replace(/ /g, '+'),
-                    filename
-                ];
-
-                for (const basePath of possiblePaths) {
-                    for (const encodedFilename of filenameVariations) {
-                        const path = `${basePath}${encodedFilename}`;
-                        try {
-                            console.log(`Tentando caminho: ${path}`);
-                            const response = await fetch(path, {
-                                method: 'GET',
-                                headers: {
-                                    'Accept': 'text/plain, text/*, */*'
-                                }
-                            });
-                            
-                            if (response.ok) {
-                                text = await response.text();
-                                if (text && text.trim().length > 0) {
-                                    console.log(`Sucesso ao carregar de: ${path}`);
-                                    success = true;
-                                    break;
-                                } else {
-                                    console.warn(`Arquivo vazio em: ${path}`);
-                                }
-                            } else {
-                                console.warn(`Resposta não OK (${response.status}) para: ${path}`);
-                                lastError = `HTTP ${response.status}`;
-                            }
-                        } catch (error) {
-                            console.warn(`Erro ao tentar ${path}:`, error.message);
-                            lastError = error.message;
-                            continue;
-                        }
-                    }
-                    if (success) break;
-                }
-
-                if (!success) {
-                    console.error(`Não foi possível carregar ${filename}. Último erro: ${lastError}`);
-                    
-                    let errorMsg = `Erro ao carregar o documento "${title}".\n\nArquivo: ${filename}\n\n`;
-                    
-                    if (!isRunningOnServer()) {
-                        errorMsg += 'IMPORTANTE: Você está abrindo o arquivo HTML diretamente (file://).\n\n';
-                        errorMsg += 'Para que os documentos funcionem, você precisa usar um servidor HTTP local.\n\n';
-                        errorMsg += 'Opções:\n';
-                        errorMsg += '1. Use Python: python -m http.server 8000\n';
-                        errorMsg += '2. Use Node.js: npx http-server\n';
-                        errorMsg += '3. Use Live Server no VS Code\n';
-                        errorMsg += '4. Use qualquer outro servidor HTTP local\n\n';
-                        errorMsg += 'Depois acesse: http://localhost:8000/Index/documentos.html';
-                    } else {
-                        errorMsg += 'Verifique se o arquivo existe na pasta documentos-legais.\n';
-                        errorMsg += 'Caminho esperado: ../documentos-legais/' + filename;
-                    }
-                    
-                    alert(errorMsg);
-                    return;
-                }
-                
-                // Formatar texto para HTML
-                const formattedText = text
-                    .split('\n')
-                    .map(line => {
-                        const trimmedLine = line.trim();
-                        if (trimmedLine === '') return '<br>';
-                        
-                        const escapedLine = escapeHtml(trimmedLine);
-                        
-                        // Detectar títulos (linhas em maiúsculas ou com números)
-                        if (/^[A-Z0-9\s\.]+$/.test(trimmedLine) && trimmedLine.length > 5 && trimmedLine.length < 80) {
-                            return `<h3 style="margin-top: 20px; margin-bottom: 10px; col   or: #00b5b8; font-size: 18px;">${escapedLine}</h3>`;
-                        }
-                        // Detectar subtítulos (começam com número)
-                        if (/^\d+\./.test(trimmedLine)) {
-                            return `<h4 style="margin-top: 15px; margin-bottom: 8px; color: #333; font-size: 16px;">${escapedLine}</h4>`;
-                        }
-                        return `<p style="margin-bottom: 10px; line-height: 1.6; text-align: justify;">${escapedLine}</p>`;
-                    })
-                    .join('');
-
-                const escapedTitle = escapeHtml(title);
-                const currentDate = new Date().toLocaleDateString('pt-BR');
-                const currentDateTime = new Date().toLocaleString('pt-BR');
-
-                // Criar HTML completo para o PDF
-                const htmlContent = `
-                    <div style="font-family: 'Inter', Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; color: #333;">
-                        <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #00b5b8; padding-bottom: 20px;">
-                            <h1 style="color: #00b5b8; margin: 0; font-size: 28px;">${escapedTitle}</h1>
-                            <p style="color: #666; margin-top: 10px; font-size: 14px;">ARKAD AI - ${currentDate}</p>
-                        </div>
-                        <div style="text-align: justify; line-height: 1.8;">
-                            ${formattedText}
-                        </div>
-                        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 12px;">
-                            <p>Documento gerado em ${currentDateTime}</p>
-                            <p>ARKAD AI - Plataforma de Inteligência de Negócios</p>
-                        </div>
-                    </div>
-                `;
-
-                // Criar elemento temporário
-                const element = document.createElement('div');
-                element.innerHTML = htmlContent;
-                element.style.position = 'absolute';
-                element.style.left = '-9999px';
-                document.body.appendChild(element);
-
-                // Configurações do PDF
-                const opt = {
-                    margin: [0.5, 0.5, 0.5, 0.5],
-                    filename: `${title.replace(/[^a-z0-9]/gi, '_')}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { 
-                        scale: 2,
-                        useCORS: true,
-                        letterRendering: true
-                    },
-                    jsPDF: { 
-                        unit: 'in', 
-                        format: 'a4', 
-                        orientation: 'portrait',
-                        compress: true
-                    }
-                };
-
-                // Gerar PDF
-                await html2pdf().set(opt).from(element).save();
-                
-                // Remover elemento temporário
-                document.body.removeChild(element);
-
-            } catch (error) {
-                console.error('Erro ao gerar PDF:', error);
-                alert('Erro ao gerar o PDF. Por favor, tente novamente.');
-            }
-        }
-
-        // Baixar todos os documentos em PDF
-        async function downloadAllPDFs(docsList) {
-            const docs = docsList || legalDocuments;
-            
-            if (!docs || docs.length === 0) {
-                alert('Nenhum documento disponível para download.');
-                return;
-            }
-
-            const confirmMsg = `Deseja baixar todos os ${docs.length} documentos em PDF?\n\nOs downloads serão iniciados sequencialmente.`;
-            if (!confirm(confirmMsg)) {
-                return;
-            }
-
-            try {
-                let loadedCount = 0;
-                let failedCount = 0;
-
-                for (let i = 0; i < docs.length; i++) {
-                    const doc = docs[i];
-                    
-                    if (doc.filename) {
-                        // Aguardar um pouco entre downloads para não sobrecarregar
-                        if (i > 0) {
-                            await new Promise(resolve => setTimeout(resolve, 500));
-                        }
-
-                        try {
-                            await downloadLegalPDF(doc.filename, doc.title);
-                            loadedCount++;
-                        } catch (error) {
-                            console.warn(`Não foi possível baixar: ${doc.filename}`);
-                            failedCount++;
-                        }
-                    } else {
-                        console.warn(`Documento sem arquivo: ${doc.title}`);
-                        failedCount++;
-                    }
-                }
-
-                // Mostrar resultado
-                if (loadedCount > 0) {
-                    alert(`Download concluído!\n\n${loadedCount} documento(s) baixado(s) com sucesso.${failedCount > 0 ? `\n${failedCount} documento(s) não puderam ser baixados.` : ''}`);
-                } else {
-                    alert('Nenhum documento pôde ser baixado. Por favor, verifique os arquivos.');
-                }
-            } catch (error) {
-                console.error('Erro ao baixar todos os PDFs:', error);
-                alert('Erro ao baixar os documentos. Por favor, tente novamente.');
-            }
-        }
-
-        // Gerar PDF a partir do texto
-        async function generatePDFFromText(text, title, filename) {
-            // Formatar texto para HTML
-            const formattedText = text
-                .split('\n')
-                .map(line => {
-                    const trimmedLine = line.trim();
-                    if (trimmedLine === '') return '<br>';
-                    
-                    const escapedLine = escapeHtml(trimmedLine);
-                    
-                    // Detectar títulos (linhas em maiúsculas ou com números)
-                    if (/^[A-Z0-9\s\.]+$/.test(trimmedLine) && trimmedLine.length > 5 && trimmedLine.length < 80) {
-                        return `<h3 style="margin-top: 20px; margin-bottom: 10px; color: #00b5b8; font-size: 18px;">${escapedLine}</h3>`;
-                    }
-                    // Detectar subtítulos (começam com número)
-                    if (/^\d+\./.test(trimmedLine)) {
-                        return `<h4 style="margin-top: 15px; margin-bottom: 8px; color: #333; font-size: 16px;">${escapedLine}</h4>`;
-                    }
-                    return `<p style="margin-bottom: 10px; line-height: 1.6; text-align: justify;">${escapedLine}</p>`;
-                })
-                .join('');
-
-            const escapedTitle = escapeHtml(title);
-            const currentDate = new Date().toLocaleDateString('pt-BR');
-            const currentDateTime = new Date().toLocaleString('pt-BR');
-
-            // Criar HTML completo para o PDF
-            const htmlContent = `
-                <div style="font-family: 'Inter', Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; color: #333;">
-                    <div style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #00b5b8; padding-bottom: 20px;">
-                        <h1 style="color: #00b5b8; margin: 0; font-size: 28px;">${escapedTitle}</h1>
-                        <p style="color: #666; margin-top: 10px; font-size: 14px;">ARKAD AI - ${currentDate}</p>
-                    </div>
-                    <div style="text-align: justify; line-height: 1.8;">
-                        ${formattedText}
-                    </div>
-                    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; text-align: center; color: #666; font-size: 12px;">
-                        <p>Documento gerado em ${currentDateTime}</p>
-                        <p>ARKAD AI - Plataforma de Inteligência de Negócios</p>
-                    </div>
-                </div>
-            `;
-
-            // Criar elemento temporário
-            const element = document.createElement('div');
-            element.innerHTML = htmlContent;
-            element.style.position = 'absolute';
-            element.style.left = '-9999px';
-            document.body.appendChild(element);
-
-            // Configurações do PDF
-            const opt = {
-                margin: [0.5, 0.5, 0.5, 0.5],
-                filename: `${title.replace(/[^a-z0-9]/gi, '_')}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2,
-                    useCORS: true,
-                    letterRendering: true
-                },
-                jsPDF: { 
-                    unit: 'in', 
-                    format: 'a4', 
-                    orientation: 'portrait',
-                    compress: true
-                }
-            };
-
-            // Gerar PDF
-            await html2pdf().set(opt).from(element).save();
-            
-            // Remover elemento temporário
-            document.body.removeChild(element);
         }
 
         // Inicializar página

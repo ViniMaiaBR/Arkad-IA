@@ -1,38 +1,38 @@
 Termos de Assinatura e Pagamentos
 Plataforma Arkad AI
 4 de novembro de 2025
-Estes Termos de Assinatura e Pagamentos (”Termos de Assinatura”) regem a contratação dos serviços pagos da plataforma de inteligência de negócios ”Arkad AI” (”Plataforma”), de propriedade da [Nome da Empresa Proprietária da Arkad AI], doravante denominada ”ARKAD AI”.
-Estes Termos de Assinatura são um complemento direto aos ”Termos de Uso” e à ”Política de Privacidade” da Plataforma.
+Estes Termos de Assinatura e Pagamentos (”Termos de Assinatura”) regem a contratação dos serviços pagos da plataforma de inteligência de negócios ”Arkad AI” (”Plataforma”), de propriedade da [Nome da Empresa Proprietária da Arkad AI], doravante denominada ”ARKAD AI”.
+Estes Termos de Assinatura são um complemento direto aos ”Termos de Uso” e à ”Política de Privacidade” da Plataforma.
 1. DO OBJETO E DA CONTRATAÇÃO
 1.1. O objeto deste documento é a licença de uso (assinatura) da Plataforma Arkad
-AI, que fornece ao USUÁRIO acesso a dados, informações estratégicas, dashboards, relatórios e demais funcionalidades (”Serviços”), conforme o plano contratado.
-2.2. A contratação se dá de forma eletrônica, no momento em que o USUÁRIO seleciona um plano pago e fornece suas informações de pagamento, manifestando
+AI, que fornece ao USUÁRIO acesso a dados, informações estratégicas, dashboards, relatórios e demais funcionalidades (”Serviços”), conforme o plano contratado.
+2.2. A contratação se dá de forma eletrônica, no momento em que o USUÁRIO seleciona um plano pago e fornece suas informações de pagamento, manifestando
 aceite a estes Termos de Assinatura.
 2. DOS PLANOS E MODALIDADES
-1.1. A ARKAD AI oferece diferentes modalidades de planos, que podem variar em
+2.1. A ARKAD AI oferece diferentes modalidades de planos, que podem variar em
 preço, prazo e funcionalidades disponíveis (ex: mensal, anual, por volume de
 relatórios, etc.).
-2.2. As características específicas, valores e limitações de cada plano estão detalhados na área de ”Assinatura” ou ”Planos” dentro da Plataforma.
+2.2. As características específicas, valores e limitações de cada plano estão detalhados na área de ”Assinatura” ou ”Planos” dentro da Plataforma.
 3.3. O USUÁRIO escolhe o plano que melhor se adequa às suas necessidades no
 momento da contratação.
 3. DO PAGAMENTO E FATURAMENTO
-1.1. O pagamento pela assinatura será realizado por meio de [Ex: Cartão de Crédito,
+3.1. O pagamento pela assinatura será realizado por meio de [Ex: Cartão de Crédito,
 Boleto Bancário], conforme opção disponibilizada pela Plataforma e escolhida
 pelo USUÁRIO.
-2.2. Ao fornecer os dados de pagamento, o USUÁRIO autoriza a ARKAD AI a efetuar
+3.2. Ao fornecer os dados de pagamento, o USUÁRIO autoriza a ARKAD AI a efetuar
 as cobranças recorrentes dos valores referentes ao plano contratado.
 3.3. As notas fiscais serão emitidas eletronicamente e enviadas ao e-mail de cadastro
 do USUÁRIO.
 4. DA RENOVAÇÃO AUTOMÁTICA
-1.1. Salvo disposição em contrário no momento da contratação (ex: planos de pagamento único), as assinaturas da Plataforma Arkad AI são renovadas automaticamente ao final de cada período contratado (ciclo de faturamento).
+4.1. Salvo disposição em contrário no momento da contratação (ex: planos de pagamento único), as assinaturas da Plataforma Arkad AI são renovadas automaticamente ao final de cada período contratado (ciclo de faturamento).
 2.2. A renovação será feita pelo mesmo período e plano originalmente contratados,
 aplicando-se o valor vigente à época da renovação.
-3.3. O USUÁRIO pode cancelar a renovação automática a qualquer momento, conforme a cláusula 5.
+3.3. O USUÁRIO pode cancelar a renovação automática a qualquer momento, conforme a cláusula 5.
 5. DO CANCELAMENTO E REEMBOLSO
-1.1. O USUÁRIO pode solicitar o cancelamento de sua assinatura a qualquer momento, através do painel de configurações da Plataforma ou pelos canais de
+5.1. O USUÁRIO pode solicitar o cancelamento de sua assinatura a qualquer momento, através do painel de configurações da Plataforma ou pelos canais de
 atendimento.
-2.2. Cancelamento da Renovação: Se o cancelamento for solicitado antes do término do ciclo de faturamento vigente, a renovação automática será interrompida. O USUÁRIO manterá o acesso total à Plataforma até o último dia do período já pago.
-3.3. Política de Reembolso: Os valores pagos pela assinatura não são reembolsáveis, mesmo em caso de cancelamento antecipado. A ARKAD AI não concede
+2.2. Cancelamento da Renovação: Se o cancelamento for solicitado antes do término do ciclo de faturamento vigente, a renovação automática será interrompida. O USUÁRIO manterá o acesso total à Plataforma até o último dia do período já pago.
+3.3. Política de Reembolso: Os valores pagos pela assinatura não são reembolsáveis, mesmo em caso de cancelamento antecipado. A ARKAD AI não concede
 reembolsos ou créditos por períodos de assinatura parcialmente utilizados ou
 por funcionalidades não utilizadas.
 4.4. Direito de Arrependimento: Para contratações online, o USUÁRIO (se aplicável
@@ -41,18 +41,18 @@ cancelamento e reembolso integral em até 7 (sete) dias corridos a contar da
 data da contratação inicial, desde que o uso efetivo da plataforma não tenha
 sido substancial.
 6. DA INADIMPLÊNCIA
-1.1. Na falha do processamento do pagamento (ex: cartão expirado, saldo insuficiente), a ARKAD AI se reserva o direito de tentar realizar novas cobranças.
-2.2. Caso o pagamento não seja regularizado em até [Ex: 5 dias] após a data de vencimento, a ARKAD AI poderá suspender imediatamente o acesso do USUÁRIO
+6.1. Na falha do processamento do pagamento (ex: cartão expirado, saldo insuficiente), a ARKAD AI se reserva o direito de tentar realizar novas cobranças.
+2.2. Caso o pagamento não seja regularizado em até [Ex: 5 dias] após a data de vencimento, a ARKAD AI poderá suspender imediatamente o acesso do USUÁRIO
 às funcionalidades pagas da Plataforma, sem prejuízo de outras medidas legais
 cabíveis para o recebimento dos valores devidos.
 3.3. O acesso só será restabelecido após a identificação da regularização financeira.
 7. DA ALTERAÇÃO DE PREÇOS
-1.1. A ARKAD AI se reserva o direito de reajustar os preços dos planos de assinatura.
-2.2. Qualquer alteração de preço será comunicada ao USUÁRIO com antecedência
-mínima de 30 (trinta) dias da data em que a alteração entrará em vigor (geralmente na próxima renovação).
+7.1. A ARKAD AI se reserva o direito de reajustar os preços dos planos de assinatura.
+7.2. Qualquer alteração de preço será comunicada ao USUÁRIO com antecedência
+mínima de 30 (trinta) dias da data em que a alteração entrará em vigor (geralmente na próxima renovação).
 3.3. Caso o USUÁRIO não concorde com o novo valor, poderá cancelar sua assinatura
 antes do início do novo ciclo de cobrança, conforme a cláusula 5. A permanência
 e o pagamento após o aviso prévio configuram aceite dos novos valores.
 8. DO FORO
-1.1. Para dirimir quaisquer controvérsias oriundas destes Termos de Assinatura, as
-partes elegem o foro da Comarca de Santo André, Estado de São Paulo, renunciando a qualquer outro, por mais privilegiado que seja.
+8.1. Para dirimir quaisquer controvérsias oriundas destes Termos de Assinatura, as
+partes elegem o foro da Comarca de Santo André, Estado de São Paulo, renunciando a qualquer outro, por mais privilegiado que seja.

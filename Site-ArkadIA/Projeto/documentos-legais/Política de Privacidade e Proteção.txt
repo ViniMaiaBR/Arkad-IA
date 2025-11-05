@@ -6,45 +6,45 @@ Esta Política de Privacidade e Proteção de Dados (”Política”) descreve c
 da Empresa Proprietária da Arkad AI], doravante denominada ”ARKAD AI”, coleta, trata,
 armazena e protege os dados dos usuários (”USUÁRIO”) da plataforma de inteligência de
 negócios ”Arkad AI” (”Plataforma”).
-Esta Política é parte integrante dos Termos de Uso da Plataforma e reitera o compromisso da ARKAD AI com a transparência e o cumprimento rigoroso da Lei Geral de Proteção de Dados Pessoais (LGPD - Lei nº 13.709/2018).
+Esta Política é parte integrante dos Termos de Uso da Plataforma e reitera o compromisso da ARKAD AI com a transparência e o cumprimento rigoroso da Lei Geral de Proteção de Dados Pessoais (LGPD - Lei nº 13.709/2018).
 1. DO OBJETIVO E APLICAÇÃO
-1.1. Esta Política visa informar ao USUÁRIO as práticas de tratamento de dados adotadas pela Plataforma, garantindo um ambiente seguro onde o empresário se
-sinta confortável para compartilhar informações em troca de análises relevantes.
-2.2. O aceite desta Política é requisito para o uso da Plataforma, ocorrendo em conjunto com o aceite dos Termos de Uso.
+1.1. Esta Política visa informar ao USUÁRIO as práticas de tratamento de dados adotadas pela Plataforma, garantindo um ambiente seguro onde o empresário se
+sinta confortável para compartilhar informações em troca de análises relevantes.
+2.2. O aceite desta Política é requisito para o uso da Plataforma, ocorrendo em conjunto com o aceite dos Termos de Uso.
 2. DOS DADOS COLETADOS
 1.1. A ARKAD AI coleta diferentes tipos de dados para prover suas funcionalidades:
-2.2. Dados Fornecidos pelo USUÁRIO: Informações de cadastro (nome, e-mail, empresa), dados de pagamento (se aplicável), e informações estratégicas inseridas
+2.2. Dados Fornecidos pelo USUÁRIO: Informações de cadastro (nome, e-mail, empresa), dados de pagamento (se aplicável), e informações estratégicas inseridas
 voluntariamente, como metas empresariais específicas, concorrentes e outros
 dados necessários para as análises.
-3.3. Dados Coletados de Fontes Externas: A Plataforma utiliza um processo automatizado (ETL) para coletar dados de fontes abertas e APIs de mercado confiáveis, abrangendo setores como tecnologia, varejo, finanças, saúde e energia.
-4.4. Dados de Fontes Públicas: Coleta de dados oriundos de bases governamentais, índices econômicos e publicações especializadas, sempre filtrados e associados ao contexto do USUÁRIO.
+3.3. Dados Coletados de Fontes Externas: A Plataforma utiliza um processo automatizado (ETL) para coletar dados de fontes abertas e APIs de mercado confiáveis, abrangendo setores como tecnologia, varejo, finanças, saúde e energia.
+4.4. Dados de Fontes Públicas: Coleta de dados oriundos de bases governamentais, índices econômicos e publicações especializadas, sempre filtrados e associados ao contexto do USUÁRIO.
 5.5. Metadados de Coleta: Cada dado coletado carrega metadados como data da
 coleta, fonte original e grau de confiabilidade, para fins de auditoria e qualidade
 da informação.
 3. DA FINALIDADE DO TRATAMENTO
-1.1. Todo tratamento de dados realizado pela ARKAD AI tem como finalidade exclusiva a prestação dos serviços contratados. Os dados são utilizados para:
+1.1. Todo tratamento de dados realizado pela ARKAD AI tem como finalidade exclusiva a prestação dos serviços contratados. Os dados são utilizados para:
 2.2. Gerar análises de mercado e concorrência;
 3.3. Alimentar dashboards interativos e relatórios comparativos;
 4.4. Permitir o funcionamento do mecanismo de inferência inteligente para sugerir
 estratégias;
-5.5. Treinar e operar modelos estatísticos (regressões, ARIMA) para previsão de tendências;
-6.6. Operar o chatbot integrado para responder perguntas sobre negócios, investimentos e riscos;
+5.5. Treinar e operar modelos estatísticos (regressões, ARIMA) para previsão de tendências;
+6.6. Operar o chatbot integrado para responder perguntas sobre negócios, investimentos e riscos;
 7.7. Filtrar informações por país, cidade, setor e porte da empresa, de acordo com
 as metas do USUÁRIO.
 4. DO ARMAZENAMENTO E SEGURANÇA
 1.1. A proteção de dados é um pilar da ARKAD AI. Empregamos medidas técnicas e
 administrativas de ponta para proteger as informações:
-2.2. Criptografia: Todos os dados são criptografados tanto em repouso (armazenados em bancos de dados SQLServer e MongoDB) quanto em trânsito (durante
+2.2. Criptografia: Todos os dados são criptografados tanto em repouso (armazenados em bancos de dados SQLServer e MongoDB) quanto em trânsito (durante
 a transmissão).
-3.3. Controle de Acesso: O acesso à Plataforma e aos dados é controlado por autenticação com múltiplos fatores (2FA), com monitoramento de sessões e registros
+3.3. Controle de Acesso: O acesso à Plataforma e aos dados é controlado por autenticação com múltiplos fatores (2FA), com monitoramento de sessões e registros
 detalhados de atividade (logs).
 4.4. Infraestrutura Segura: Os servidores operam em ambientes com certificação
 ISO/IEC 27001, assegurando os mais altos padrões de segurança física e digital.
-5.5. Anonimização: Sempre que possível, os dados são tratados de forma anonimizada ou pseudo-anonimizada para proteger a identidade do titular.
-6.6. Backups: Cópias de segurança são realizadas regularmente para garantir a integridade e a disponibilidade dos dados.
+5.5. Anonimização: Sempre que possível, os dados são tratados de forma anonimizada ou pseudo-anonimizada para proteger a identidade do titular.
+6.6. Backups: Cópias de segurança são realizadas regularmente para garantir a integridade e a disponibilidade dos dados.
 5. DO COMPARTILHAMENTO DE DADOS
 1.1. A ARKAD AI adota uma política restrita de não compartilhamento.
-2.2. Nenhuma informação pessoal ou empresarial identificável fornecida pelo USUÁRIO será compartilhada, comercializada ou divulgada a terceiros sem a permissão expressa e inequívoca do USUÁRIO.
+2.2. Nenhuma informação pessoal ou empresarial identificável fornecida pelo USUÁRIO será compartilhada, comercializada ou divulgada a terceiros sem a permissão expressa e inequívoca do USUÁRIO.
 3.3. O compartilhamento só ocorrerá em caso de obrigação legal ou ordem judicial
 emanada de autoridade competente.
 6. DOS DIREITOS DO TITULAR (USUÁRIO)
@@ -67,10 +67,10 @@ do USUÁRIO a esta Política, fornecido no momento do cadastro.
 2.2. O USUÁRIO pode gerenciar suas permissões e revogar seu consentimento a
 qualquer tempo através dos canais de atendimento ou da própria Plataforma.
 8. DAS ALTERAÇÕES DESTA POLÍTICA
-1.1. A ARKAD AI pode atualizar esta Política de Privacidade periodicamente para refletir melhorias na Plataforma ou novas exigências legais.
-2.2. O USUÁRIO será notificado sobre quaisquer alterações materiais. O uso contínuo da Plataforma após a notificação constitui aceitação das novas condições.
+1.1. A ARKAD AI pode atualizar esta Política de Privacidade periodicamente para refletir melhorias na Plataforma ou novas exigências legais.
+2.2. O USUÁRIO será notificado sobre quaisquer alterações materiais. O uso contínuo da Plataforma após a notificação constitui aceitação das novas condições.
 9. DO ENCARREGADO DE PROTEÇÃO DE DADOS (DPO)
-1.1. Para exercer seus direitos de titular ou para esclarecer dúvidas sobre esta Política, o USUÁRIO pode contatar o Encarregado de Proteção de Dados (DPO) da
+1.1. Para exercer seus direitos de titular ou para esclarecer dúvidas sobre esta Política, o USUÁRIO pode contatar o Encarregado de Proteção de Dados (DPO) da
 ARKAD AI através do e-mail: [Inserir E-mail do DPO, ex: privacidade@arkad.ai].
-2.2. Endereço para Correspondência: Av. Príncipe de Gales, 821 - Bairro Vila Príncipe de Gales, Santo André - SP, CEP: 09060-650 (A/C: Encarregado de Proteção
+2.2. Endereço para Correspondência: Av. Príncipe de Gales, 821 - Bairro Vila Príncipe de Gales, Santo André - SP, CEP: 09060-650 (A/C: Encarregado de Proteção
 de Dados - DPO).

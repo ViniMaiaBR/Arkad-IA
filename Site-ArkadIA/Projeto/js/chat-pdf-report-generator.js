@@ -219,7 +219,7 @@ class ChatPDFReportGenerator {
     <title>Relatório Arkad AI</title>
     <style>
         @page {
-            margin: 10mm;
+            margin: 3mm;
             size: A4;
         }
         

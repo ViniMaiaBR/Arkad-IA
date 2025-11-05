@@ -15,6 +15,42 @@ app.use('/Prompts', express.static(path.join(__dirname, 'Site-ArkadIA', 'Projeto
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Endpoint para servir documentos legais
+app.get('/api/documentos-legais/:filename', (req, res) => {
+    try {
+        const filename = decodeURIComponent(req.params.filename);
+        const filePath = path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'documentos-legais', filename);
+        
+        // Verificar se o arquivo existe
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ 
+                error: 'Arquivo não encontrado',
+                filename: filename 
+            });
+        }
+        
+        // Verificar se é um arquivo .txt
+        if (!filename.endsWith('.txt')) {
+            return res.status(400).json({ 
+                error: 'Tipo de arquivo não permitido',
+                filename: filename 
+            });
+        }
+        
+        // Ler e enviar o arquivo
+        const fileContent = fs.readFileSync(filePath, 'utf-8');
+        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+        res.setHeader('Content-Disposition', `inline; filename="${filename}"`);
+        res.send(fileContent);
+    } catch (error) {
+        console.error('Erro ao servir documento legal:', error);
+        res.status(500).json({ 
+            error: 'Erro ao ler o arquivo',
+            message: error.message 
+        });
+    }
+});
+
 // Rota raiz - redireciona para a página inicial
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'Site-ArkadIA', 'Projeto', 'Index', 'index.html'));

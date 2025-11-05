@@ -51,101 +51,53 @@ O protocolo file:// não permite carregar arquivos via fetch().
             return;
         }
 
-        // Calcular caminho relativo baseado na estrutura
-        const currentPath = window.location.pathname;
-        const isInIndexFolder = currentPath.includes('/Index/') || currentPath.endsWith('/Index');
+        // Usar endpoint da API do backend
+        const apiEndpoint = `/api/documentos-legais/${encodeURIComponent(filename)}`;
+        console.log(`🔗 Usando endpoint da API: ${apiEndpoint}`);
         
-        // Caminhos base para tentar (baseado na estrutura real)
-        const basePaths = isInIndexFolder 
-            ? [
-                '../documentos-legais/',
-                './documentos-legais/',
-                '../Projeto/documentos-legais/',
-                'documentos-legais/'
-            ]
-            : [
-                './documentos-legais/',
-                'documentos-legais/',
-                '../documentos-legais/'
-            ];
-
-        // Variações de encoding do nome do arquivo
-        const filenameVariations = [
-            filename,                                          // Original
-            encodeURIComponent(filename),                      // Full encoding
-            filename.replace(/ /g, '%20'),                     // Espaços
-            filename.replace(/\(/g, '%28').replace(/\)/g, '%29'), // Parênteses
-            encodeURI(filename),                               // URI encoding
-            filename.replace(/ /g, '+')                         // Espaços como +
-        ];
-
-        console.log(`📂 Caminhos base a tentar:`, basePaths);
-        console.log(`🔤 Variações de encoding:`, filenameVariations);
-
         let content = null;
-        let successPath = null;
         let lastError = null;
-        let attemptCount = 0;
 
-        // Tentar todas as combinações de path + encoding
-        outerLoop: for (const basePath of basePaths) {
-            for (const fileVariation of filenameVariations) {
-                const path = `${basePath}${fileVariation}`;
-                attemptCount++;
-                
-                try {
-                    console.log(`  [${attemptCount}] Tentando: ${path}`);
-                    const response = await fetch(path, {
-                        method: 'GET',
-                        headers: {
-                            'Accept': 'text/plain, text/*, */*'
-                        },
-                        cache: 'no-cache'
-                    });
-                    
-                    console.log(`    Status: ${response.status} ${response.statusText}`);
-                    
-                    if (response.ok) {
-                        const text = await response.text();
-                        if (text && text.trim().length > 0) {
-                            content = text;
-                            successPath = path;
-                            console.log(`  ✅ SUCESSO em: ${path}`);
-                            console.log(`  📊 Conteúdo: ${content.length} caracteres`);
-                            break outerLoop;
-                        } else {
-                            console.warn(`    ⚠️ Resposta OK mas conteúdo vazio`);
-                        }
-                    } else {
-                        console.warn(`    ❌ Status ${response.status}: ${response.statusText}`);
-                    }
-                } catch (error) {
-                    lastError = error;
-                    console.warn(`    ❌ Erro: ${error.message}`);
+        try {
+            const response = await fetch(apiEndpoint, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'text/plain, text/*, */*'
+                },
+                cache: 'no-cache'
+            });
+            
+            console.log(`📡 Status: ${response.status} ${response.statusText}`);
+            
+            if (response.ok) {
+                content = await response.text();
+                if (content && content.trim().length > 0) {
+                    console.log(`✅ Arquivo carregado com sucesso!`);
+                    console.log(`📊 Tamanho: ${content.length} caracteres`);
+                    console.groupEnd();
+                } else {
+                    throw new Error('Resposta vazia do servidor');
                 }
+            } else {
+                const errorData = await response.json().catch(() => ({ error: response.statusText }));
+                throw new Error(errorData.error || `Erro ${response.status}: ${response.statusText}`);
             }
-        }
-
-        if (!content) {
-            console.error(`❌ FALHA: Arquivo não encontrado após ${attemptCount} tentativas`);
+        } catch (error) {
+            lastError = error;
+            console.error(`❌ FALHA: Erro ao carregar documento`);
             console.error(`📄 Arquivo procurado: "${filename}"`);
-            console.error(`📋 Último erro:`, lastError);
+            console.error(`📋 Erro:`, error.message);
             console.groupEnd();
             
             alert(`❌ Erro: Não foi possível carregar o documento "${title}".\n\n` +
                   `Arquivo: ${filename}\n\n` +
-                  `Tentativas: ${attemptCount}\n\n` +
+                  `Erro: ${error.message}\n\n` +
                   `Verifique:\n` +
                   `1. Se o arquivo existe em documentos-legais/\n` +
-                  `2. Se está usando um servidor HTTP (não file://)\n` +
+                  `2. Se o servidor está rodando corretamente\n` +
                   `3. Abra o console (F12) para mais detalhes`);
             return;
         }
-
-        console.log(`✅ Arquivo carregado com sucesso!`);
-        console.log(`📍 Caminho usado: ${successPath}`);
-        console.log(`📊 Tamanho: ${content.length} caracteres`);
-        console.groupEnd();
 
         const pdfFilename = title.replace(/\s+/g, '_').replace(/[()]/g, '') + ".pdf";
 
@@ -185,26 +137,28 @@ async function testDocumentAccess() {
     console.log('📍 URL:', window.location.href);
     console.log('📁 Pathname:', window.location.pathname);
     
-    const testFile = 'AvisoLegal.txt';
-    const testPaths = [
-        '../documentos-legais/' + testFile,
-        './documentos-legais/' + testFile,
-        'documentos-legais/' + testFile,
-        '/documentos-legais/' + testFile
+    const testFiles = [
+        'Aviso Legal (Disclaimer).txt',
+        'Termos de Uso da Plataforma Arkad AI.txt',
+        'Política de Cookies.txt'
     ];
     
-    console.log('📋 Testando arquivo:', testFile);
+    console.log('📋 Testando arquivos via API:');
     
-    for (const path of testPaths) {
+    for (const testFile of testFiles) {
         try {
-            const response = await fetch(path);
-            console.log(`  ${path}: ${response.status} ${response.statusText}`);
+            const apiEndpoint = `/api/documentos-legais/${encodeURIComponent(testFile)}`;
+            const response = await fetch(apiEndpoint);
+            console.log(`  ${testFile}: ${response.status} ${response.statusText}`);
             if (response.ok) {
                 const text = await response.text();
                 console.log(`    ✅ Sucesso! Tamanho: ${text.length} caracteres`);
+            } else {
+                const errorData = await response.json().catch(() => ({ error: response.statusText }));
+                console.log(`    ❌ Erro: ${errorData.error || response.statusText}`);
             }
         } catch (error) {
-            console.log(`  ${path}: ❌ ${error.message}`);
+            console.log(`  ${testFile}: ❌ ${error.message}`);
         }
     }
     
